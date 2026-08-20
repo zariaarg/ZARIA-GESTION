@@ -1,39 +1,59 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
 
 
-async function cargarModelos() {
+function cargarModelos() {
 
     const container =
-        document.getElementById(
-            "modelos-container"
-        );
+        document.getElementById("modelos-container");
 
-    try {
+    const callbackName =
+        "zariaCallback_" + Date.now();
 
-        const response = await fetch(
-            `${API_URL}?resource=modelos`
-        );
 
-        if (!response.ok) {
-            throw new Error(
-                `HTTP ${response.status}`
-            );
+    window[callbackName] = function(result) {
+
+        try {
+
+            if (!result.success) {
+                throw new Error(
+                    result.error || "Error en la API"
+                );
+            }
+
+            mostrarModelos(result.data);
+
+        } catch (error) {
+
+            console.error(error);
+
+            container.innerHTML = `
+                <p>
+                    No se pudieron cargar los modelos.
+                </p>
+            `;
+
+        } finally {
+
+            delete window[callbackName];
+
+            script.remove();
+
         }
 
-        const result =
-            await response.json();
+    };
 
-        if (!result.success) {
-            throw new Error(
-                result.error || "Error en la API"
-            );
-        }
 
-        mostrarModelos(result.data);
+    const script =
+        document.createElement("script");
 
-    } catch (error) {
+    script.src =
+        `${API_URL}?resource=modelos&callback=${callbackName}`;
 
-        console.error(error);
+    script.onerror = function() {
+
+        console.error(
+            "Error al conectar con la API"
+        );
 
         container.innerHTML = `
             <p>
@@ -41,7 +61,14 @@ async function cargarModelos() {
             </p>
         `;
 
-    }
+        delete window[callbackName];
+
+        script.remove();
+
+    };
+
+
+    document.body.appendChild(script);
 
 }
 
@@ -55,12 +82,15 @@ function mostrarModelos(modelos) {
 
     container.innerHTML = "";
 
+
     modelos.forEach(modelo => {
 
         const card =
             document.createElement("article");
 
-        card.className = "modelo-card";
+        card.className =
+            "modelo-card";
+
 
         card.innerHTML = `
             <div class="modelo-codigo">
@@ -75,6 +105,7 @@ function mostrarModelos(modelos) {
                 ${modelo.tipo}
             </div>
         `;
+
 
         container.appendChild(card);
 
