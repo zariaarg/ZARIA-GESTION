@@ -1087,3 +1087,688 @@ h2 {
     color: #222;
     background: white;
 }
+
+/* =========================================================
+   CRAFT FLOW — DASHBOARD
+   ========================================================= */
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header-marca {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+
+/* =========================
+   VISTA GENERAL
+========================= */
+
+.dashboard-view {
+    width: 100%;
+}
+
+
+.dashboard-encabezado {
+    margin-bottom: 30px;
+}
+
+
+.dashboard-saludo {
+    margin: 0 0 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #888;
+}
+
+
+.dashboard-encabezado h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+
+.dashboard-descripcion {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* =========================
+   ACCIONES PRINCIPALES
+========================= */
+
+.dashboard-acciones {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+
+.dashboard-accion {
+    min-height: 88px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    border:
+        1px solid #ddd8d4;
+
+    border-radius: 12px;
+
+    background: white;
+
+    color: #1d1a1a;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+
+.dashboard-accion:hover {
+    transform: translateY(-2px);
+
+    border-color: #bdb7b2;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, .07);
+}
+
+
+.dashboard-accion-principal {
+    background: #1d1a1a;
+    color: white;
+
+    border-color: #1d1a1a;
+}
+
+
+.dashboard-accion-principal:hover {
+    border-color: #1d1a1a;
+}
+
+
+.dashboard-accion-icono {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid currentColor;
+
+    border-radius: 50%;
+
+    font-size: 20px;
+    font-weight: 300;
+}
+
+
+.dashboard-accion strong {
+    display: block;
+
+    font-size: 13px;
+
+    letter-spacing: .4px;
+}
+
+
+.dashboard-accion small {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    opacity: .65;
+}
+
+
+/* =========================
+   TARJETAS RESUMEN
+========================= */
+
+.dashboard-resumen {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+
+.dashboard-card {
+    background: white;
+
+    border:
+        1px solid #ddd8d4;
+
+    border-radius: 12px;
+
+    padding: 22px;
+}
+
+
+.dashboard-card-destacada {
+    background: #f1efed;
+}
+
+
+.dashboard-card-label {
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.6px;
+
+    color: #888;
+}
+
+
+.dashboard-card-numero {
+    margin-top: 10px;
+
+    font-size: 30px;
+
+    line-height: 1;
+
+    font-weight: 600;
+
+    color: #1d1a1a;
+}
+
+
+.dashboard-card-dinero {
+    font-size: 25px;
+}
+
+
+.dashboard-card-detalle {
+    margin-top: 9px;
+
+    font-size: 11px;
+
+    color: #888;
+}
+
+
+/* =========================
+   GRID DE PANELES
+========================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+
+.dashboard-panel {
+    background: white;
+
+    border:
+        1px solid #ddd8d4;
+
+    border-radius: 12px;
+
+    padding: 24px;
+}
+
+
+.dashboard-panel-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+
+.dashboard-panel-label {
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.6px;
+
+    color: #888;
+}
+
+
+.dashboard-panel h3 {
+    margin: 6px 0 0;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    color: #1d1a1a;
+}
+
+
+.dashboard-panel-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid #ddd8d4;
+
+    border-radius: 50%;
+
+    color: #555;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   ESTADOS DE PEDIDOS
+========================= */
+
+.dashboard-estados {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.dashboard-estado {
+    display: grid;
+
+    grid-template-columns:
+        120px 1fr 35px;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.dashboard-estado-nombre {
+    font-size: 12px;
+
+    color: #555;
+}
+
+
+.dashboard-estado-barra {
+    height: 7px;
+
+    overflow: hidden;
+
+    background: #ebe8e5;
+
+    border-radius: 20px;
+}
+
+
+.dashboard-estado-progreso {
+    height: 100%;
+
+    background: #1d1a1a;
+
+    border-radius: 20px;
+
+    transition:
+        width .4s ease;
+}
+
+
+.dashboard-estado-cantidad {
+    text-align: right;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    color: #1d1a1a;
+}
+
+
+.dashboard-cargando {
+    padding: 15px 0;
+
+    font-size: 12px;
+
+    color: #999;
+}
+
+
+/* =========================
+   FINANZAS DEL DASHBOARD
+========================= */
+
+.dashboard-finanza {
+    padding: 15px 0 25px;
+
+    border-bottom:
+        1px solid #eee;
+}
+
+
+.dashboard-finanza-label {
+    display: block;
+
+    font-size: 11px;
+
+    color: #888;
+}
+
+
+.dashboard-finanza-valor {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 30px;
+
+    color: #1d1a1a;
+}
+
+
+.dashboard-finanza-linea {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-top: 18px;
+
+    font-size: 12px;
+
+    color: #777;
+}
+
+
+.dashboard-finanza-linea strong {
+    color: #1d1a1a;
+}
+
+
+/* =========================
+   ACCESOS
+========================= */
+
+.dashboard-accesos {
+    margin-bottom: 30px;
+}
+
+
+.dashboard-accesos-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+
+.dashboard-accesos-grid button {
+    min-height: 85px;
+
+    padding: 16px;
+
+    background: #f8f7f6;
+
+    border:
+        1px solid #e1ddda;
+
+    border-radius: 9px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+
+.dashboard-accesos-grid button:hover {
+    background: white;
+
+    border-color: #aaa39e;
+}
+
+
+.dashboard-accesos-grid span {
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    color: #1d1a1a;
+}
+
+
+.dashboard-accesos-grid small {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 10px;
+
+    color: #888;
+}
+
+
+/* =========================
+   VISTAS DE MÓDULOS
+========================= */
+
+.modulo-view {
+    width: 100%;
+}
+
+
+.modulo-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+.modulo-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #888;
+}
+
+
+.modulo-header h2 {
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 600;
+}
+
+
+.btn-volver-dashboard {
+    height: 40px;
+
+    padding:
+        0 15px;
+
+    background: white;
+
+    border:
+        1px solid #d8d3cf;
+
+    border-radius: 8px;
+
+    color: #1d1a1a;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+.btn-volver-dashboard:hover {
+    border-color: #999;
+}
+
+
+/* =========================
+   RESPONSIVE TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-acciones {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .dashboard-resumen {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .dashboard-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .dashboard-accesos-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================
+   RESPONSIVE CELULAR
+========================= */
+
+@media (max-width: 550px) {
+
+    .header-marca {
+        display: block;
+    }
+
+
+    .header-marca span {
+        display: none;
+    }
+
+
+    .dashboard-acciones {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .dashboard-resumen {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .dashboard-card {
+        padding: 17px;
+    }
+
+
+    .dashboard-card-numero {
+        font-size: 25px;
+    }
+
+
+    .dashboard-card-dinero {
+        font-size: 19px;
+    }
+
+
+    .dashboard-panel {
+        padding: 18px;
+    }
+
+
+    .dashboard-estado {
+        grid-template-columns:
+            90px 1fr 25px;
+    }
+
+
+    .dashboard-accesos-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .modulo-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+}
