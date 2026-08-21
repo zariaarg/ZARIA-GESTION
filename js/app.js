@@ -1863,7 +1863,9 @@ async function guardarMaterialModelo(
    MATERIALES DEL MODELO
 ========================= */
 
-async function cargarMaterialesModelo(modeloId) {
+async function cargarMaterialesModelo(
+    modeloId
+) {
 
     const container =
         document.getElementById(
@@ -1885,78 +1887,24 @@ async function cargarMaterialesModelo(modeloId) {
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}?resource=modelo_materiales` +
-                `&empresa_id=${
-                    empresaActual
-                        ? empresaActual.empresa_id
-                        : 1
-                }` +
-                `&callback=zariaCallback`
+        const data =
+            await llamarAPI(
+                "modelo_materiales",
+                empresaActual
+                    ? empresaActual.empresa_id
+                    : null
             );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        const texto =
-            await response.text();
-
-
-        const inicio =
-            texto.indexOf("(");
-
-
-        const fin =
-            texto.lastIndexOf(")");
-
-
-        if (
-            inicio === -1 ||
-            fin === -1
-        ) {
-
-            throw new Error(
-                "Respuesta inválida de modelo_materiales"
-            );
-
-        }
-
-
-        const json =
-            JSON.parse(
-                texto.substring(
-                    inicio + 1,
-                    fin
-                )
-            );
-
-
-        if (!json.success) {
-
-            throw new Error(
-                json.error ||
-                "Error en la API"
-            );
-
-        }
 
 
         const materialesModelo =
-            json.data.filter(
+            (data || []).filter(
                 item =>
                     Number(item.modelo_id) ===
                     Number(modeloId) &&
 
                     (
                         !empresaActual ||
+
                         Number(item.empresa_id) ===
                         Number(
                             empresaActual.empresa_id
@@ -1987,8 +1935,8 @@ async function cargarMaterialesModelo(modeloId) {
 
                         nombre:
                             material
-                            ? material.nombre
-                            : `Material #${item.material_id}`
+                                ? material.nombre
+                                : `Material #${item.material_id}`
 
                     };
 
@@ -2127,13 +2075,18 @@ async function cargarMateriales() {
         materiales =
             (data || []).filter(
                 material =>
+
                     material.activo === true ||
+
                     String(
                         material.activo
-                    ).toUpperCase() === "TRUE" ||
+                    ).toUpperCase() ===
+                    "TRUE" ||
+
                     String(
                         material.activo
-                    ).toUpperCase() === "VERDADERO"
+                    ).toUpperCase() ===
+                    "VERDADERO"
             );
 
 
@@ -5376,6 +5329,63 @@ function configurarDashboard() {
 }
 
 /* =========================================================
+   PREPARAR VISTAS
+   ========================================================= */
+
+function prepararVistasIniciales() {
+
+    const dashboard =
+        document.getElementById(
+            "dashboard-view"
+        );
+
+
+    const modelosView =
+        document.getElementById(
+            "modelos-view"
+        );
+
+
+    /*
+     * Al entrar al sistema:
+     *
+     * DASHBOARD visible
+     * MODELOS oculto
+     */
+
+    if (dashboard) {
+
+        dashboard.style.display =
+            "";
+
+        dashboard.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+    }
+
+
+    if (modelosView) {
+
+        modelosView.style.display =
+            "none";
+
+        modelosView.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    vistaActual =
+        "dashboard";
+
+}
+
+
+/* =========================================================
    INICIO DEL SISTEMA
    ========================================================= */
 
@@ -5384,17 +5394,39 @@ async function iniciarSistema() {
     try {
 
         /*
-         * Primero cargamos la empresa.
-         * Después cargamos el dashboard.
+         * Primero establecemos visualmente
+         * la vista inicial.
+         *
+         * Esto evita que MODELOS aparezca
+         * durante unos milisegundos mientras
+         * carga el Dashboard.
+         */
+
+        prepararVistasIniciales();
+
+
+        /*
+         * Cargamos la empresa configurada.
          */
 
         await cargarEmpresas();
 
 
-        await iniciarDashboard();
-
+        /*
+         * Configuramos los botones del Dashboard.
+         */
 
         configurarDashboard();
+
+
+        /*
+         * Cargamos solamente la información
+         * necesaria para mostrar el Dashboard.
+         *
+         * NO se muestra el listado de modelos.
+         */
+
+        await iniciarDashboard();
 
 
     } catch (error) {
@@ -5408,8 +5440,9 @@ async function iniciarSistema() {
 
 }
 
+
 /* =========================
    ARRANCAR
 ========================= */
 
-iniciarAplicacion();
+iniciarSistema();
