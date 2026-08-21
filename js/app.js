@@ -20,110 +20,105 @@ let busquedaActual = "";
    API JSONP
 ========================= */
 
-function llamarAPI(resource) {
+/* =========================
+   API JSONP
+========================= */
 
-    return new Promise((resolve, reject) => {
+function llamarAPI(
+    resource,
+    empresaId = null
+) {
 
-        const callbackName =
-            "zariaCallback_" +
-            Date.now() +
-            "_" +
-            Math.floor(Math.random() * 1000);
+    return new Promise(
+        (resolve, reject) => {
 
-
-        const script =
-            document.createElement("script");
-
-
-        window[callbackName] = function(result) {
-
-            delete window[callbackName];
-
-            script.remove();
-
-
-            if (!result.success) {
-
-                reject(
-                    new Error(
-                        result.error ||
-                        "Error en la API"
-                    )
+            const callbackName =
+                "zariaCallback_" +
+                Date.now() +
+                "_" +
+                Math.floor(
+                    Math.random() * 1000
                 );
 
-                return;
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            window[callbackName] =
+                function(result) {
+
+                    delete window[
+                        callbackName
+                    ];
+
+                    script.remove();
+
+
+                    if (!result.success) {
+
+                        reject(
+                            new Error(
+                                result.error ||
+                                "Error en la API"
+                            )
+                        );
+
+                        return;
+
+                    }
+
+
+                    resolve(
+                        result.data
+                    );
+
+                };
+
+
+            script.onerror =
+                function() {
+
+                    delete window[
+                        callbackName
+                    ];
+
+                    script.remove();
+
+
+                    reject(
+                        new Error(
+                            "No se pudo conectar con la API"
+                        )
+                    );
+
+                };
+
+
+            let url =
+                `${API_URL}?resource=${encodeURIComponent(resource)}&callback=${callbackName}`;
+
+
+            if (empresaId) {
+
+                url +=
+                    `&empresa_id=${encodeURIComponent(empresaId)}`;
 
             }
 
 
-            resolve(result.data);
-
-        };
-
-
-        script.onerror = function() {
-
-            delete window[callbackName];
-
-            script.remove();
+            script.src =
+                url;
 
 
-            reject(
-                new Error(
-                    "No se pudo conectar con la API"
-                )
+            document.body.appendChild(
+                script
             );
 
-        };
-
-
-        /*
-         * Recursos globales:
-         *
-         * empresas
-         * configuracion
-         * config_sistema
-         *
-         * No llevan empresa_id.
-         *
-         * El resto se filtra por
-         * empresaActual.
-         */
-
-        let url =
-            `${API_URL}?resource=${encodeURIComponent(resource)}`;
-
-
-        const recursosGlobales = [
-            "empresas",
-            "configuracion",
-            "config_sistema"
-        ];
-
-
-        if (
-            !recursosGlobales.includes(resource) &&
-            empresaActual
-        ) {
-
-            url +=
-                `&empresa_id=${encodeURIComponent(
-                    empresaActual.empresa_id
-                )}`;
-
         }
-
-
-        url +=
-            `&callback=${callbackName}`;
-
-
-        script.src = url;
-
-
-        document.body.appendChild(script);
-
-    });
+    );
 
 }
 
@@ -365,20 +360,18 @@ function crearControles() {
     );
 
 
-    document
-        .getElementById(
-            "btn-nuevo-modelo"
-        )
-        .addEventListener(
-            "click",
-            function() {
+document
+    .getElementById(
+        "btn-nuevo-modelo"
+    )
+    .addEventListener(
+        "click",
+        function() {
 
-                alert(
-                    "NUEVO MODELO lo vamos a conectar después de terminar EDITAR."
-                );
+            abrirNuevoModelo();
 
-            }
-        );
+        }
+    );
 
 }
 
@@ -2029,6 +2022,664 @@ async function cargarMateriales() {
 
 }
 
+/* =========================
+   NUEVO MODELO
+========================= */
+
+function abrirNuevoModelo() {
+
+    if (!empresaActual) {
+
+        alert(
+            "No hay una empresa seleccionada."
+        );
+
+        return;
+
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+
+    modal.className =
+        "modelo-nuevo-modal";
+
+
+    modal.innerHTML = `
+
+        <div class="modelo-nuevo-overlay"></div>
+
+
+        <div class="modelo-nuevo-contenido">
+
+
+            <button
+                type="button"
+                class="modelo-nuevo-cerrar"
+            >
+                ×
+            </button>
+
+
+            <div class="modelo-nuevo-header">
+
+                <span>
+                    NUEVO MODELO
+                </span>
+
+                <h2>
+                    Crear modelo
+                </h2>
+
+                <p>
+                    Empresa:
+                    <strong>
+                        ${escaparHTML(
+                            empresaActual.nombre_comercial ||
+                            empresaActual.nombre ||
+                            ""
+                        )}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <form id="form-nuevo-modelo">
+
+
+                <div class="form-grid">
+
+
+                    <!-- CÓDIGO -->
+
+                    <div class="campo">
+
+                        <label>
+                            CÓDIGO
+                        </label>
+
+                        <input
+                            type="text"
+                            name="codigo"
+                            placeholder="Ej: Z-010"
+                            required
+                        >
+
+                        <small>
+                            Ingresá el código del modelo.
+                        </small>
+
+                    </div>
+
+
+                    <!-- NOMBRE -->
+
+                    <div class="campo">
+
+                        <label>
+                            NOMBRE
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nombre"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TIPO -->
+
+                    <div class="campo">
+
+                        <label>
+                            TIPO
+                        </label>
+
+                        <select
+                            name="tipo"
+                            required
+                        >
+
+                            ${crearOpcionesTipo("")}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MATERIAL -->
+
+                    <div class="campo">
+
+                        <label>
+                            MATERIAL
+                        </label>
+
+                        <input
+                            type="text"
+                            name="material_base"
+                            placeholder="Ej: Cuero vacuno"
+                        >
+
+                    </div>
+
+
+                    <!-- COSTO -->
+
+                    <div class="campo">
+
+                        <label>
+                            COSTO
+                        </label>
+
+                        <input
+                            type="number"
+                            name="costo"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                        >
+
+                    </div>
+
+
+                    <!-- PRECIO -->
+
+                    <div class="campo">
+
+                        <label>
+                            PRECIO DE VENTA
+                        </label>
+
+                        <input
+                            type="number"
+                            name="precio_venta"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                        >
+
+                    </div>
+
+
+                    <!-- IMAGEN -->
+
+                    <div class="campo">
+
+                        <label>
+                            IMAGEN
+                        </label>
+
+                        <input
+                            type="url"
+                            name="imagen"
+                            placeholder="URL de Google Drive"
+                        >
+
+                    </div>
+
+
+                    <!-- IMAGEN 2 -->
+
+                    <div class="campo">
+
+                        <label>
+                            IMAGEN 2
+                        </label>
+
+                        <input
+                            type="url"
+                            name="imagen_2"
+                            placeholder="URL de Google Drive"
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPCIÓN -->
+
+                    <div class="campo campo-completo">
+
+                        <label>
+                            DESCRIPCIÓN
+                        </label>
+
+                        <textarea
+                            name="descripcion"
+                            rows="5"
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- MEDIDAS -->
+
+                    <div class="campo campo-completo">
+
+                        <label>
+                            MEDIDAS
+                        </label>
+
+                        <textarea
+                            name="medidas"
+                            rows="5"
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- ACTIVO -->
+
+                    <div class="campo campo-activo">
+
+                        <label>
+                            ACTIVO
+                        </label>
+
+                        <label class="switch">
+
+                            <input
+                                type="checkbox"
+                                name="activo"
+                                checked
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    class="modelo-nuevo-mensaje"
+                    id="nuevo-mensaje"
+                ></div>
+
+
+                <div class="modelo-nuevo-botones">
+
+
+                    <button
+                        type="button"
+                        class="btn-cancelar-nuevo"
+                    >
+                        CANCELAR
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-guardar-nuevo"
+                    >
+                        CREAR MODELO
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    agregarEstilosNuevoModelo();
+
+
+    const formulario =
+        modal.querySelector(
+            "#form-nuevo-modelo"
+        );
+
+
+    const cerrarModal =
+        () => modal.remove();
+
+
+    modal
+        .querySelector(
+            ".modelo-nuevo-cerrar"
+        )
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    modal
+        .querySelector(
+            ".modelo-nuevo-overlay"
+        )
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    modal
+        .querySelector(
+            ".btn-cancelar-nuevo"
+        )
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+
+    formulario.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            await guardarNuevoModelo(
+                formulario,
+                modal
+            );
+
+        }
+    );
+
+}
+
+/* =========================
+   GUARDAR NUEVO MODELO
+========================= */
+
+async function guardarNuevoModelo(
+    formulario,
+    modal
+) {
+
+    const boton =
+        formulario.querySelector(
+            ".btn-guardar-nuevo"
+        );
+
+
+    const mensaje =
+        formulario.querySelector(
+            "#nuevo-mensaje"
+        );
+
+
+    const formData =
+        new FormData(formulario);
+
+
+    const codigo =
+        String(
+            formData.get("codigo") || ""
+        ).trim();
+
+
+    const nombre =
+        String(
+            formData.get("nombre") || ""
+        ).trim();
+
+
+    const tipo =
+        String(
+            formData.get("tipo") || ""
+        ).trim();
+
+
+    if (!codigo) {
+
+        alert(
+            "Ingresá el código del modelo."
+        );
+
+        return;
+
+    }
+
+
+    if (!nombre) {
+
+        alert(
+            "Ingresá el nombre del modelo."
+        );
+
+        return;
+
+    }
+
+
+    if (!tipo) {
+
+        alert(
+            "Seleccioná un tipo."
+        );
+
+        return;
+
+    }
+
+
+    if (!empresaActual) {
+
+        alert(
+            "No hay una empresa seleccionada."
+        );
+
+        return;
+
+    }
+
+
+    const data = {
+
+        empresa_id:
+            Number(
+                empresaActual.empresa_id
+            ),
+
+        codigo:
+            codigo,
+
+        nombre:
+            nombre,
+
+        tipo:
+            tipo,
+
+        material_base:
+            String(
+                formData.get(
+                    "material_base"
+                ) || ""
+            ).trim(),
+
+        costo:
+            formData.get("costo") === ""
+                ? ""
+                : Number(
+                    formData.get("costo")
+                ),
+
+        precio_venta:
+            formData.get("precio_venta") === ""
+                ? ""
+                : Number(
+                    formData.get(
+                        "precio_venta"
+                    )
+                ),
+
+        imagen:
+            String(
+                formData.get(
+                    "imagen"
+                ) || ""
+            ).trim(),
+
+        imagen_2:
+            String(
+                formData.get(
+                    "imagen_2"
+                ) || ""
+            ).trim(),
+
+        descripcion:
+            String(
+                formData.get(
+                    "descripcion"
+                ) || ""
+            ).trim(),
+
+        medidas:
+            String(
+                formData.get(
+                    "medidas"
+                ) || ""
+            ).trim(),
+
+        activo:
+            formData.get("activo") === "on"
+
+    };
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "CREANDO...";
+
+    mensaje.textContent =
+        "Guardando modelo...";
+
+    mensaje.className =
+        "modelo-nuevo-mensaje";
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "insert",
+
+                            resource:
+                                "modelos",
+
+                            data:
+                                data
+
+                        })
+
+                }
+            );
+
+
+        const resultado =
+            await response.json();
+
+
+        if (!resultado.success) {
+
+            throw new Error(
+                resultado.error ||
+                "No se pudo crear el modelo."
+            );
+
+        }
+
+
+        mensaje.textContent =
+            "Modelo creado correctamente.";
+
+        mensaje.className =
+            "modelo-nuevo-mensaje exito";
+
+
+        setTimeout(
+            async function() {
+
+                modal.remove();
+
+
+                try {
+
+                    modelos =
+                        await llamarAPI(
+                            "modelos",
+                            empresaActual.empresa_id
+                        );
+
+                    mostrarModelos();
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                }
+
+            },
+            700
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error creando modelo:",
+            error
+        );
+
+
+        mensaje.textContent =
+            "No se pudo crear el modelo.";
+
+        mensaje.className =
+            "modelo-nuevo-mensaje error";
+
+
+        boton.disabled =
+            false;
+
+        boton.textContent =
+            "CREAR MODELO";
+
+
+        alert(
+            "No se pudo crear el modelo.\n\n" +
+            error.message
+        );
+
+    }
+
+}
 
 /* =========================
    EDITAR MODELO
@@ -3285,6 +3936,317 @@ function agregarEstilosEditor() {
 
 }
 
+/* =========================
+   ESTILOS NUEVO MODELO
+========================= */
+
+function agregarEstilosNuevoModelo() {
+
+    if (
+        document.getElementById(
+            "zaria-nuevo-modelo-styles"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "zaria-nuevo-modelo-styles";
+
+
+    style.textContent = `
+
+        .modelo-nuevo-modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 99999;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 25px;
+
+        }
+
+
+        .modelo-nuevo-overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,0.65);
+
+            backdrop-filter:
+                blur(3px);
+
+        }
+
+
+        .modelo-nuevo-contenido {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: min(
+                850px,
+                100%
+            );
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.25);
+
+        }
+
+
+        .modelo-nuevo-cerrar {
+
+            position: absolute;
+
+            top: 15px;
+
+            right: 18px;
+
+            border: none;
+
+            background: none;
+
+            font-size: 30px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            color: #333;
+
+        }
+
+
+        .modelo-nuevo-header {
+
+            margin-bottom: 28px;
+
+            padding-right: 35px;
+
+        }
+
+
+        .modelo-nuevo-header span {
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            color: #777;
+
+        }
+
+
+        .modelo-nuevo-header h2 {
+
+            margin:
+                6px 0 4px;
+
+            font-size: 28px;
+
+        }
+
+
+        .modelo-nuevo-header p {
+
+            margin: 0;
+
+            color: #777;
+
+            font-size: 13px;
+
+        }
+
+
+        .modelo-nuevo-mensaje {
+
+            min-height: 20px;
+
+            margin-top: 20px;
+
+            font-size: 13px;
+
+        }
+
+
+        .modelo-nuevo-mensaje.exito {
+
+            color: #2d6a3f;
+
+        }
+
+
+        .modelo-nuevo-mensaje.error {
+
+            color: #a33;
+
+        }
+
+
+        .modelo-nuevo-botones {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid #eee;
+
+        }
+
+
+        .modelo-nuevo-botones button {
+
+            height: 42px;
+
+            padding:
+                0 20px;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: .5px;
+
+            cursor: pointer;
+
+        }
+
+
+        .btn-cancelar-nuevo {
+
+            background: white;
+
+            color: #1d1a1a;
+
+            border:
+                1px solid #1d1a1a;
+
+        }
+
+
+        .btn-guardar-nuevo {
+
+            background: #1d1a1a;
+
+            color: white;
+
+            border:
+                1px solid #1d1a1a;
+
+        }
+
+
+        .btn-guardar-nuevo:disabled {
+
+            opacity: .6;
+
+            cursor: wait;
+
+        }
+
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .modelo-nuevo-modal {
+
+                padding: 10px;
+
+            }
+
+
+            .modelo-nuevo-contenido {
+
+                padding:
+                    25px 20px;
+
+                max-height: 95vh;
+
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .campo-completo {
+
+                grid-column:
+                    auto;
+
+            }
+
+
+            .modelo-nuevo-botones {
+
+                flex-direction: column;
+
+            }
+
+
+            .modelo-nuevo-botones button {
+
+                width: 100%;
+
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+}
 
 /* =========================
    IMAGEN DRIVE
