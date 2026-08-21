@@ -2096,24 +2096,41 @@ function convertirImagenDrive(url) {
         return "";
     }
 
+    url = String(url).trim();
 
-    const match =
-        url.match(
-            /\/d\/([^/]+)/
-        );
-
-
-    if (!match) {
+    // Si ya es una URL de thumbnail de Drive
+    if (url.includes("drive.google.com/thumbnail")) {
         return url;
     }
 
+    // Detectar ID en enlaces:
+    // https://drive.google.com/file/d/ID/view
+    // https://drive.google.com/open?id=ID
+    // https://drive.google.com/uc?id=ID
+    let fileId = "";
 
-    const fileId =
-        match[1];
+    const matchArchivo = url.match(/\/file\/d\/([^/]+)/);
 
+    if (matchArchivo) {
+        fileId = matchArchivo[1];
+    }
 
-    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    if (!fileId) {
+        const matchId = url.match(/[?&]id=([^&]+)/);
 
+        if (matchId) {
+            fileId = matchId[1];
+        }
+    }
+
+    // Si no pudimos obtener el ID,
+    // dejamos la URL original
+    if (!fileId) {
+        return url;
+    }
+
+    // URL de imagen optimizada de Google Drive
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
 }
 
 
