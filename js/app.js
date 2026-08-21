@@ -4406,6 +4406,813 @@ function escaparHTML(texto) {
 
 }
 
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+async function iniciarDashboard() {
+
+    try {
+
+        const [
+            pedidos,
+            clientes,
+            modelosDashboard
+        ] = await Promise.all([
+
+            llamarAPI("pedidos"),
+
+            llamarAPI("clientes"),
+
+            llamarAPI("modelos")
+
+        ]);
+
+
+        const pedidosEmpresa =
+            filtrarPorEmpresa(
+                pedidos
+            );
+
+
+        const clientesEmpresa =
+            filtrarPorEmpresa(
+                clientes
+            );
+
+
+        const modelosEmpresa =
+            filtrarPorEmpresa(
+                modelosDashboard
+            );
+
+
+        mostrarResumenDashboard(
+            pedidosEmpresa,
+            clientesEmpresa,
+            modelosEmpresa
+        );
+
+
+        mostrarEstadosDashboard(
+            pedidosEmpresa
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando dashboard:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTRAR DATOS POR EMPRESA
+   ========================================================= */
+
+function filtrarPorEmpresa(data) {
+
+    if (!empresaActual) {
+
+        return data || [];
+
+    }
+
+
+    const empresaId =
+        Number(
+            empresaActual.empresa_id
+        );
+
+
+    return (data || []).filter(
+        item => {
+
+            if (
+                item.empresa_id ===
+                undefined
+            ) {
+
+                return true;
+
+            }
+
+
+            if (
+                item.empresa_id ===
+                null ||
+                item.empresa_id === ""
+            ) {
+
+                return true;
+
+            }
+
+
+            return Number(
+                item.empresa_id
+            ) === empresaId;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RESUMEN DASHBOARD
+   ========================================================= */
+
+function mostrarResumenDashboard(
+    pedidos,
+    clientes,
+    modelos
+) {
+
+    const totalPedidos =
+        pedidos.length;
+
+
+    const totalClientes =
+        clientes.length;
+
+
+    const modelosActivos =
+        modelos.filter(
+            modelo =>
+                modelo.activo === true ||
+                String(modelo.activo)
+                    .toUpperCase() === "TRUE"
+        ).length;
+
+
+    const ahora =
+        new Date();
+
+
+    const mesActual =
+        ahora.getMonth();
+
+
+    const anioActual =
+        ahora.getFullYear();
+
+
+    const pedidosMes =
+        pedidos.filter(
+            pedido => {
+
+                const fecha =
+                    convertirFecha(
+                        pedido.fecha
+                    );
+
+
+                if (!fecha) {
+
+                    return false;
+
+                }
+
+
+                return (
+                    fecha.getMonth() ===
+                    mesActual
+                    &&
+                    fecha.getFullYear() ===
+                    anioActual
+                );
+
+            }
+        );
+
+
+    const ventasMes =
+        pedidosMes.reduce(
+            (
+                total,
+                pedido
+            ) => {
+
+                return total +
+                    Number(
+                        pedido.precio
+                    || 0
+                    );
+
+            },
+            0
+        );
+
+
+    const senasMes =
+        pedidosMes.reduce(
+            (
+                total,
+                pedido
+            ) => {
+
+                return total +
+                    Number(
+                        pedido.sena
+                    || 0
+                    );
+
+            },
+            0
+        );
+
+
+    const totalPedidosElemento =
+        document.getElementById(
+            "dashboard-total-pedidos"
+        );
+
+
+    const totalClientesElemento =
+        document.getElementById(
+            "dashboard-total-clientes"
+        );
+
+
+    const totalModelosElemento =
+        document.getElementById(
+            "dashboard-total-modelos"
+        );
+
+
+    const ventasMesElemento =
+        document.getElementById(
+            "dashboard-ventas-mes"
+        );
+
+
+    const senasMesElemento =
+        document.getElementById(
+            "dashboard-senas-mes"
+        );
+
+
+    const pedidosMesElemento =
+        document.getElementById(
+            "dashboard-pedidos-mes"
+        );
+
+
+    if (totalPedidosElemento) {
+
+        totalPedidosElemento.textContent =
+            totalPedidos;
+
+    }
+
+
+    if (totalClientesElemento) {
+
+        totalClientesElemento.textContent =
+            totalClientes;
+
+    }
+
+
+    if (totalModelosElemento) {
+
+        totalModelosElemento.textContent =
+            modelosActivos;
+
+    }
+
+
+    if (ventasMesElemento) {
+
+        ventasMesElemento.textContent =
+            formatearPrecio(
+                ventasMes
+            );
+
+    }
+
+
+    if (senasMesElemento) {
+
+        senasMesElemento.textContent =
+            formatearPrecio(
+                senasMes
+            );
+
+    }
+
+
+    if (pedidosMesElemento) {
+
+        pedidosMesElemento.textContent =
+            pedidosMes.length;
+
+    }
+
+}
+
+
+/* =========================================================
+   ESTADOS DE PEDIDOS
+   ========================================================= */
+
+function mostrarEstadosDashboard(
+    pedidos
+) {
+
+    const container =
+        document.getElementById(
+            "dashboard-estados"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    if (!pedidos.length) {
+
+        container.innerHTML = `
+            <div class="dashboard-cargando">
+                Todavía no hay pedidos registrados.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const estados = {};
+
+
+    pedidos.forEach(
+        pedido => {
+
+            const estado =
+                String(
+                    pedido.estado ||
+                    "SIN ESTADO"
+                )
+                .trim()
+                .toUpperCase();
+
+
+            estados[estado] =
+                (
+                    estados[estado] ||
+                    0
+                ) + 1;
+
+        }
+    );
+
+
+    const estadosOrdenados =
+        Object.entries(
+            estados
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                b[1] - a[1]
+        );
+
+
+    const maximo =
+        Math.max(
+            ...estadosOrdenados
+                .map(
+                    item =>
+                        item[1]
+                )
+        );
+
+
+    container.innerHTML =
+        estadosOrdenados
+            .map(
+                (
+                    [estado, cantidad]
+                ) => {
+
+                    const porcentaje =
+                        maximo > 0
+                        ? (
+                            cantidad /
+                            maximo
+                        ) * 100
+                        : 0;
+
+
+                    return `
+                        <div class="dashboard-estado">
+
+                            <span class="dashboard-estado-nombre">
+                                ${escaparHTML(
+                                    formatearEstado(
+                                        estado
+                                    )
+                                )}
+                            </span>
+
+                            <div class="dashboard-estado-barra">
+
+                                <div
+                                    class="dashboard-estado-progreso"
+                                    style="width: ${porcentaje}%"
+                                ></div>
+
+                            </div>
+
+                            <span class="dashboard-estado-cantidad">
+                                ${cantidad}
+                            </span>
+
+                        </div>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   FORMATEAR ESTADO
+   ========================================================= */
+
+function formatearEstado(
+    estado
+) {
+
+    return String(
+        estado || ""
+    )
+        .toLowerCase()
+        .replace(
+            /\b\w/g,
+            letra =>
+                letra.toUpperCase()
+        );
+
+}
+
+
+/* =========================================================
+   CONVERTIR FECHA
+   ========================================================= */
+
+function convertirFecha(
+    valor
+) {
+
+    if (!valor) {
+
+        return null;
+
+    }
+
+
+    if (
+        valor instanceof Date
+    ) {
+
+        return valor;
+
+    }
+
+
+    const fecha =
+        new Date(
+            valor
+        );
+
+
+    if (
+        isNaN(
+            fecha.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return fecha;
+
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+function mostrarDashboard() {
+
+    const dashboard =
+        document.getElementById(
+            "dashboard-view"
+        );
+
+
+    const modelos =
+        document.getElementById(
+            "modelos-view"
+        );
+
+
+    if (dashboard) {
+
+        dashboard.style.display =
+            "";
+
+    }
+
+
+    if (modelos) {
+
+        modelos.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   MOSTRAR MODELOS
+   ========================================================= */
+
+async function mostrarVistaModelos() {
+
+    const dashboard =
+        document.getElementById(
+            "dashboard-view"
+        );
+
+
+    const modelos =
+        document.getElementById(
+            "modelos-view"
+        );
+
+
+    if (dashboard) {
+
+        dashboard.style.display =
+            "none";
+
+    }
+
+
+    if (modelos) {
+
+        modelos.style.display =
+            "";
+
+    }
+
+
+    await iniciarAplicacion();
+
+}
+
+
+/* =========================================================
+   BOTONES DASHBOARD
+   ========================================================= */
+
+function configurarDashboard() {
+
+
+    const btnModelos =
+        document.getElementById(
+            "btn-dashboard-modelos"
+        );
+
+
+    const btnAccesoModelos =
+        document.getElementById(
+            "btn-acceso-modelos"
+        );
+
+
+    const btnVolver =
+        document.getElementById(
+            "btn-volver-dashboard"
+        );
+
+
+    const btnNuevoPedido =
+        document.getElementById(
+            "btn-dashboard-nuevo-pedido"
+        );
+
+
+    const btnPedidos =
+        document.getElementById(
+            "btn-dashboard-pedidos"
+        );
+
+
+    const btnClientes =
+        document.getElementById(
+            "btn-dashboard-clientes"
+        );
+
+
+    const btnAccesoPedidos =
+        document.getElementById(
+            "btn-acceso-pedidos"
+        );
+
+
+    const btnAccesoClientes =
+        document.getElementById(
+            "btn-acceso-clientes"
+        );
+
+
+    const btnMateriales =
+        document.getElementById(
+            "btn-acceso-materiales"
+        );
+
+
+    if (btnModelos) {
+
+        btnModelos.addEventListener(
+            "click",
+            mostrarVistaModelos
+        );
+
+    }
+
+
+    if (btnAccesoModelos) {
+
+        btnAccesoModelos.addEventListener(
+            "click",
+            mostrarVistaModelos
+        );
+
+    }
+
+
+    if (btnVolver) {
+
+        btnVolver.addEventListener(
+            "click",
+            mostrarDashboard
+        );
+
+    }
+
+
+    if (btnNuevoPedido) {
+
+        btnNuevoPedido.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo NUEVO PEDIDO lo conectamos en el próximo paso."
+                );
+
+            }
+        );
+
+    }
+
+
+    if (btnPedidos) {
+
+        btnPedidos.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo PEDIDOS lo conectamos en el próximo paso."
+                );
+
+            }
+        );
+
+    }
+
+
+    if (btnAccesoPedidos) {
+
+        btnAccesoPedidos.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo PEDIDOS lo conectamos en el próximo paso."
+                );
+
+            }
+        );
+
+    }
+
+
+    if (btnClientes) {
+
+        btnClientes.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo CLIENTES lo conectamos en el próximo paso."
+                );
+
+            }
+        );
+
+    }
+
+
+    if (btnAccesoClientes) {
+
+        btnAccesoClientes.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo CLIENTES lo conectamos en el próximo paso."
+                );
+
+            }
+        );
+
+    }
+
+
+    if (btnMateriales) {
+
+        btnMateriales.addEventListener(
+            "click",
+            function() {
+
+                alert(
+                    "El módulo MATERIALES lo conectamos más adelante."
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INICIO DEL SISTEMA
+   ========================================================= */
+
+async function iniciarSistema() {
+
+    try {
+
+        /*
+         * Primero cargamos la empresa.
+         * Después cargamos el dashboard.
+         */
+
+        await cargarEmpresas();
+
+
+        await iniciarDashboard();
+
+
+        configurarDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error iniciando CRAFT FLOW:",
+            error
+        );
+
+    }
+
+}
 
 /* =========================
    ARRANCAR
