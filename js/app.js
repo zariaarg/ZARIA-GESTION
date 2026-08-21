@@ -1236,11 +1236,15 @@ async function guardarMaterialModelo(
 async function cargarMaterialesModelo(modeloId) {
 
     const container =
-        document.getElementById("modelo-materiales-container");
+        document.getElementById(
+            "modelo-materiales-container"
+        );
+
 
     if (!container) {
         return;
     }
+
 
     container.innerHTML = `
         <div class="materiales-cargando">
@@ -1248,50 +1252,122 @@ async function cargarMaterialesModelo(modeloId) {
         </div>
     `;
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}?resource=modelo_materiales&callback=zariaCallback`
-        );
+        /* =========================
+           CARGAR MODELO_MATERIALES
+        ========================= */
+
+        const response =
+            await fetch(
+                `${API_URL}?resource=modelo_materiales&callback=zariaCallback`
+            );
+
 
         if (!response.ok) {
+
             throw new Error(
                 `HTTP ${response.status}`
             );
+
         }
 
-        const texto = await response.text();
 
-        const inicio = texto.indexOf("(");
-        const fin = texto.lastIndexOf(")");
+        const texto =
+            await response.text();
 
-        if (inicio === -1 || fin === -1) {
+
+        const inicio =
+            texto.indexOf("(");
+
+
+        const fin =
+            texto.lastIndexOf(")");
+
+
+        if (
+            inicio === -1 ||
+            fin === -1
+        ) {
+
             throw new Error(
                 "Respuesta inválida de modelo_materiales"
             );
+
         }
 
-        const json = JSON.parse(
-            texto.substring(
-                inicio + 1,
-                fin
-            )
-        );
+
+        const json =
+            JSON.parse(
+                texto.substring(
+                    inicio + 1,
+                    fin
+                )
+            );
+
 
         if (!json.success) {
+
             throw new Error(
-                json.error || "Error en la API"
+                json.error ||
+                "Error en la API"
             );
+
         }
 
-        const materiales =
+
+        /* =========================
+           FILTRAR POR MODELO
+        ========================= */
+
+        const materialesModelo =
             json.data.filter(
                 item =>
                     Number(item.modelo_id) ===
                     Number(modeloId)
             );
 
-        mostrarMaterialesModelo(materiales);
+
+        /* =========================
+           CRUZAR CON MATERIALES
+        ========================= */
+
+        const materialesCompletos =
+            materialesModelo.map(
+                item => {
+
+                    const material =
+                        materiales.find(
+                            material =>
+                                Number(
+                                    material.material_id
+                                ) ===
+                                Number(
+                                    item.material_id
+                                )
+                        );
+
+
+                    return {
+
+                        ...item,
+
+                        nombre:
+                            material
+                            ? material.nombre
+                            : `Material #${item.material_id}`
+
+                    };
+
+                }
+            );
+
+
+        mostrarMaterialesModelo(
+            materialesCompletos
+        );
+
 
     } catch (error) {
 
@@ -1299,6 +1375,7 @@ async function cargarMaterialesModelo(modeloId) {
             "Error cargando materiales:",
             error
         );
+
 
         container.innerHTML = `
             <div class="materiales-error">
