@@ -5567,5 +5567,3 @@ async function iniciarSistema() {
    ========================================================= */
 
 iniciarSistema();
-```
-
