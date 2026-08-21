@@ -105,41 +105,33 @@ h2 {
 
 .modelo-imagen {
     width: 100%;
-
     height: 200px;
 
-    background: #ebe8e5;
-
+  /* Un fondo cálido muy suave en lugar de un gris frío */
+    background: #f4f0ec;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     overflow: hidden;
 }
-
 .modelo-imagen img {
     width: 100%;
-
     height: 100%;
-
     object-fit: contain;
-
     display: block;
 }
 
 .modelo-imagen.sin-imagen {
-    color: #888;
-
+ /* Color de texto más cálido y elegante */
+    color: #9c8e83;
     font-size: 13px;
+    font-style: italic;
 }
 
 
 /* =========================
    CONTENIDO DE LA TARJETA
 ========================= */
-
 .modelo-contenido {
     padding: 18px;
 }
@@ -151,32 +143,26 @@ h2 {
 
 .modelo-superior {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 10px;
 }
 
 .modelo-codigo {
-    font-size: 13px;
-
-    color: #777;
+  font-size: 12px;
+    color: #8c827a;
+    font-weight: 500;
 }
 
 .modelo-tipo {
     font-size: 11px;
-
     font-weight: bold;
-
     letter-spacing: 1px;
-
     padding: 5px 8px;
-
     border-radius: 5px;
-
-    background: #f0eeec;
+    /* Usamos un fondo con el verde oliva suave y texto blanco o verde oscuro */
+    background: #e4e8e1;
+    color: #4a5345;
 }
 
 
@@ -186,10 +172,9 @@ h2 {
 
 .modelo-nombre {
     font-size: 22px;
-
     font-weight: bold;
-
     margin: 8px 0;
+    color: #2c2622; /* Un tono más cálido que el negro puro */
 }
 
 
@@ -199,11 +184,8 @@ h2 {
 
 .modelo-material {
     font-size: 13px;
-
-    color: #666;
-
+    color: #7a6e65;
     margin: 0;
-
     min-height: 18px;
 }
 
@@ -214,10 +196,9 @@ h2 {
 
 .modelo-precio {
     font-size: 18px;
-
     font-weight: bold;
-
     margin-top: 15px;
+    color: #C47456;
 }
 
 
@@ -232,45 +213,36 @@ h2 {
 
 .modelos-toolbar {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     flex-wrap: wrap;
 }
 
 
 .modelos-busqueda {
     flex: 1;
-
     min-width: 220px;
 }
-
 
 .modelos-busqueda input,
 .modelos-filtro select {
     width: 100%;
-
     height: 44px;
-
     border: 1px solid #d8d3cf;
-
     border-radius: 8px;
-
     background: white;
-
     padding: 0 14px;
-
     font-size: 14px;
-
     outline: none;
+/* Transición suave para cuando cambie de color al hacer clic */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 
 .modelos-busqueda input:focus,
 .modelos-filtro select:focus {
-    border-color: #555;
+    border-color: #C47456;
+   box-shadow: 0 0 0 3px rgba(196, 116, 86, 0.15); /* Un halo muy sutil y elegante */
 }
 
 
