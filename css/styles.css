@@ -257,29 +257,23 @@ h2 {
 
 .btn-nuevo-modelo {
     height: 44px;
-
     padding: 0 18px;
-
     border: none;
-
     border-radius: 8px;
-
-    background: #1d1a1a;
-
+   /* Usamos el Terracota principal de Craft Flow */
+    background: #C47456;
     color: white;
-
     font-size: 13px;
-
     font-weight: bold;
-
     cursor: pointer;
-
-    transition: opacity 0.2s ease;
+/* Transición suave y elegante para el hover */
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 
 .btn-nuevo-modelo:hover {
-    opacity: 0.8;
+    /* Un terracota un poco más oscuro al pasar el mouse */
+    background: #b06447; 
 }
 
 
@@ -289,51 +283,46 @@ h2 {
 
 .modelo-botones {
     display: flex;
-
     gap: 8px;
-
     margin-top: 20px;
 }
 
 
 .modelo-botones button {
     flex: 1;
-
     height: 40px;
-
     border-radius: 7px;
-
     font-size: 11px;
-
     font-weight: bold;
-
     letter-spacing: 1px;
-
     cursor: pointer;
 }
 
-
 .btn-ver {
-    background: #1d1a1a;
-
+    /* El botón principal de la tarjeta usa el Verde Oliva Suave/Profundo */
+    background: #5d6657; 
     color: white;
-
-    border: 1px solid #1d1a1a;
+    border: 1px solid #5d6657;
 }
 
 
 .btn-editar {
+   /* El botón secundario se queda limpio con fondo blanco y bordes cálidos */
     background: white;
-
-    color: #1d1a1a;
-
-    border: 1px solid #1d1a1a;
+    color: #5d6657;
+    border: 1px solid #5d6657;
 }
 
 
-.btn-ver:hover,
+.btn-ver:hover {
+    background: #4a5345;
+    border-color: #4a5345;
+    opacity: 1;
+}
 .btn-editar:hover {
-    opacity: 0.75;
+    /* Al pasar el mouse por editar, se pinta suavemente de verde oliva */
+    background: #f0f3ee;
+    opacity: 1;
 }
 
 
