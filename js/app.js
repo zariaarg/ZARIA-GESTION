@@ -543,18 +543,253 @@ function verModelo(id) {
                 String(id)
         );
 
-
     if (!modelo) {
         return;
     }
 
+    const imagenPrincipal =
+        convertirImagenDrive(modelo.imagen);
 
-    alert(
-        `MODELO ${modelo.nombre}\n\n` +
-        `Código: ${modelo.codigo}\n` +
-        `Tipo: ${modelo.tipo}\n` +
-        `Precio: ${formatearPrecio(modelo.precio_venta)}`
+    const imagenSecundaria =
+        convertirImagenDrive(modelo.imagen_2);
+
+    const modal =
+        document.createElement("div");
+
+    modal.className = "modelo-modal";
+
+    modal.innerHTML = `
+
+        <div class="modelo-modal-overlay"></div>
+
+        <div class="modelo-modal-contenido">
+
+            <button
+                type="button"
+                class="modelo-modal-cerrar"
+                aria-label="Cerrar"
+            >
+                ×
+            </button>
+
+
+            <div class="modelo-detalle">
+
+
+                <!-- IMÁGENES -->
+
+                <div class="modelo-detalle-imagenes">
+
+                    ${
+                        imagenPrincipal
+                        ? `
+                            <div class="modelo-detalle-imagen-principal">
+
+                                <img
+                                    src="${imagenPrincipal}"
+                                    alt="${escaparHTML(modelo.nombre)}"
+                                >
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                        imagenSecundaria
+                        ? `
+                            <div class="modelo-detalle-imagen-secundaria">
+
+                                <img
+                                    src="${imagenSecundaria}"
+                                    alt="${escaparHTML(modelo.nombre)}"
+                                >
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+
+                <!-- INFORMACIÓN -->
+
+                <div class="modelo-detalle-info">
+
+
+                    <div class="modelo-detalle-codigo">
+
+                        ${escaparHTML(modelo.codigo)}
+
+                    </div>
+
+
+                    <div class="modelo-detalle-tipo">
+
+                        ${escaparHTML(modelo.tipo)}
+
+                    </div>
+
+
+                    <h2>
+
+                        ${escaparHTML(modelo.nombre)}
+
+                    </h2>
+
+
+                    <div class="modelo-detalle-material">
+
+                        ${escaparHTML(modelo.material_base)}
+
+                    </div>
+
+
+                    <div class="modelo-detalle-precio">
+
+                        ${formatearPrecio(
+                            modelo.precio_venta
+                        )}
+
+                    </div>
+
+
+                    ${
+                        modelo.descripcion
+                        ? `
+                            <div class="modelo-detalle-seccion">
+
+                                <h3>
+                                    DESCRIPCIÓN
+                                </h3>
+
+                                <p>
+                                    ${escaparHTML(
+                                        modelo.descripcion
+                                    )}
+                                </p>
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                        modelo.medidas
+                        ? `
+                            <div class="modelo-detalle-seccion">
+
+                                <h3>
+                                    MEDIDAS
+                                </h3>
+
+                                <p class="modelo-medidas">
+
+                                    ${escaparHTML(
+                                        modelo.medidas
+                                    ).replace(
+                                        /\n/g,
+                                        "<br>"
+                                    )}
+
+                                </p>
+
+                            </div>
+                        `
+                        : ""
+                    }
+
+
+                    <div class="modelo-detalle-seccion">
+
+                        <h3>
+                            PERSONALIZACIÓN
+                        </h3>
+
+                        <p>
+                            Las prendas se realizan
+                            a pedido y pueden
+                            personalizarse según las
+                            opciones disponibles.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    /*
+     * Cerrar con X
+     */
+
+    const botonCerrar =
+        modal.querySelector(
+            ".modelo-modal-cerrar"
+        );
+
+    botonCerrar.addEventListener(
+        "click",
+        cerrarModal
     );
+
+
+    /*
+     * Cerrar haciendo click
+     * fuera de la ficha
+     */
+
+    const overlay =
+        modal.querySelector(
+            ".modelo-modal-overlay"
+        );
+
+    overlay.addEventListener(
+        "click",
+        cerrarModal
+    );
+
+
+    /*
+     * Cerrar con ESC
+     */
+
+    document.addEventListener(
+        "keydown",
+        function cerrarConEscape(event) {
+
+            if (event.key === "Escape") {
+
+                cerrarModal();
+
+                document.removeEventListener(
+                    "keydown",
+                    cerrarConEscape
+                );
+
+            }
+
+        }
+    );
+
+
+    function cerrarModal() {
+
+        modal.remove();
+
+    }
 
 }
 
