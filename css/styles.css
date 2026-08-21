@@ -20,25 +20,29 @@ body {
 
 .header {
     height: 70px;
-    background: #1d1a1a;
-    color: white;
 
+   /* Usamos un verde oliva oscuro y elegante */
+    background: #5d6657; 
+    color: #ffffff;
+   
     display: flex;
     align-items: center;
-
     padding: 0 30px;
-
     gap: 12px;
+/* Agregamos una pequeña sombra para despegarlo del resto */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .header h1 {
     margin: 0;
     font-size: 24px;
-    letter-spacing: 2px;
+    letter-spacing: 1px; /* Un poco menos de espacio queda más moderno */
+    font-weight: 600;    /* Un poquito más de peso para que se lea mejor */
 }
 
 .header span {
-    opacity: 0.7;
+    opacity: 0.8; /* Un poco más legible que 0.7 */
+    font-weight: 300;
 }
 
 
@@ -79,11 +83,21 @@ h2 {
     border-radius: 12px;
 
     overflow: hidden;
-
-    box-shadow:
-        0 2px 10px rgba(0, 0, 0, 0.08);
+/* Sombra un poquito más suave y refinada */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+/* Añadimos una transición suave para cuando el mouse pase por encima */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Un borde muy fino con un tono neutro cálido */
+    border: 1px solid #eae5df;
+   
 }
-
+/* Efecto cuando pasas el mouse por la tarjeta (le da vida a la app) */
+.modelo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(196, 116, 86, 0.15); /* La sombra toma un reflejo terracota muy sutil */
+    border-color: #C47456; /* El borde se pinta del terracota de Craft Flow al seleccionarlo */
+}
 
 /* =========================
    IMAGEN DEL MODELO
