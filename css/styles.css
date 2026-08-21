@@ -998,3 +998,92 @@ h2 {
     opacity: 0.5;
     cursor: wait;
 }
+
+/* =========================
+   SELECTOR DE EMPRESA
+========================= */
+
+.empresa-selector {
+    margin-left: auto;
+}
+
+.empresa-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.empresa-logo {
+    width: 38px;
+    height: 38px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    background: white;
+
+    padding: 4px;
+}
+
+.empresa-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.empresa-label {
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+
+    opacity: 0.55;
+}
+
+#empresa-select {
+
+    appearance: none;
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    outline: none;
+
+    padding: 2px 22px 2px 0;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            white 50%
+        ),
+        linear-gradient(
+            135deg,
+            white 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 8px) 50%,
+        calc(100% - 3px) 50%;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+}
+
+#empresa-select option {
+    color: #222;
+    background: white;
+}
