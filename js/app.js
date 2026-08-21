@@ -10,6 +10,8 @@ let empresaActual = null;
 
 let modelos = [];
 let tipos = [];
+let materiales = [];
+
 let filtroActual = "TODOS";
 let busquedaActual = "";
 
@@ -28,14 +30,17 @@ function llamarAPI(resource) {
             "_" +
             Math.floor(Math.random() * 1000);
 
+
         const script =
             document.createElement("script");
+
 
         window[callbackName] = function(result) {
 
             delete window[callbackName];
 
             script.remove();
+
 
             if (!result.success) {
 
@@ -47,7 +52,9 @@ function llamarAPI(resource) {
                 );
 
                 return;
+
             }
+
 
             resolve(result.data);
 
@@ -60,6 +67,7 @@ function llamarAPI(resource) {
 
             script.remove();
 
+
             reject(
                 new Error(
                     "No se pudo conectar con la API"
@@ -69,8 +77,49 @@ function llamarAPI(resource) {
         };
 
 
-        script.src =
-            `${API_URL}?resource=${resource}&callback=${callbackName}`;
+        /*
+         * Recursos globales:
+         *
+         * empresas
+         * configuracion
+         * config_sistema
+         *
+         * No llevan empresa_id.
+         *
+         * El resto se filtra por
+         * empresaActual.
+         */
+
+        let url =
+            `${API_URL}?resource=${encodeURIComponent(resource)}`;
+
+
+        const recursosGlobales = [
+            "empresas",
+            "configuracion",
+            "config_sistema"
+        ];
+
+
+        if (
+            !recursosGlobales.includes(resource) &&
+            empresaActual
+        ) {
+
+            url +=
+                `&empresa_id=${encodeURIComponent(
+                    empresaActual.empresa_id
+                )}`;
+
+        }
+
+
+        url +=
+            `&callback=${callbackName}`;
+
+
+        script.src = url;
+
 
         document.body.appendChild(script);
 
@@ -90,12 +139,34 @@ async function iniciarAplicacion() {
             "modelos-container"
         );
 
+
     try {
 
-        container.innerHTML = `
-            <p>Cargando modelos...</p>
-        `;
+        if (container) {
 
+            container.innerHTML = `
+                <p>Cargando modelos...</p>
+            `;
+
+        }
+
+
+        /*
+         * Primero aseguramos que exista
+         * una empresa seleccionada.
+         */
+
+        if (!empresaActual) {
+
+            await cargarEmpresas();
+
+        }
+
+
+        /*
+         * Ahora sí cargamos los datos
+         * correspondientes a la empresa.
+         */
 
         const [
             modelosData,
@@ -109,26 +180,36 @@ async function iniciarAplicacion() {
         ]);
 
 
-        modelos = modelosData;
+        modelos =
+            modelosData || [];
 
 
-        tipos = configuracion
+        tipos =
+            configuracion
 
-            .filter(item =>
-                String(item.categoria)
-                    .toUpperCase() === "TIPO"
-            )
+                .filter(item =>
+                    String(item.categoria)
+                        .toUpperCase() === "TIPO"
+                )
 
-            .filter(item =>
-                item.activo === true ||
-                String(item.activo)
-                    .toUpperCase() === "TRUE"
-            )
+                .filter(item =>
+                    item.activo === true ||
+                    String(item.activo)
+                        .toUpperCase() === "TRUE"
+                )
 
-            .sort((a, b) =>
-                Number(a.orden || 999) -
-                Number(b.orden || 999)
-            );
+                .sort((a, b) =>
+                    Number(a.orden || 999) -
+                    Number(b.orden || 999)
+                );
+
+
+        /*
+         * Cargamos materiales de la
+         * empresa actual.
+         */
+
+        await cargarMateriales();
 
 
         crearControles();
@@ -140,11 +221,16 @@ async function iniciarAplicacion() {
 
         console.error(error);
 
-        container.innerHTML = `
-            <p class="error">
-                No se pudieron cargar los modelos.
-            </p>
-        `;
+
+        if (container) {
+
+            container.innerHTML = `
+                <p class="error">
+                    No se pudieron cargar los modelos.
+                </p>
+            `;
+
+        }
 
     }
 
@@ -296,6 +382,7 @@ function crearControles() {
 
 }
 
+
 /* =========================
    CARGAR EMPRESAS
 ========================= */
@@ -304,61 +391,19 @@ async function cargarEmpresas() {
 
     try {
 
-        const response = await fetch(
-            `${API_URL}?resource=empresas&callback=zariaCallback`
-        );
+        const empresasData =
+            await llamarAPI("empresas");
 
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-        const texto =
-            await response.text();
-
-        const inicio =
-            texto.indexOf("(");
-
-        const fin =
-            texto.lastIndexOf(")");
-
-        if (
-            inicio === -1 ||
-            fin === -1
-        ) {
-
-            throw new Error(
-                "Respuesta inválida de empresas"
-            );
-
-        }
-
-        const json =
-            JSON.parse(
-                texto.substring(
-                    inicio + 1,
-                    fin
-                )
-            );
-
-        if (!json.success) {
-
-            throw new Error(
-                json.error ||
-                "Error cargando empresas"
-            );
-
-        }
 
         empresas =
-            json.data || [];
+            empresasData || [];
+
 
         await establecerEmpresaInicial();
 
+
         mostrarEmpresas();
+
 
     } catch (error) {
 
@@ -367,9 +412,16 @@ async function cargarEmpresas() {
             error
         );
 
+
+        empresas = [];
+
+        empresaActual = null;
+
     }
 
 }
+
+
 /* =========================
    EMPRESA INICIAL
 ========================= */
@@ -378,69 +430,26 @@ async function establecerEmpresaInicial() {
 
     try {
 
-        const response = await fetch(
-            `${API_URL}?resource=config_sistema&callback=zariaCallback`
-        );
-
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-        const texto =
-            await response.text();
-
-        const inicio =
-            texto.indexOf("(");
-
-        const fin =
-            texto.lastIndexOf(")");
-
-        if (
-            inicio === -1 ||
-            fin === -1
-        ) {
-
-            throw new Error(
-                "Respuesta inválida de configuración"
-            );
-
-        }
-
-        const json =
-            JSON.parse(
-                texto.substring(
-                    inicio + 1,
-                    fin
-                )
-            );
-
-        if (!json.success) {
-
-            throw new Error(
-                json.error ||
-                "Error cargando configuración"
-            );
-
-        }
-
         const configuracion =
-            json.data || [];
+            await llamarAPI(
+                "config_sistema"
+            );
+
 
         const parametro =
             configuracion.find(
                 item =>
-                    item.parametro ===
+                    String(item.parametro)
+                        .toLowerCase() ===
                     "empresa_default_id"
             );
+
 
         const empresaDefaultId =
             parametro
                 ? Number(parametro.valor)
                 : 1;
+
 
         empresaActual =
             empresas.find(
@@ -451,12 +460,29 @@ async function establecerEmpresaInicial() {
                     empresaDefaultId
             );
 
+
+        /*
+         * Si por alguna razón la empresa
+         * configurada no existe, usamos
+         * la primera empresa activa.
+         */
+
         if (!empresaActual) {
 
             empresaActual =
-                empresas[0] || null;
+                empresas.find(
+                    empresa =>
+                        empresa.activo === true ||
+                        String(
+                            empresa.activo
+                        ).toUpperCase() ===
+                        "TRUE"
+                ) ||
+                empresas[0] ||
+                null;
 
         }
+
 
     } catch (error) {
 
@@ -465,12 +491,27 @@ async function establecerEmpresaInicial() {
             error
         );
 
+
+        /*
+         * Fallback:
+         * empresa 1.
+         */
+
         empresaActual =
-            empresas[0] || null;
+            empresas.find(
+                empresa =>
+                    Number(
+                        empresa.empresa_id
+                    ) === 1
+            ) ||
+            empresas[0] ||
+            null;
 
     }
 
 }
+
+
 /* =========================
    MOSTRAR EMPRESAS
 ========================= */
@@ -482,22 +523,28 @@ function mostrarEmpresas() {
             "empresa-select"
         );
 
+
     const logo =
         document.getElementById(
             "empresa-logo"
         );
 
+
     if (!select) {
         return;
     }
 
+
     select.innerHTML = "";
+
 
     empresas
         .filter(
             empresa =>
                 empresa.activo === true ||
-                empresa.activo === "TRUE"
+                String(
+                    empresa.activo
+                ).toUpperCase() === "TRUE"
         )
         .forEach(
             empresa => {
@@ -507,12 +554,15 @@ function mostrarEmpresas() {
                         "option"
                     );
 
+
                 option.value =
                     empresa.empresa_id;
+
 
                 option.textContent =
                     empresa.nombre_comercial ||
                     empresa.nombre;
+
 
                 if (
                     empresaActual &&
@@ -528,12 +578,14 @@ function mostrarEmpresas() {
 
                 }
 
+
                 select.appendChild(
                     option
                 );
 
             }
         );
+
 
     if (
         empresaActual &&
@@ -545,6 +597,7 @@ function mostrarEmpresas() {
                 empresaActual.logo
             );
 
+
         logo.alt =
             empresaActual.nombre_comercial ||
             empresaActual.nombre ||
@@ -552,19 +605,24 @@ function mostrarEmpresas() {
 
     }
 
+
     select.onchange =
         cambiarEmpresa;
 
-}/* =========================
+}
+
+
+/* =========================
    CAMBIAR EMPRESA
 ========================= */
 
-function cambiarEmpresa(event) {
+async function cambiarEmpresa(event) {
 
     const empresaId =
         Number(
             event.target.value
         );
+
 
     const nuevaEmpresa =
         empresas.find(
@@ -575,17 +633,29 @@ function cambiarEmpresa(event) {
                 empresaId
         );
 
+
     if (!nuevaEmpresa) {
         return;
     }
 
+
+    /*
+     * Cambiamos la empresa actual.
+     */
+
     empresaActual =
         nuevaEmpresa;
+
+
+    /*
+     * Actualizamos logo.
+     */
 
     const logo =
         document.getElementById(
             "empresa-logo"
         );
+
 
     if (logo) {
 
@@ -594,6 +664,7 @@ function cambiarEmpresa(event) {
                 empresaActual.logo
             );
 
+
         logo.alt =
             empresaActual.nombre_comercial ||
             empresaActual.nombre ||
@@ -601,20 +672,88 @@ function cambiarEmpresa(event) {
 
     }
 
+
     /*
-     * Por ahora NO recargamos los datos.
-     *
-     * Primero vamos a conectar
-     * empresaActual con MODELOS,
-     * CLIENTES, PEDIDOS, etc.
+     * Reiniciamos filtros.
      */
 
-    console.log(
-        "Empresa seleccionada:",
-        empresaActual
-    );
+    filtroActual =
+        "TODOS";
+
+
+    busquedaActual =
+        "";
+
+
+    /*
+     * Volvemos a cargar los datos
+     * correspondientes a la nueva empresa.
+     */
+
+    try {
+
+        const [
+            modelosData
+        ] = await Promise.all([
+
+            llamarAPI("modelos")
+
+        ]);
+
+
+        modelos =
+            modelosData || [];
+
+
+        await cargarMateriales();
+
+
+        const buscador =
+            document.getElementById(
+                "buscar-modelo"
+            );
+
+
+        const filtro =
+            document.getElementById(
+                "filtro-tipo"
+            );
+
+
+        if (buscador) {
+
+            buscador.value = "";
+
+        }
+
+
+        if (filtro) {
+
+            filtro.value =
+                "TODOS";
+
+        }
+
+
+        mostrarModelos();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cambiando de empresa:",
+            error
+        );
+
+
+        alert(
+            "No se pudieron cargar los datos de la empresa seleccionada."
+        );
+
+    }
 
 }
+
 
 /* =========================
    MOSTRAR MODELOS
@@ -628,8 +767,26 @@ function mostrarModelos() {
         );
 
 
+    if (!container) {
+        return;
+    }
+
+
     const modelosFiltrados =
         modelos.filter(modelo => {
+
+
+            /*
+             * Seguridad adicional:
+             * aunque el servidor ya filtre,
+             * también verificamos empresa_id
+             * en el navegador.
+             */
+
+            const coincideEmpresa =
+                !empresaActual ||
+                Number(modelo.empresa_id) ===
+                Number(empresaActual.empresa_id);
 
 
             const coincideTipo =
@@ -661,6 +818,7 @@ function mostrarModelos() {
 
 
             return (
+                coincideEmpresa &&
                 coincideTipo &&
                 coincideBusqueda
             );
@@ -884,7 +1042,14 @@ function verModelo(id) {
         modelos.find(
             item =>
                 String(item.modelo_id) ===
-                String(id)
+                String(id) &&
+                (
+                    !empresaActual ||
+                    Number(item.empresa_id) ===
+                    Number(
+                        empresaActual.empresa_id
+                    )
+                )
         );
 
 
@@ -892,9 +1057,11 @@ function verModelo(id) {
         return;
     }
 
-window.modeloActualId =
-    modelo.modelo_id;
-   
+
+    window.modeloActualId =
+        modelo.modelo_id;
+
+
     const imagenPrincipal =
         convertirImagenDrive(
             modelo.imagen
@@ -1131,9 +1298,9 @@ window.modeloActualId =
     document.body.appendChild(modal);
 
 
-    /* =========================
-       CARGAR MATERIALES
-    ========================= */
+    /*
+     * CARGAR MATERIALES
+     */
 
     cargarMaterialesModelo(
         modelo.modelo_id
@@ -1172,6 +1339,7 @@ window.modeloActualId =
 
 }
 
+
 /* =========================
    AGREGAR MATERIAL
 ========================= */
@@ -1180,6 +1348,7 @@ function abrirAgregarMaterial() {
 
     const modeloId =
         window.modeloActualId;
+
 
     if (!modeloId) {
 
@@ -1379,13 +1548,19 @@ function abrirAgregarMaterial() {
         ".material-btn-guardar"
     ).addEventListener(
         "click",
-        () => guardarMaterialModelo(
-            modal,
-            modeloId
-        )
+        () =>
+            guardarMaterialModelo(
+                modal,
+                modeloId
+            )
     );
 
 }
+
+
+/* =========================
+   GUARDAR MATERIAL MODELO
+========================= */
 
 async function guardarMaterialModelo(
     modal,
@@ -1493,6 +1668,11 @@ async function guardarMaterialModelo(
                             accion:
                                 "agregar_modelo_material",
 
+                            empresa_id:
+                                empresaActual
+                                    ? empresaActual.empresa_id
+                                    : 1,
+
                             modelo_id:
                                 modeloId,
 
@@ -1556,6 +1736,7 @@ async function guardarMaterialModelo(
 
 }
 
+
 /* =========================
    MATERIALES DEL MODELO
 ========================= */
@@ -1582,13 +1763,15 @@ async function cargarMaterialesModelo(modeloId) {
 
     try {
 
-        /* =========================
-           CARGAR MODELO_MATERIALES
-        ========================= */
-
         const response =
             await fetch(
-                `${API_URL}?resource=modelo_materiales&callback=zariaCallback`
+                `${API_URL}?resource=modelo_materiales` +
+                `&empresa_id=${
+                    empresaActual
+                        ? empresaActual.empresa_id
+                        : 1
+                }` +
+                `&callback=zariaCallback`
             );
 
 
@@ -1644,21 +1827,21 @@ async function cargarMaterialesModelo(modeloId) {
         }
 
 
-        /* =========================
-           FILTRAR POR MODELO
-        ========================= */
-
         const materialesModelo =
             json.data.filter(
                 item =>
                     Number(item.modelo_id) ===
-                    Number(modeloId)
+                    Number(modeloId) &&
+
+                    (
+                        !empresaActual ||
+                        Number(item.empresa_id) ===
+                        Number(
+                            empresaActual.empresa_id
+                        )
+                    )
             );
 
-
-        /* =========================
-           CRUZAR CON MATERIALES
-        ========================= */
 
         const materialesCompletos =
             materialesModelo.map(
@@ -1714,18 +1897,28 @@ async function cargarMaterialesModelo(modeloId) {
 
 }
 
-function mostrarMaterialesModelo(materiales) {
+
+/* =========================
+   MOSTRAR MATERIALES MODELO
+========================= */
+
+function mostrarMaterialesModelo(materialesModelo) {
 
     const container =
         document.getElementById(
             "modelo-materiales-container"
         );
 
+
     if (!container) {
         return;
     }
 
-    if (!materiales || materiales.length === 0) {
+
+    if (
+        !materialesModelo ||
+        materialesModelo.length === 0
+    ) {
 
         container.innerHTML = `
             <div class="materiales-vacio">
@@ -1743,11 +1936,14 @@ function mostrarMaterialesModelo(materiales) {
         `;
 
         return;
+
     }
+
 
     let html = "";
 
-    materiales.forEach(material => {
+
+    materialesModelo.forEach(material => {
 
         html += `
             <div class="material-modelo-item">
@@ -1755,7 +1951,11 @@ function mostrarMaterialesModelo(materiales) {
                 <div class="material-modelo-info">
 
                     <strong>
-                        ${material.material_nombre || material.nombre || ""}
+                        ${
+                            material.material_nombre ||
+                            material.nombre ||
+                            ""
+                        }
                     </strong>
 
                     <span>
@@ -1770,6 +1970,7 @@ function mostrarMaterialesModelo(materiales) {
 
     });
 
+
     html += `
         <button
             type="button"
@@ -1780,84 +1981,37 @@ function mostrarMaterialesModelo(materiales) {
         </button>
     `;
 
-    container.innerHTML = html;
+
+    container.innerHTML =
+        html;
+
 }
+
 
 /* =========================
    LISTA DE MATERIALES
 ========================= */
 
-let materiales = [];
-
-
 async function cargarMateriales() {
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}?resource=materiales&callback=zariaCallback`
+        const data =
+            await llamarAPI(
+                "materiales"
             );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        const texto =
-            await response.text();
-
-
-        const inicio =
-            texto.indexOf("(");
-
-
-        const fin =
-            texto.lastIndexOf(")");
-
-
-        if (
-            inicio === -1 ||
-            fin === -1
-        ) {
-
-            throw new Error(
-                "Respuesta inválida de materiales"
-            );
-
-        }
-
-
-        const json =
-            JSON.parse(
-                texto.substring(
-                    inicio + 1,
-                    fin
-                )
-            );
-
-
-        if (!json.success) {
-
-            throw new Error(
-                json.error ||
-                "Error en la API"
-            );
-
-        }
 
 
         materiales =
-            json.data.filter(
+            (data || []).filter(
                 material =>
                     material.activo === true ||
-                    material.activo === "TRUE" ||
-                    material.activo === "VERDADERO"
+                    String(
+                        material.activo
+                    ).toUpperCase() === "TRUE" ||
+                    String(
+                        material.activo
+                    ).toUpperCase() === "VERDADERO"
             );
 
 
@@ -1868,11 +2022,13 @@ async function cargarMateriales() {
             error
         );
 
+
         materiales = [];
 
     }
 
 }
+
 
 /* =========================
    EDITAR MODELO
@@ -1884,7 +2040,15 @@ function editarModelo(id) {
         modelos.find(
             item =>
                 String(item.modelo_id) ===
-                String(id)
+                String(id) &&
+
+                (
+                    !empresaActual ||
+                    Number(item.empresa_id) ===
+                    Number(
+                        empresaActual.empresa_id
+                    )
+                )
         );
 
 
@@ -2304,8 +2468,8 @@ function crearOpcionesTipo(tipoActual) {
                 .toUpperCase() ===
             String(tipoActual)
                 .toUpperCase()
-                ? "selected"
-                : "";
+            ? "selected"
+            : "";
 
 
         opciones += `
@@ -2327,12 +2491,6 @@ function crearOpcionesTipo(tipoActual) {
 
     });
 
-
-    /*
-     * Si por alguna razón el tipo actual
-     * no estuviera en CONFIGURACION,
-     * lo agregamos para no perderlo.
-     */
 
     const existe =
         tipos.some(
@@ -2411,6 +2569,11 @@ async function guardarModelo(
 
     const data = {
 
+        empresa_id:
+            empresaActual
+                ? empresaActual.empresa_id
+                : modelo.empresa_id,
+
         nombre:
             formData.get("nombre")
                 .trim(),
@@ -2460,30 +2623,7 @@ async function guardarModelo(
     };
 
 
-    /*
-     * IMPORTANTE:
-     *
-     * NO enviamos:
-     *
-     * modelo_id
-     * codigo
-     * created_at
-     * updated_at
-     *
-     * El servidor los protege.
-     */
-
-
     try {
-
-        /*
-         * Google Apps Script puede recibir
-         * el POST mediante un formulario.
-         *
-         * Esto evita el problema CORS que
-         * tuvimos anteriormente con fetch().
-         */
-
 
         const iframe =
             document.createElement(
@@ -2555,6 +2695,11 @@ async function guardarModelo(
                 id:
                     modelo.modelo_id,
 
+                empresa_id:
+                    empresaActual
+                        ? empresaActual.empresa_id
+                        : modelo.empresa_id,
+
                 data: data
 
             });
@@ -2570,15 +2715,12 @@ async function guardarModelo(
         );
 
 
-        /*
-         * Esperamos la carga del iframe.
-         */
-
         iframe.onload =
             function() {
 
                 mensaje.textContent =
                     "Cambios guardados correctamente.";
+
 
                 mensaje.className =
                     "modelo-editar-mensaje exito";
@@ -2594,17 +2736,13 @@ async function guardarModelo(
                         modal.remove();
 
 
-                        /*
-                         * Volvemos a cargar
-                         * modelos desde Sheets.
-                         */
-
                         try {
 
                             modelos =
                                 await llamarAPI(
                                     "modelos"
                                 );
+
 
                             mostrarModelos();
 
@@ -3158,41 +3296,66 @@ function convertirImagenDrive(url) {
         return "";
     }
 
-    url = String(url).trim();
 
-    // Si ya es una URL de thumbnail de Drive
-    if (url.includes("drive.google.com/thumbnail")) {
+    url =
+        String(url).trim();
+
+
+    if (
+        url.includes(
+            "drive.google.com/thumbnail"
+        )
+    ) {
+
         return url;
+
     }
 
-    // Detectar ID en enlaces:
-    // https://drive.google.com/file/d/ID/view
-    // https://drive.google.com/open?id=ID
-    // https://drive.google.com/uc?id=ID
+
     let fileId = "";
 
-    const matchArchivo = url.match(/\/file\/d\/([^/]+)/);
+
+    const matchArchivo =
+        url.match(
+            /\/file\/d\/([^/]+)/
+        );
+
 
     if (matchArchivo) {
-        fileId = matchArchivo[1];
+
+        fileId =
+            matchArchivo[1];
+
     }
 
+
     if (!fileId) {
-        const matchId = url.match(/[?&]id=([^&]+)/);
+
+        const matchId =
+            url.match(
+                /[?&]id=([^&]+)/
+            );
+
 
         if (matchId) {
-            fileId = matchId[1];
+
+            fileId =
+                matchId[1];
+
         }
+
     }
 
-    // Si no pudimos obtener el ID,
-    // dejamos la URL original
+
     if (!fileId) {
+
         return url;
+
     }
 
-    // URL de imagen optimizada de Google Drive
+
     return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+
 }
 
 
@@ -3286,6 +3449,4 @@ function escaparHTML(texto) {
    ARRANCAR
 ========================= */
 
-cargarEmpresas();
 iniciarAplicacion();
-cargarMateriales();
