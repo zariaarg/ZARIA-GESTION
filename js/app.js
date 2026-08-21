@@ -993,6 +993,96 @@ function mostrarMaterialesModelo(materiales) {
     container.innerHTML = html;
 }
 
+/* =========================
+   LISTA DE MATERIALES
+========================= */
+
+let materiales = [];
+
+
+async function cargarMateriales() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}?resource=materiales&callback=zariaCallback`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const texto =
+            await response.text();
+
+
+        const inicio =
+            texto.indexOf("(");
+
+
+        const fin =
+            texto.lastIndexOf(")");
+
+
+        if (
+            inicio === -1 ||
+            fin === -1
+        ) {
+
+            throw new Error(
+                "Respuesta inválida de materiales"
+            );
+
+        }
+
+
+        const json =
+            JSON.parse(
+                texto.substring(
+                    inicio + 1,
+                    fin
+                )
+            );
+
+
+        if (!json.success) {
+
+            throw new Error(
+                json.error ||
+                "Error en la API"
+            );
+
+        }
+
+
+        materiales =
+            json.data.filter(
+                material =>
+                    material.activo === true ||
+                    material.activo === "TRUE" ||
+                    material.activo === "VERDADERO"
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando materiales:",
+            error
+        );
+
+        materiales = [];
+
+    }
+
+}
 
 /* =========================
    EDITAR MODELO
@@ -2407,3 +2497,4 @@ function escaparHTML(texto) {
 ========================= */
 
 iniciarAplicacion();
+cargarMateriales();
