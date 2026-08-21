@@ -14,7 +14,7 @@ let materiales = [];
 
 let filtroActual = "TODOS";
 let busquedaActual = "";
-
+let vistaActual = "dashboard";
 
 /* =========================
    API JSONP
@@ -127,6 +127,10 @@ function llamarAPI(
    INICIO
 ========================= */
 
+/* =========================
+   INICIO VISTA MODELOS
+========================= */
+
 async function iniciarAplicacion() {
 
     const container =
@@ -134,21 +138,24 @@ async function iniciarAplicacion() {
             "modelos-container"
         );
 
+    if (!container) {
+        console.warn(
+            "No existe #modelos-container"
+        );
+        return;
+    }
+
+    vistaActual = "modelos";
 
     try {
 
-        if (container) {
-
-            container.innerHTML = `
-                <p>Cargando modelos...</p>
-            `;
-
-        }
-
+        container.innerHTML = `
+            <p>Cargando modelos...</p>
+        `;
 
         /*
-         * Primero aseguramos que exista
-         * una empresa seleccionada.
+         * Si por alguna razón todavía
+         * no hay empresa, la cargamos.
          */
 
         if (!empresaActual) {
@@ -157,10 +164,17 @@ async function iniciarAplicacion() {
 
         }
 
+        if (!empresaActual) {
+
+            throw new Error(
+                "No hay una empresa seleccionada."
+            );
+
+        }
 
         /*
-         * Ahora sí cargamos los datos
-         * correspondientes a la empresa.
+         * Cargamos solamente los datos
+         * necesarios para la pantalla MODELOS.
          */
 
         const [
@@ -168,19 +182,22 @@ async function iniciarAplicacion() {
             configuracion
         ] = await Promise.all([
 
-            llamarAPI("modelos"),
+            llamarAPI(
+                "modelos",
+                empresaActual.empresa_id
+            ),
 
-            llamarAPI("configuracion")
+            llamarAPI(
+                "configuracion"
+            )
 
         ]);
-
 
         modelos =
             modelosData || [];
 
-
         tipos =
-            configuracion
+            (configuracion || [])
 
                 .filter(item =>
                     String(item.categoria)
@@ -198,48 +215,73 @@ async function iniciarAplicacion() {
                     Number(b.orden || 999)
                 );
 
-
         /*
-         * Cargamos materiales de la
-         * empresa actual.
+         * Materiales solamente los necesitamos
+         * dentro del módulo MODELOS.
          */
 
         await cargarMateriales();
 
+        /*
+         * IMPORTANTE:
+         *
+         * Los controles se crean dentro de
+         * #modelos-view, NO dentro de .main.
+         */
 
         crearControles();
 
         mostrarModelos();
 
-
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Error cargando MODELOS:",
+            error
+        );
 
-
-        if (container) {
-
-            container.innerHTML = `
-                <p class="error">
-                    No se pudieron cargar los modelos.
-                </p>
-            `;
-
-        }
+        container.innerHTML = `
+            <p class="error">
+                No se pudieron cargar los modelos.
+            </p>
+        `;
 
     }
 
 }
 
-
 /* =========================
-   CONTROLES
+   CONTROLES DE MODELOS
 ========================= */
 
 function crearControles() {
 
-    const main =
-        document.querySelector(".main");
+    /*
+     * IMPORTANTE:
+     *
+     * Antes buscábamos .main.
+     * Eso hacía que los controles de
+     * MODELOS terminaran apareciendo
+     * también en el Dashboard.
+     *
+     * Ahora buscamos EXCLUSIVAMENTE
+     * dentro de #modelos-view.
+     */
+
+    const modelosView =
+        document.getElementById(
+            "modelos-view"
+        );
+
+    if (!modelosView) {
+
+        console.warn(
+            "No existe #modelos-view"
+        );
+
+        return;
+
+    }
 
 
     let controles =
@@ -251,20 +293,52 @@ function crearControles() {
     if (!controles) {
 
         controles =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         controles.id =
             "modelos-controles";
 
 
+        /*
+         * Buscamos el título de MODELOS
+         * únicamente dentro de su vista.
+         */
+
         const titulo =
-            main.querySelector("h2");
+            modelosView.querySelector(
+                "h2"
+            );
 
 
-        titulo.insertAdjacentElement(
-            "afterend",
-            controles
-        );
+        const container =
+            document.getElementById(
+                "modelos-container"
+            );
+
+
+        if (titulo) {
+
+            titulo.insertAdjacentElement(
+                "afterend",
+                controles
+            );
+
+        } else if (container) {
+
+            container.insertAdjacentElement(
+                "beforebegin",
+                controles
+            );
+
+        } else {
+
+            modelosView.appendChild(
+                controles
+            );
+
+        }
 
     }
 
@@ -279,6 +353,7 @@ function crearControles() {
                     type="text"
                     id="buscar-modelo"
                     placeholder="Buscar modelo..."
+                    autocomplete="off"
                 >
 
             </div>
@@ -295,9 +370,13 @@ function crearControles() {
                     ${tipos.map(tipo => `
 
                         <option
-                            value="${escaparHTML(tipo.valor)}"
+                            value="${escaparHTML(
+                                tipo.valor
+                            )}"
                         >
-                            ${escaparHTML(tipo.valor)}
+                            ${escaparHTML(
+                                tipo.valor
+                            )}
                         </option>
 
                     `).join("")}
@@ -321,57 +400,92 @@ function crearControles() {
 
 
     const buscador =
-        document.getElementById(
-            "buscar-modelo"
+        controles.querySelector(
+            "#buscar-modelo"
         );
 
 
     const filtro =
-        document.getElementById(
-            "filtro-tipo"
+        controles.querySelector(
+            "#filtro-tipo"
         );
 
 
-    buscador.addEventListener(
-        "input",
-        function() {
-
-            busquedaActual =
-                this.value
-                    .trim()
-                    .toLowerCase();
-
-            mostrarModelos();
-
-        }
-    );
+    const botonNuevo =
+        controles.querySelector(
+            "#btn-nuevo-modelo"
+        );
 
 
-    filtro.addEventListener(
-        "change",
-        function() {
+    /*
+     * Restauramos los valores actuales
+     * si volvemos a entrar a MODELOS.
+     */
 
-            filtroActual =
-                this.value;
+    if (buscador) {
 
-            mostrarModelos();
+        buscador.value =
+            busquedaActual;
 
-        }
-    );
+    }
 
 
-document
-    .getElementById(
-        "btn-nuevo-modelo"
-    )
-    .addEventListener(
-        "click",
-        function() {
+    if (filtro) {
 
-            abrirNuevoModelo();
+        filtro.value =
+            filtroActual;
 
-        }
-    );
+    }
+
+
+    if (buscador) {
+
+        buscador.addEventListener(
+            "input",
+            function() {
+
+                busquedaActual =
+                    this.value
+                        .trim()
+                        .toLowerCase();
+
+                mostrarModelos();
+
+            }
+        );
+
+    }
+
+
+    if (filtro) {
+
+        filtro.addEventListener(
+            "change",
+            function() {
+
+                filtroActual =
+                    this.value;
+
+                mostrarModelos();
+
+            }
+        );
+
+    }
+
+
+    if (botonNuevo) {
+
+        botonNuevo.addEventListener(
+            "click",
+            function() {
+
+                abrirNuevoModelo();
+
+            }
+        );
+
+    }
 
 }
 
@@ -667,69 +781,86 @@ async function cambiarEmpresa(event) {
 
 
     /*
-     * Reiniciamos filtros.
+     * Reiniciamos filtros de MODELOS.
      */
 
     filtroActual =
         "TODOS";
-
 
     busquedaActual =
         "";
 
 
     /*
-     * Volvemos a cargar los datos
-     * correspondientes a la nueva empresa.
+     * Limpiamos los controles si existen.
      */
+
+    const buscador =
+        document.getElementById(
+            "buscar-modelo"
+        );
+
+
+    const filtro =
+        document.getElementById(
+            "filtro-tipo"
+        );
+
+
+    if (buscador) {
+
+        buscador.value =
+            "";
+
+    }
+
+
+    if (filtro) {
+
+        filtro.value =
+            "TODOS";
+
+    }
+
 
     try {
 
-        const [
-            modelosData
-        ] = await Promise.all([
-
-            llamarAPI("modelos")
-
-        ]);
-
-
-        modelos =
-            modelosData || [];
-
+        /*
+         * Actualizamos materiales para
+         * la nueva empresa.
+         */
 
         await cargarMateriales();
 
 
-        const buscador =
-            document.getElementById(
-                "buscar-modelo"
-            );
+        /*
+         * Si estamos en MODELOS,
+         * recargamos la pantalla.
+         */
 
+        if (
+            vistaActual ===
+            "modelos"
+        ) {
 
-        const filtro =
-            document.getElementById(
-                "filtro-tipo"
-            );
-
-
-        if (buscador) {
-
-            buscador.value = "";
+            await iniciarAplicacion();
 
         }
 
 
-        if (filtro) {
+        /*
+         * Si estamos en Dashboard,
+         * actualizamos sus estadísticas.
+         */
 
-            filtro.value =
-                "TODOS";
+        if (
+            vistaActual ===
+            "dashboard"
+        ) {
+
+            await iniciarDashboard();
 
         }
-
-
-        mostrarModelos();
-
 
     } catch (error) {
 
@@ -744,8 +875,6 @@ async function cambiarEmpresa(event) {
         );
 
     }
-
-}
 
 
 /* =========================
@@ -4916,12 +5045,11 @@ function convertirFecha(
 
 }
 
-
 /* =========================================================
-   NAVEGACIÓN
+   MOSTRAR DASHBOARD
    ========================================================= */
 
-function mostrarDashboard() {
+async function mostrarDashboard() {
 
     const dashboard =
         document.getElementById(
@@ -4929,32 +5057,60 @@ function mostrarDashboard() {
         );
 
 
-    const modelos =
+    const modelosView =
         document.getElementById(
             "modelos-view"
         );
 
+
+    vistaActual =
+        "dashboard";
+
+
+    /*
+     * Dashboard visible
+     */
 
     if (dashboard) {
 
         dashboard.style.display =
             "";
 
+        dashboard.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
     }
 
 
-    if (modelos) {
+    /*
+     * MODELOS completamente oculto
+     */
 
-        modelos.style.display =
+    if (modelosView) {
+
+        modelosView.style.display =
             "none";
 
+        modelosView.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
     }
+
+
+    /*
+     * Actualizamos los datos del Dashboard.
+     */
+
+    await iniciarDashboard();
 
 }
 
-
 /* =========================================================
-   MOSTRAR MODELOS
+   MOSTRAR VISTA MODELOS
    ========================================================= */
 
 async function mostrarVistaModelos() {
@@ -4965,27 +5121,53 @@ async function mostrarVistaModelos() {
         );
 
 
-    const modelos =
+    const modelosView =
         document.getElementById(
             "modelos-view"
         );
 
+
+    vistaActual =
+        "modelos";
+
+
+    /*
+     * Ocultamos Dashboard
+     */
 
     if (dashboard) {
 
         dashboard.style.display =
             "none";
 
+        dashboard.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
     }
 
 
-    if (modelos) {
+    /*
+     * Mostramos MODELOS
+     */
 
-        modelos.style.display =
+    if (modelosView) {
+
+        modelosView.style.display =
             "";
 
+        modelosView.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
     }
 
+
+    /*
+     * Ahora sí cargamos los modelos.
+     */
 
     await iniciarAplicacion();
 
@@ -4997,7 +5179,6 @@ async function mostrarVistaModelos() {
    ========================================================= */
 
 function configurarDashboard() {
-
 
     const btnModelos =
         document.getElementById(
@@ -5053,133 +5234,146 @@ function configurarDashboard() {
         );
 
 
+    /*
+     * MODELOS
+     */
+
     if (btnModelos) {
 
-        btnModelos.addEventListener(
-            "click",
-            mostrarVistaModelos
-        );
+        btnModelos.onclick =
+            function() {
+
+                mostrarVistaModelos();
+
+            };
 
     }
 
 
     if (btnAccesoModelos) {
 
-        btnAccesoModelos.addEventListener(
-            "click",
-            mostrarVistaModelos
-        );
+        btnAccesoModelos.onclick =
+            function() {
+
+                mostrarVistaModelos();
+
+            };
 
     }
 
+
+    /*
+     * VOLVER AL DASHBOARD
+     */
 
     if (btnVolver) {
 
-        btnVolver.addEventListener(
-            "click",
-            mostrarDashboard
-        );
+        btnVolver.onclick =
+            function() {
+
+                mostrarDashboard();
+
+            };
 
     }
 
 
+    /*
+     * PEDIDOS
+     */
+
     if (btnNuevoPedido) {
 
-        btnNuevoPedido.addEventListener(
-            "click",
+        btnNuevoPedido.onclick =
             function() {
 
                 alert(
                     "El módulo NUEVO PEDIDO lo conectamos en el próximo paso."
                 );
 
-            }
-        );
+            };
 
     }
 
 
     if (btnPedidos) {
 
-        btnPedidos.addEventListener(
-            "click",
+        btnPedidos.onclick =
             function() {
 
                 alert(
                     "El módulo PEDIDOS lo conectamos en el próximo paso."
                 );
 
-            }
-        );
+            };
 
     }
 
 
     if (btnAccesoPedidos) {
 
-        btnAccesoPedidos.addEventListener(
-            "click",
+        btnAccesoPedidos.onclick =
             function() {
 
                 alert(
                     "El módulo PEDIDOS lo conectamos en el próximo paso."
                 );
 
-            }
-        );
+            };
 
     }
 
 
+    /*
+     * CLIENTES
+     */
+
     if (btnClientes) {
 
-        btnClientes.addEventListener(
-            "click",
+        btnClientes.onclick =
             function() {
 
                 alert(
                     "El módulo CLIENTES lo conectamos en el próximo paso."
                 );
 
-            }
-        );
+            };
 
     }
 
 
     if (btnAccesoClientes) {
 
-        btnAccesoClientes.addEventListener(
-            "click",
+        btnAccesoClientes.onclick =
             function() {
 
                 alert(
                     "El módulo CLIENTES lo conectamos en el próximo paso."
                 );
 
-            }
-        );
+            };
 
     }
 
 
+    /*
+     * MATERIALES
+     */
+
     if (btnMateriales) {
 
-        btnMateriales.addEventListener(
-            "click",
+        btnMateriales.onclick =
             function() {
 
                 alert(
                     "El módulo MATERIALES lo conectamos más adelante."
                 );
 
-            }
-        );
+            };
 
     }
 
 }
-
 
 /* =========================================================
    INICIO DEL SISTEMA
