@@ -777,3 +777,72 @@ h2 {
     }
 
 }
+/* =========================
+   MATERIALES DEL MODELO
+========================= */
+
+.modelo-materiales {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e0dc;
+}
+
+.modelo-materiales h3 {
+    margin: 0 0 18px 0;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.material-modelo-item {
+    background: #f7f5f3;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+}
+
+.material-modelo-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.material-modelo-info strong {
+    font-size: 14px;
+}
+
+.material-modelo-info span {
+    font-size: 13px;
+    color: #666;
+}
+
+.materiales-cargando,
+.materiales-vacio,
+.materiales-error {
+    padding: 15px;
+    background: #f7f5f3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #777;
+}
+
+.btn-agregar-material {
+    margin-top: 12px;
+    padding: 10px 15px;
+
+    border: 1px solid #1d1a1a;
+    border-radius: 7px;
+
+    background: white;
+    color: #1d1a1a;
+
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+}
+
+.btn-agregar-material:hover {
+    opacity: 0.7;
+}
