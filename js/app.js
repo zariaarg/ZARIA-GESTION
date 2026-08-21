@@ -5002,394 +5002,127 @@ function convertirFecha(
    MOSTRAR DASHBOARD
    ========================================================= */
 
-
 async function mostrarDashboard() {
 
     const dashboard =
-        document.getElementById(
-            "dashboard-view"
-        );
+        document.getElementById("dashboard-view");
 
     const modelosView =
-        document.getElementById(
-            "modelos-view"
-        );
+        document.getElementById("modelos-view");
 
-    vistaActual =
-        "dashboard";
-
-
-    /*
-     * DASHBOARD VISIBLE
-     */
+    vistaActual = "dashboard";
 
     if (dashboard) {
-
         dashboard.style.display = "";
-
-        dashboard.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
+        dashboard.setAttribute("aria-hidden", "false");
     }
-
-
-    /*
-     * MODELOS OCULTO
-     */
 
     if (modelosView) {
-
         modelosView.style.display = "none";
-
-        modelosView.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
+        modelosView.setAttribute("aria-hidden", "true");
     }
 
-
-    /*
-     * Nos aseguramos de que la empresa
-     * y su logo estén visibles.
-     */
-
-    if (
-        typeof mostrarEmpresas ===
-        "function"
-    ) {
-
-        mostrarEmpresas();
-
+    if (typeof iniciarDashboard === "function") {
+        await iniciarDashboard();
     }
-
-
-    /*
-     * Actualizamos Dashboard.
-     */
-
-    if (
-        typeof iniciarDashboard ===
-        "function"
-    ) {
-
-        try {
-
-            await iniciarDashboard();
-
-        } catch (error) {
-
-            console.error(
-                "Error actualizando Dashboard:",
-                error
-            );
-
-        }
-
-    }
-
 }
 
 
 /* =========================================================
-   MOSTRAR VISTA MODELOS
+   MOSTRAR MODELOS
    ========================================================= */
 
 async function mostrarVistaModelos() {
 
     const dashboard =
-        document.getElementById(
-            "dashboard-view"
-        );
+        document.getElementById("dashboard-view");
 
     const modelosView =
-        document.getElementById(
-            "modelos-view"
-        );
+        document.getElementById("modelos-view");
 
-
-    /*
-     * Cambiamos primero la vista.
-     */
-
-    vistaActual =
-        "modelos";
-
-
-    /*
-     * Ocultar Dashboard
-     */
+    vistaActual = "modelos";
 
     if (dashboard) {
-
         dashboard.style.display = "none";
-
-        dashboard.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
+        dashboard.setAttribute("aria-hidden", "true");
     }
-
-
-    /*
-     * Mostrar MODELOS
-     */
 
     if (modelosView) {
-
         modelosView.style.display = "";
-
-        modelosView.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
+        modelosView.setAttribute("aria-hidden", "false");
     }
 
-
-    /*
-     * Cargar modelos solamente ahora.
-     */
-
-    if (
-        typeof iniciarAplicacion ===
-        "function"
-    ) {
-
+    if (typeof iniciarAplicacion === "function") {
         await iniciarAplicacion();
-
     }
-
 }
 
 
 /* =========================================================
-   CONFIGURAR BOTONES DEL DASHBOARD
+   BOTONES DASHBOARD
    ========================================================= */
 
 function configurarDashboard() {
 
     const btnModelos =
-        document.getElementById(
-            "btn-dashboard-modelos"
-        );
+        document.getElementById("btn-dashboard-modelos");
 
     const btnAccesoModelos =
-        document.getElementById(
-            "btn-acceso-modelos"
-        );
+        document.getElementById("btn-acceso-modelos");
 
     const btnVolver =
-        document.getElementById(
-            "btn-volver-dashboard"
-        );
+        document.getElementById("btn-volver-dashboard");
 
-    const btnNuevoPedido =
-        document.getElementById(
-            "btn-dashboard-nuevo-pedido"
-        );
-
-    const btnPedidos =
-        document.getElementById(
-            "btn-dashboard-pedidos"
-        );
-
-    const btnClientes =
-        document.getElementById(
-            "btn-dashboard-clientes"
-        );
-
-    const btnAccesoPedidos =
-        document.getElementById(
-            "btn-acceso-pedidos"
-        );
-
-    const btnAccesoClientes =
-        document.getElementById(
-            "btn-acceso-clientes"
-        );
-
-    const btnMateriales =
-        document.getElementById(
-            "btn-acceso-materiales"
-        );
-
-
-    /*
-     * MODELOS
-     */
 
     if (btnModelos) {
 
-        btnModelos.onclick =
-            function(event) {
+        btnModelos.onclick = function(event) {
 
-                event.preventDefault();
+            event.preventDefault();
 
-                mostrarVistaModelos();
+            mostrarVistaModelos();
 
-            };
-
+        };
     }
 
 
     if (btnAccesoModelos) {
 
-        btnAccesoModelos.onclick =
-            function(event) {
+        btnAccesoModelos.onclick = function(event) {
 
-                event.preventDefault();
+            event.preventDefault();
 
-                mostrarVistaModelos();
+            mostrarVistaModelos();
 
-            };
-
+        };
     }
 
-
-    /*
-     * VOLVER AL DASHBOARD
-     */
 
     if (btnVolver) {
 
-        btnVolver.onclick =
-            function(event) {
+        btnVolver.onclick = function(event) {
 
-                event.preventDefault();
+            event.preventDefault();
 
-                mostrarDashboard();
+            mostrarDashboard();
 
-            };
-
+        };
     }
-
-
-    /*
-     * NUEVO PEDIDO
-     */
-
-    if (btnNuevoPedido) {
-
-        btnNuevoPedido.onclick =
-            function() {
-
-                alert(
-                    "El módulo NUEVO PEDIDO lo conectamos en el próximo paso."
-                );
-
-            };
-
-    }
-
-
-    /*
-     * PEDIDOS
-     */
-
-    if (btnPedidos) {
-
-        btnPedidos.onclick =
-            function() {
-
-                alert(
-                    "El módulo PEDIDOS lo conectamos en el próximo paso."
-                );
-
-            };
-
-    }
-
-
-    if (btnAccesoPedidos) {
-
-        btnAccesoPedidos.onclick =
-            function() {
-
-                alert(
-                    "El módulo PEDIDOS lo conectamos en el próximo paso."
-                );
-
-            };
-
-    }
-
-
-    /*
-     * CLIENTES
-     */
-
-    if (btnClientes) {
-
-        btnClientes.onclick =
-            function() {
-
-                alert(
-                    "El módulo CLIENTES lo conectamos en el próximo paso."
-                );
-
-            };
-
-    }
-
-
-    if (btnAccesoClientes) {
-
-        btnAccesoClientes.onclick =
-            function() {
-
-                alert(
-                    "El módulo CLIENTES lo conectamos en el próximo paso."
-                );
-
-            };
-
-    }
-
-
-    /*
-     * MATERIALES
-     */
-
-    if (btnMateriales) {
-
-        btnMateriales.onclick =
-            function() {
-
-                alert(
-                    "El módulo MATERIALES lo conectamos más adelante."
-                );
-
-            };
-
-    }
-
 }
 
 
 /* =========================================================
-   PREPARAR VISTAS INICIALES
+   PREPARAR VISTAS
    ========================================================= */
 
 function prepararVistasIniciales() {
 
     const dashboard =
-        document.getElementById(
-            "dashboard-view"
-        );
+        document.getElementById("dashboard-view");
 
     const modelosView =
-        document.getElementById(
-            "modelos-view"
-        );
+        document.getElementById("modelos-view");
 
-
-    /*
-     * DASHBOARD VISIBLE
-     */
 
     if (dashboard) {
 
@@ -5403,10 +5136,6 @@ function prepararVistasIniciales() {
     }
 
 
-    /*
-     * MODELOS OCULTO
-     */
-
     if (modelosView) {
 
         modelosView.style.display = "none";
@@ -5419,116 +5148,43 @@ function prepararVistasIniciales() {
     }
 
 
-    vistaActual =
-        "dashboard";
-
+    vistaActual = "dashboard";
 }
 
 
 /* =========================================================
-   INICIO DEL SISTEMA
+   INICIO
    ========================================================= */
 
 async function iniciarSistema() {
 
-    console.log(
-        "Iniciando CRAFT FLOW..."
-    );
-
-
     try {
-
-        /*
-         * Primero dejamos preparada
-         * la vista inicial.
-         */
 
         prepararVistasIniciales();
 
-
         /*
-         * PRIMERO:
-         * cargar empresas y determinar
-         * la empresa configurada.
+         * Carga la empresa configurada.
          */
-
         await cargarEmpresas();
 
-
         /*
-         * Si por algún motivo
-         * cargarEmpresas no dejó empresa,
-         * intentamos utilizar la primera
-         * empresa disponible.
+         * Configura los botones.
          */
-
-        if (
-            !empresaActual &&
-            typeof empresas !==
-            "undefined" &&
-            empresas.length > 0
-        ) {
-
-            empresaActual =
-                empresas.find(
-                    empresa =>
-                        empresa.activo === true ||
-                        empresa.activo === "TRUE"
-                ) ||
-                empresas[0];
-
-        }
-
-
-        /*
-         * Mostramos empresa + logo
-         * nuevamente después de asegurar
-         * empresaActual.
-         */
-
-        if (
-            typeof mostrarEmpresas ===
-            "function"
-        ) {
-
-            mostrarEmpresas();
-
-        }
-
-
-        /*
-         * Configuramos TODOS los botones
-         * del Dashboard.
-         */
-
         configurarDashboard();
 
-
         /*
-         * Cargamos el Dashboard.
-         *
-         * IMPORTANTE:
-         * NO cargamos modelos acá.
+         * Carga solamente el Dashboard.
+         * Los modelos se cargan al pulsar MODELOS.
          */
-
-        if (
-            typeof iniciarDashboard ===
-            "function"
-        ) {
+        if (typeof iniciarDashboard === "function") {
 
             await iniciarDashboard();
 
         }
 
-
         console.log(
-            "CRAFT FLOW iniciado correctamente.",
-            {
-                empresa: empresaActual,
-                empresas: empresas
-            }
+            "CRAFT FLOW iniciado correctamente"
         );
-
 
     } catch (error) {
 
@@ -5537,33 +5193,12 @@ async function iniciarSistema() {
             error
         );
 
-
-        /*
-         * Aunque falle una carga secundaria,
-         * intentamos dejar funcionando
-         * los botones del Dashboard.
-         */
-
-        try {
-
-            configurarDashboard();
-
-        } catch (errorBotones) {
-
-            console.error(
-                "Error configurando botones:",
-                errorBotones
-            );
-
-        }
-
     }
-
 }
 
 
 /* =========================================================
-   ARRANCAR SISTEMA
+   ARRANCAR
    ========================================================= */
 
 iniciarSistema();
