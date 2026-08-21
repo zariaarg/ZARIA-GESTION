@@ -1,5 +1,13 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
 
+/* =========================
+   EMPRESA ACTUAL
+========================= */
+
+let empresas = [];
+
+let empresaActual = null;
+
 let modelos = [];
 let tipos = [];
 let filtroActual = "TODOS";
@@ -288,6 +296,325 @@ function crearControles() {
 
 }
 
+/* =========================
+   CARGAR EMPRESAS
+========================= */
+
+async function cargarEmpresas() {
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}?resource=empresas&callback=zariaCallback`
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+        const texto =
+            await response.text();
+
+        const inicio =
+            texto.indexOf("(");
+
+        const fin =
+            texto.lastIndexOf(")");
+
+        if (
+            inicio === -1 ||
+            fin === -1
+        ) {
+
+            throw new Error(
+                "Respuesta inválida de empresas"
+            );
+
+        }
+
+        const json =
+            JSON.parse(
+                texto.substring(
+                    inicio + 1,
+                    fin
+                )
+            );
+
+        if (!json.success) {
+
+            throw new Error(
+                json.error ||
+                "Error cargando empresas"
+            );
+
+        }
+
+        empresas =
+            json.data || [];
+
+        await establecerEmpresaInicial();
+
+        mostrarEmpresas();
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando empresas:",
+            error
+        );
+
+    }
+
+}
+/* =========================
+   EMPRESA INICIAL
+========================= */
+
+async function establecerEmpresaInicial() {
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}?resource=config_sistema&callback=zariaCallback`
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+        const texto =
+            await response.text();
+
+        const inicio =
+            texto.indexOf("(");
+
+        const fin =
+            texto.lastIndexOf(")");
+
+        if (
+            inicio === -1 ||
+            fin === -1
+        ) {
+
+            throw new Error(
+                "Respuesta inválida de configuración"
+            );
+
+        }
+
+        const json =
+            JSON.parse(
+                texto.substring(
+                    inicio + 1,
+                    fin
+                )
+            );
+
+        if (!json.success) {
+
+            throw new Error(
+                json.error ||
+                "Error cargando configuración"
+            );
+
+        }
+
+        const configuracion =
+            json.data || [];
+
+        const parametro =
+            configuracion.find(
+                item =>
+                    item.parametro ===
+                    "empresa_default_id"
+            );
+
+        const empresaDefaultId =
+            parametro
+                ? Number(parametro.valor)
+                : 1;
+
+        empresaActual =
+            empresas.find(
+                empresa =>
+                    Number(
+                        empresa.empresa_id
+                    ) ===
+                    empresaDefaultId
+            );
+
+        if (!empresaActual) {
+
+            empresaActual =
+                empresas[0] || null;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error determinando empresa:",
+            error
+        );
+
+        empresaActual =
+            empresas[0] || null;
+
+    }
+
+}
+/* =========================
+   MOSTRAR EMPRESAS
+========================= */
+
+function mostrarEmpresas() {
+
+    const select =
+        document.getElementById(
+            "empresa-select"
+        );
+
+    const logo =
+        document.getElementById(
+            "empresa-logo"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    select.innerHTML = "";
+
+    empresas
+        .filter(
+            empresa =>
+                empresa.activo === true ||
+                empresa.activo === "TRUE"
+        )
+        .forEach(
+            empresa => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    empresa.empresa_id;
+
+                option.textContent =
+                    empresa.nombre_comercial ||
+                    empresa.nombre;
+
+                if (
+                    empresaActual &&
+                    Number(
+                        empresa.empresa_id
+                    ) ===
+                    Number(
+                        empresaActual.empresa_id
+                    )
+                ) {
+
+                    option.selected = true;
+
+                }
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    if (
+        empresaActual &&
+        logo
+    ) {
+
+        logo.src =
+            convertirImagenDrive(
+                empresaActual.logo
+            );
+
+        logo.alt =
+            empresaActual.nombre_comercial ||
+            empresaActual.nombre ||
+            "";
+
+    }
+
+    select.onchange =
+        cambiarEmpresa;
+
+}/* =========================
+   CAMBIAR EMPRESA
+========================= */
+
+function cambiarEmpresa(event) {
+
+    const empresaId =
+        Number(
+            event.target.value
+        );
+
+    const nuevaEmpresa =
+        empresas.find(
+            empresa =>
+                Number(
+                    empresa.empresa_id
+                ) ===
+                empresaId
+        );
+
+    if (!nuevaEmpresa) {
+        return;
+    }
+
+    empresaActual =
+        nuevaEmpresa;
+
+    const logo =
+        document.getElementById(
+            "empresa-logo"
+        );
+
+    if (logo) {
+
+        logo.src =
+            convertirImagenDrive(
+                empresaActual.logo
+            );
+
+        logo.alt =
+            empresaActual.nombre_comercial ||
+            empresaActual.nombre ||
+            "";
+
+    }
+
+    /*
+     * Por ahora NO recargamos los datos.
+     *
+     * Primero vamos a conectar
+     * empresaActual con MODELOS,
+     * CLIENTES, PEDIDOS, etc.
+     */
+
+    console.log(
+        "Empresa seleccionada:",
+        empresaActual
+    );
+
+}
 
 /* =========================
    MOSTRAR MODELOS
@@ -2959,5 +3286,6 @@ function escaparHTML(texto) {
    ARRANCAR
 ========================= */
 
+cargarEmpresas();
 iniciarAplicacion();
 cargarMateriales();
