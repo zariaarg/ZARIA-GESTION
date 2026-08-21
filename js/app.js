@@ -5002,6 +5002,7 @@ function convertirFecha(
    MOSTRAR DASHBOARD
    ========================================================= */
 
+
 async function mostrarDashboard() {
 
     const dashboard =
@@ -5009,25 +5010,22 @@ async function mostrarDashboard() {
             "dashboard-view"
         );
 
-
     const modelosView =
         document.getElementById(
             "modelos-view"
         );
-
 
     vistaActual =
         "dashboard";
 
 
     /*
-     * Dashboard visible
+     * DASHBOARD VISIBLE
      */
 
     if (dashboard) {
 
-        dashboard.style.display =
-            "";
+        dashboard.style.display = "";
 
         dashboard.setAttribute(
             "aria-hidden",
@@ -5038,13 +5036,12 @@ async function mostrarDashboard() {
 
 
     /*
-     * MODELOS completamente oculto
+     * MODELOS OCULTO
      */
 
     if (modelosView) {
 
-        modelosView.style.display =
-            "none";
+        modelosView.style.display = "none";
 
         modelosView.setAttribute(
             "aria-hidden",
@@ -5055,12 +5052,46 @@ async function mostrarDashboard() {
 
 
     /*
-     * Actualizamos los datos del Dashboard.
+     * Nos aseguramos de que la empresa
+     * y su logo estén visibles.
      */
 
-    await iniciarDashboard();
+    if (
+        typeof mostrarEmpresas ===
+        "function"
+    ) {
+
+        mostrarEmpresas();
+
+    }
+
+
+    /*
+     * Actualizamos Dashboard.
+     */
+
+    if (
+        typeof iniciarDashboard ===
+        "function"
+    ) {
+
+        try {
+
+            await iniciarDashboard();
+
+        } catch (error) {
+
+            console.error(
+                "Error actualizando Dashboard:",
+                error
+            );
+
+        }
+
+    }
 
 }
+
 
 /* =========================================================
    MOSTRAR VISTA MODELOS
@@ -5073,25 +5104,27 @@ async function mostrarVistaModelos() {
             "dashboard-view"
         );
 
-
     const modelosView =
         document.getElementById(
             "modelos-view"
         );
 
 
+    /*
+     * Cambiamos primero la vista.
+     */
+
     vistaActual =
         "modelos";
 
 
     /*
-     * Ocultamos Dashboard
+     * Ocultar Dashboard
      */
 
     if (dashboard) {
 
-        dashboard.style.display =
-            "none";
+        dashboard.style.display = "none";
 
         dashboard.setAttribute(
             "aria-hidden",
@@ -5102,13 +5135,12 @@ async function mostrarVistaModelos() {
 
 
     /*
-     * Mostramos MODELOS
+     * Mostrar MODELOS
      */
 
     if (modelosView) {
 
-        modelosView.style.display =
-            "";
+        modelosView.style.display = "";
 
         modelosView.setAttribute(
             "aria-hidden",
@@ -5119,16 +5151,23 @@ async function mostrarVistaModelos() {
 
 
     /*
-     * Ahora sí cargamos los modelos.
+     * Cargar modelos solamente ahora.
      */
 
-    await iniciarAplicacion();
+    if (
+        typeof iniciarAplicacion ===
+        "function"
+    ) {
+
+        await iniciarAplicacion();
+
+    }
 
 }
 
 
 /* =========================================================
-   BOTONES DASHBOARD
+   CONFIGURAR BOTONES DEL DASHBOARD
    ========================================================= */
 
 function configurarDashboard() {
@@ -5138,48 +5177,40 @@ function configurarDashboard() {
             "btn-dashboard-modelos"
         );
 
-
     const btnAccesoModelos =
         document.getElementById(
             "btn-acceso-modelos"
         );
-
 
     const btnVolver =
         document.getElementById(
             "btn-volver-dashboard"
         );
 
-
     const btnNuevoPedido =
         document.getElementById(
             "btn-dashboard-nuevo-pedido"
         );
-
 
     const btnPedidos =
         document.getElementById(
             "btn-dashboard-pedidos"
         );
 
-
     const btnClientes =
         document.getElementById(
             "btn-dashboard-clientes"
         );
-
 
     const btnAccesoPedidos =
         document.getElementById(
             "btn-acceso-pedidos"
         );
 
-
     const btnAccesoClientes =
         document.getElementById(
             "btn-acceso-clientes"
         );
-
 
     const btnMateriales =
         document.getElementById(
@@ -5194,7 +5225,9 @@ function configurarDashboard() {
     if (btnModelos) {
 
         btnModelos.onclick =
-            function() {
+            function(event) {
+
+                event.preventDefault();
 
                 mostrarVistaModelos();
 
@@ -5206,7 +5239,9 @@ function configurarDashboard() {
     if (btnAccesoModelos) {
 
         btnAccesoModelos.onclick =
-            function() {
+            function(event) {
+
+                event.preventDefault();
 
                 mostrarVistaModelos();
 
@@ -5222,7 +5257,9 @@ function configurarDashboard() {
     if (btnVolver) {
 
         btnVolver.onclick =
-            function() {
+            function(event) {
+
+                event.preventDefault();
 
                 mostrarDashboard();
 
@@ -5232,7 +5269,7 @@ function configurarDashboard() {
 
 
     /*
-     * PEDIDOS
+     * NUEVO PEDIDO
      */
 
     if (btnNuevoPedido) {
@@ -5248,6 +5285,10 @@ function configurarDashboard() {
 
     }
 
+
+    /*
+     * PEDIDOS
+     */
 
     if (btnPedidos) {
 
@@ -5328,8 +5369,9 @@ function configurarDashboard() {
 
 }
 
+
 /* =========================================================
-   PREPARAR VISTAS
+   PREPARAR VISTAS INICIALES
    ========================================================= */
 
 function prepararVistasIniciales() {
@@ -5339,7 +5381,6 @@ function prepararVistasIniciales() {
             "dashboard-view"
         );
 
-
     const modelosView =
         document.getElementById(
             "modelos-view"
@@ -5347,16 +5388,12 @@ function prepararVistasIniciales() {
 
 
     /*
-     * Al entrar al sistema:
-     *
-     * DASHBOARD visible
-     * MODELOS oculto
+     * DASHBOARD VISIBLE
      */
 
     if (dashboard) {
 
-        dashboard.style.display =
-            "";
+        dashboard.style.display = "";
 
         dashboard.setAttribute(
             "aria-hidden",
@@ -5366,10 +5403,13 @@ function prepararVistasIniciales() {
     }
 
 
+    /*
+     * MODELOS OCULTO
+     */
+
     if (modelosView) {
 
-        modelosView.style.display =
-            "none";
+        modelosView.style.display = "none";
 
         modelosView.setAttribute(
             "aria-hidden",
@@ -5391,42 +5431,103 @@ function prepararVistasIniciales() {
 
 async function iniciarSistema() {
 
+    console.log(
+        "Iniciando CRAFT FLOW..."
+    );
+
+
     try {
 
         /*
-         * Primero establecemos visualmente
+         * Primero dejamos preparada
          * la vista inicial.
-         *
-         * Esto evita que MODELOS aparezca
-         * durante unos milisegundos mientras
-         * carga el Dashboard.
          */
 
         prepararVistasIniciales();
 
 
         /*
-         * Cargamos la empresa configurada.
+         * PRIMERO:
+         * cargar empresas y determinar
+         * la empresa configurada.
          */
 
         await cargarEmpresas();
 
 
         /*
-         * Configuramos los botones del Dashboard.
+         * Si por algún motivo
+         * cargarEmpresas no dejó empresa,
+         * intentamos utilizar la primera
+         * empresa disponible.
+         */
+
+        if (
+            !empresaActual &&
+            typeof empresas !==
+            "undefined" &&
+            empresas.length > 0
+        ) {
+
+            empresaActual =
+                empresas.find(
+                    empresa =>
+                        empresa.activo === true ||
+                        empresa.activo === "TRUE"
+                ) ||
+                empresas[0];
+
+        }
+
+
+        /*
+         * Mostramos empresa + logo
+         * nuevamente después de asegurar
+         * empresaActual.
+         */
+
+        if (
+            typeof mostrarEmpresas ===
+            "function"
+        ) {
+
+            mostrarEmpresas();
+
+        }
+
+
+        /*
+         * Configuramos TODOS los botones
+         * del Dashboard.
          */
 
         configurarDashboard();
 
 
         /*
-         * Cargamos solamente la información
-         * necesaria para mostrar el Dashboard.
+         * Cargamos el Dashboard.
          *
-         * NO se muestra el listado de modelos.
+         * IMPORTANTE:
+         * NO cargamos modelos acá.
          */
 
-        await iniciarDashboard();
+        if (
+            typeof iniciarDashboard ===
+            "function"
+        ) {
+
+            await iniciarDashboard();
+
+        }
+
+
+        console.log(
+            "CRAFT FLOW iniciado correctamente.",
+            {
+                empresa: empresaActual,
+                empresas: empresas
+            }
+        );
 
 
     } catch (error) {
@@ -5436,13 +5537,35 @@ async function iniciarSistema() {
             error
         );
 
+
+        /*
+         * Aunque falle una carga secundaria,
+         * intentamos dejar funcionando
+         * los botones del Dashboard.
+         */
+
+        try {
+
+            configurarDashboard();
+
+        } catch (errorBotones) {
+
+            console.error(
+                "Error configurando botones:",
+                errorBotones
+            );
+
+        }
+
     }
 
 }
 
 
-/* =========================
-   ARRANCAR
-========================= */
+/* =========================================================
+   ARRANCAR SISTEMA
+   ========================================================= */
 
 iniciarSistema();
+```
+
