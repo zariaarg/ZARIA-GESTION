@@ -749,6 +749,29 @@ function verModelo(id) {
                     }
 
 
+                    <!-- =========================
+                         MATERIALES Y CONSUMO
+                    ========================= -->
+
+                    <div class="modelo-materiales">
+
+                        <h3>
+                            MATERIALES Y CONSUMO
+                        </h3>
+
+
+                        <div
+                            id="modelo-materiales-container"
+                        >
+
+                            Cargando materiales...
+
+                        </div>
+
+
+                    </div>
+
+
                     <div class="modelo-detalle-seccion">
 
                         <h3>
@@ -777,6 +800,15 @@ function verModelo(id) {
 
 
     document.body.appendChild(modal);
+
+
+    /* =========================
+       CARGAR MATERIALES
+    ========================= */
+
+    cargarMaterialesModelo(
+        modelo.modelo_id
+    );
 
 
     const botonCerrar =
@@ -809,6 +841,156 @@ function verModelo(id) {
 
     }
 
+}
+
+/* =========================
+   MATERIALES DEL MODELO
+========================= */
+
+async function cargarMaterialesModelo(modeloId) {
+
+    const container =
+        document.getElementById("modelo-materiales-container");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="materiales-cargando">
+            Cargando materiales...
+        </div>
+    `;
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}?resource=modelo_materiales&callback=zariaCallback`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        const texto = await response.text();
+
+        const inicio = texto.indexOf("(");
+        const fin = texto.lastIndexOf(")");
+
+        if (inicio === -1 || fin === -1) {
+            throw new Error(
+                "Respuesta inválida de modelo_materiales"
+            );
+        }
+
+        const json = JSON.parse(
+            texto.substring(
+                inicio + 1,
+                fin
+            )
+        );
+
+        if (!json.success) {
+            throw new Error(
+                json.error || "Error en la API"
+            );
+        }
+
+        const materiales =
+            json.data.filter(
+                item =>
+                    Number(item.modelo_id) ===
+                    Number(modeloId)
+            );
+
+        mostrarMaterialesModelo(materiales);
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando materiales:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="materiales-error">
+                No se pudieron cargar los materiales.
+            </div>
+        `;
+
+    }
+
+}
+
+function mostrarMaterialesModelo(materiales) {
+
+    const container =
+        document.getElementById(
+            "modelo-materiales-container"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    if (!materiales || materiales.length === 0) {
+
+        container.innerHTML = `
+            <div class="materiales-vacio">
+                Este modelo todavía no tiene
+                materiales cargados.
+            </div>
+
+            <button
+                type="button"
+                class="btn-agregar-material"
+                onclick="abrirAgregarMaterial()"
+            >
+                + AGREGAR MATERIAL
+            </button>
+        `;
+
+        return;
+    }
+
+    let html = "";
+
+    materiales.forEach(material => {
+
+        html += `
+            <div class="material-modelo-item">
+
+                <div class="material-modelo-info">
+
+                    <strong>
+                        ${material.material_nombre || material.nombre || ""}
+                    </strong>
+
+                    <span>
+                        ${material.cantidad || 0}
+                        ${material.unidad || ""}
+                    </span>
+
+                </div>
+
+            </div>
+        `;
+
+    });
+
+    html += `
+        <button
+            type="button"
+            class="btn-agregar-material"
+            onclick="abrirAgregarMaterial()"
+        >
+            + AGREGAR MATERIAL
+        </button>
+    `;
+
+    container.innerHTML = html;
 }
 
 
