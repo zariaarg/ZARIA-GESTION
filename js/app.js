@@ -565,7 +565,9 @@ function verModelo(id) {
         return;
     }
 
-
+window.modeloActualId =
+    modelo.modelo_id;
+   
     const imagenPrincipal =
         convertirImagenDrive(
             modelo.imagen
@@ -838,6 +840,390 @@ function verModelo(id) {
     function cerrarModal() {
 
         modal.remove();
+
+    }
+
+}
+
+/* =========================
+   AGREGAR MATERIAL
+========================= */
+
+function abrirAgregarMaterial() {
+
+    const modeloId =
+        window.modeloActualId;
+
+    if (!modeloId) {
+
+        alert(
+            "No se pudo identificar el modelo."
+        );
+
+        return;
+
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+
+    modal.className =
+        "material-modal";
+
+
+    const opciones =
+        materiales
+            .map(material => {
+
+                return `
+                    <option
+                        value="${material.material_id}"
+                        data-unidad="${escaparHTML(
+                            material.unidad_compra
+                        )}"
+                    >
+                        ${escaparHTML(
+                            material.nombre
+                        )}
+                    </option>
+                `;
+
+            })
+            .join("");
+
+
+    modal.innerHTML = `
+
+        <div class="material-modal-overlay"></div>
+
+
+        <div class="material-modal-contenido">
+
+            <button
+                type="button"
+                class="material-modal-cerrar"
+            >
+                ×
+            </button>
+
+
+            <h2>
+                AGREGAR MATERIAL
+            </h2>
+
+
+            <div class="material-form">
+
+
+                <label>
+                    MATERIAL
+                </label>
+
+
+                <select
+                    id="nuevo-material"
+                >
+
+                    <option value="">
+                        Seleccionar material
+                    </option>
+
+                    ${opciones}
+
+                </select>
+
+
+                <label>
+                    CANTIDAD
+                </label>
+
+
+                <input
+                    type="number"
+                    id="nuevo-material-cantidad"
+                    min="0"
+                    step="0.01"
+                    placeholder="Ej: 0.45"
+                >
+
+
+                <label>
+                    UNIDAD
+                </label>
+
+
+                <input
+                    type="text"
+                    id="nuevo-material-unidad"
+                    readonly
+                >
+
+
+                <div class="material-form-botones">
+
+                    <button
+                        type="button"
+                        class="material-btn-cancelar"
+                    >
+                        CANCELAR
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="material-btn-guardar"
+                    >
+                        GUARDAR
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    const selectMaterial =
+        modal.querySelector(
+            "#nuevo-material"
+        );
+
+
+    const inputUnidad =
+        modal.querySelector(
+            "#nuevo-material-unidad"
+        );
+
+
+    selectMaterial.addEventListener(
+        "change",
+        function () {
+
+            const opcion =
+                this.options[
+                    this.selectedIndex
+                ];
+
+
+            inputUnidad.value =
+                opcion.dataset.unidad || "";
+
+        }
+    );
+
+
+    const cerrar =
+        () => modal.remove();
+
+
+    modal.querySelector(
+        ".material-modal-cerrar"
+    ).addEventListener(
+        "click",
+        cerrar
+    );
+
+
+    modal.querySelector(
+        ".material-modal-overlay"
+    ).addEventListener(
+        "click",
+        cerrar
+    );
+
+
+    modal.querySelector(
+        ".material-btn-cancelar"
+    ).addEventListener(
+        "click",
+        cerrar
+    );
+
+
+    modal.querySelector(
+        ".material-btn-guardar"
+    ).addEventListener(
+        "click",
+        () => guardarMaterialModelo(
+            modal,
+            modeloId
+        )
+    );
+
+}
+
+async function guardarMaterialModelo(
+    modal,
+    modeloId
+) {
+
+    const materialSelect =
+        modal.querySelector(
+            "#nuevo-material"
+        );
+
+
+    const cantidadInput =
+        modal.querySelector(
+            "#nuevo-material-cantidad"
+        );
+
+
+    const unidadInput =
+        modal.querySelector(
+            "#nuevo-material-unidad"
+        );
+
+
+    const materialId =
+        Number(
+            materialSelect.value
+        );
+
+
+    const cantidad =
+        Number(
+            cantidadInput.value
+        );
+
+
+    const unidad =
+        unidadInput.value;
+
+
+    if (!materialId) {
+
+        alert(
+            "Seleccioná un material."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !cantidad ||
+        cantidad <= 0
+    ) {
+
+        alert(
+            "Ingresá una cantidad válida."
+        );
+
+        return;
+
+    }
+
+
+    if (!unidad) {
+
+        alert(
+            "No se pudo determinar la unidad."
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        modal.querySelector(
+            ".material-btn-guardar"
+        );
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "GUARDANDO...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            accion:
+                                "agregar_modelo_material",
+
+                            modelo_id:
+                                modeloId,
+
+                            material_id:
+                                materialId,
+
+                            cantidad:
+                                cantidad,
+
+                            unidad:
+                                unidad
+
+                        })
+
+                }
+            );
+
+
+        const resultado =
+            await response.json();
+
+
+        if (!resultado.success) {
+
+            throw new Error(
+                resultado.error ||
+                "No se pudo guardar"
+            );
+
+        }
+
+
+        modal.remove();
+
+
+        cargarMaterialesModelo(
+            modeloId
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error guardando material:",
+            error
+        );
+
+
+        alert(
+            "No se pudo guardar el material.\n\n" +
+            error.message
+        );
+
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "GUARDAR";
 
     }
 
