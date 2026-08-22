@@ -4063,121 +4063,73 @@ function agregarEstilosNuevoModelo() {
         ===================================== */
 
         .modelo-nuevo-contenido {
-
             position: relative !important;
-
             z-index: 2 !important;
-
             width: min(
                 850px,
                 100%
             ) !important;
-
             max-height: 92vh !important;
-
             overflow-y: auto !important;
-
             background: #ffffff !important;
-
             border-radius: 16px !important;
-
             padding: 35px !important;
-
             box-sizing: border-box !important;
-
             box-shadow:
                 0 20px 60px
                 rgba(0,0,0,0.25) !important;
-
         }
-
 
         /* =====================================
            BOTÓN CERRAR
         ===================================== */
 
         .modelo-nuevo-cerrar {
-
             position: absolute !important;
-
             top: 15px !important;
-
             right: 18px !important;
-
             border: none !important;
-
             background: none !important;
-
             font-size: 30px !important;
-
-            line-height: 1 !important;
-
+           line-height: 1 !important;
             cursor: pointer !important;
-
             color: #333 !important;
-
             padding: 5px !important;
-
         }
-
 
         /* =====================================
            CABECERA
         ===================================== */
-
         .modelo-nuevo-header {
-
             margin-bottom: 28px !important;
-
             padding-right: 35px !important;
-
         }
-
 
         .modelo-nuevo-header span {
-
-            font-size: 11px !important;
-
+           font-size: 11px !important;
             letter-spacing: 2px !important;
-
             color: #777 !important;
-
         }
-
 
         .modelo-nuevo-header h2 {
-
             margin:
                 6px 0 4px !important;
-
             font-size: 28px !important;
-
         }
-
 
         .modelo-nuevo-header p {
-
             margin: 0 !important;
-
             color: #777 !important;
-
-            font-size: 13px !important;
-
+           font-size: 13px !important;
         }
-
 
         /* =====================================
            FORMULARIO
         ===================================== */
-
         #form-nuevo-modelo {
-
             width: 100% !important;
-
             box-sizing: border-box !important;
-
         }
-
 
         /*
          * ESTA ES LA PARTE IMPORTANTE.
@@ -4185,74 +4137,43 @@ function agregarEstilosNuevoModelo() {
          * El formulario tendrá siempre
          * dos columnas en escritorio.
          */
-
         #form-nuevo-modelo .form-grid {
-
             display: grid !important;
-
             grid-template-columns:
                 minmax(0, 1fr)
                 minmax(0, 1fr) !important;
-
             column-gap: 22px !important;
-
             row-gap: 20px !important;
-
             width: 100% !important;
-
             box-sizing: border-box !important;
-
         }
-
 
         /* =====================================
            CAMPOS
         ===================================== */
-
         #form-nuevo-modelo .campo {
-
             display: flex !important;
-
             flex-direction: column !important;
-
             min-width: 0 !important;
-
             width: 100% !important;
-
             box-sizing: border-box !important;
-
         }
-
 
         #form-nuevo-modelo .campo label {
-
             display: block !important;
-
             margin-bottom: 7px !important;
-
             font-size: 11px !important;
-
             font-weight: 700 !important;
-
             letter-spacing: .7px !important;
-
             color: #333 !important;
-
         }
 
-
         #form-nuevo-modelo .campo small {
-
             display: block !important;
-
             margin-top: 6px !important;
-
             font-size: 11px !important;
-
             line-height: 1.4 !important;
-
             color: #888 !important;
-
         }
 
 
