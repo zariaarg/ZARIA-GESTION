@@ -20,10 +20,6 @@ let vistaActual = "dashboard";
    API JSONP
 ========================= */
 
-/* =========================
-   API JSONP
-========================= */
-
 function llamarAPI(
     resource,
     empresaId = null
@@ -2416,18 +2412,14 @@ function abrirNuevoModelo() {
 
     `;
 
-
-    document.body.appendChild(modal);
-
-
     agregarEstilosNuevoModelo();
 
+    document.body.appendChild(modal);
 
     const formulario =
         modal.querySelector(
             "#form-nuevo-modelo"
         );
-
 
     const cerrarModal =
         () => modal.remove();
