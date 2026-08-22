@@ -5299,7 +5299,6 @@ async function mostrarVistaModelos() {
     }
 }
 
-
 /* =========================================================
    BOTONES DASHBOARD
    ========================================================= */
@@ -5309,7 +5308,8 @@ function configurarDashboard() {
     const btnAccesoModelos = document.getElementById("btn-acceso-modelos");
     const btnClientes = document.getElementById("btn-dashboard-clientes");
     const btnAccesoClientes = document.getElementById("btn-acceso-clientes");
-    const btnVolver = document.getElementById("btn-volver-dashboard");
+    const btnVolverModelos = document.getElementById("btn-volver-dashboard");
+    const btnVolverClientes = document.getElementById("btn-volver-dashboard-clientes");
 
     if (btnModelos) {
         btnModelos.onclick = function(event) {
@@ -5339,15 +5339,20 @@ function configurarDashboard() {
         };
     }
 
-    if (btnVolver) {
-        btnVolver.onclick = function(event) {
+    if (btnVolverModelos) {
+        btnVolverModelos.onclick = function(event) {
+            event.preventDefault();
+            mostrarDashboard();
+        };
+    }
+
+    if (btnVolverClientes) {
+        btnVolverClientes.onclick = function(event) {
             event.preventDefault();
             mostrarDashboard();
         };
     }
 }
-
-**Nueva función `mostrarVistaClientes()`**
 
 /* =========================================================
    VISTA CLIENTES
@@ -5371,6 +5376,79 @@ function mostrarVistaClientes() {
     }
 
     iniciarClientes();
+}
+
+/* =========================================================
+   INICIAR CLIENTES
+   ========================================================= */
+
+async function iniciarClientes() {
+    const container = document.getElementById("clientes-container");
+
+    if (!container) {
+        return;
+    }
+
+    if (!empresaActual) {
+        container.innerHTML = "<p>No hay una empresa seleccionada.</p>";
+        return;
+    }
+
+    container.innerHTML = "<p>Cargando clientes...</p>";
+
+    try {
+        const clientes = await llamarAPI(
+            "clientes",
+            empresaActual.empresa_id
+        );
+
+        const clientesEmpresa = filtrarPorEmpresa(clientes);
+
+        if (!clientesEmpresa.length) {
+            container.innerHTML = `
+                <div class="clientes-vacio">
+                    <h3>No hay clientes registrados</h3>
+                    <p>Todavía no hay clientes cargados para esta empresa.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = clientesEmpresa.map(cliente => `
+            <article class="cliente-card">
+                <div class="cliente-card-info">
+                    <span class="cliente-card-label">CLIENTE</span>
+                    <h3>
+                        ${escaparHTML(
+                            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                        )}
+                    </h3>
+                    <p>
+                        ${escaparHTML(cliente.telefono || "Sin teléfono")}
+                    </p>
+                </div>
+
+                <div class="cliente-card-medidas">
+                    <span>MEDIDAS</span>
+                    <p>
+                        Cuello: ${escaparHTML(cliente.medidas_cuello || "-")}
+                        · Busto: ${escaparHTML(cliente.medidas_busto || "-")}
+                        · Cintura: ${escaparHTML(cliente.medidas_cintura || "-")}
+                        · Alto: ${escaparHTML(cliente.medidas_alto || "-")}
+                    </p>
+                </div>
+            </article>
+        `).join("");
+
+    } catch (error) {
+        console.error("Error cargando clientes:", error);
+
+        container.innerHTML = `
+            <div class="clientes-error">
+                <p>No se pudieron cargar los clientes.</p>
+            </div>
+        `;
+    }
 }
 
 /* =========================================================
