@@ -1026,128 +1026,88 @@ h2 {
 
 .dashboard-resumen {
     display: grid;
-
     grid-template-columns:
         repeat(4, 1fr);
-
     gap: 12px;
-
     margin-bottom: 25px;
 }
 
-
 .dashboard-card {
     background: white;
-
     border:
         1px solid #ddd8d4;
-
     border-radius: 12px;
-
     padding: 22px;
 }
 
-
 .dashboard-card-destacada {
-    background: #f1efed;
+    background: #f7f5f3;
+    border-color: #e5e0dc;
 }
-
 
 .dashboard-card-label {
     font-size: 10px;
-
     font-weight: bold;
-
     letter-spacing: 1.6px;
-
     color: #888;
 }
-
 
 .dashboard-card-numero {
     margin-top: 10px;
-
     font-size: 30px;
-
     line-height: 1;
-
     font-weight: 600;
-
     color: #1d1a1a;
 }
 
-
 .dashboard-card-dinero {
     font-size: 25px;
+    color: #C47456;
 }
-
 
 .dashboard-card-detalle {
     margin-top: 9px;
-
     font-size: 11px;
-
     color: #888;
 }
-
 
 /* =========================
    GRID DE PANELES
 ========================= */
-
 .dashboard-grid {
     display: grid;
-
     grid-template-columns:
         1.5fr 1fr;
-
     gap: 12px;
-
     margin-bottom: 25px;
 }
 
-
 .dashboard-panel {
     background: white;
-
     border:
         1px solid #ddd8d4;
-
     border-radius: 12px;
-
     padding: 24px;
 }
 
-
 .dashboard-panel-header {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
-
     margin-bottom: 22px;
 }
 
-
 .dashboard-panel-label {
     font-size: 10px;
-
     font-weight: bold;
-
     letter-spacing: 1.6px;
-
     color: #888;
 }
 
-
 .dashboard-panel h3 {
     margin: 6px 0 0;
-
     font-size: 18px;
-
     font-weight: 600;
-
     color: #1d1a1a;
 }
 
@@ -1155,96 +1115,65 @@ h2 {
 .dashboard-panel-icon {
     width: 34px;
     height: 34px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border:
         1px solid #ddd8d4;
-
     border-radius: 50%;
-
-    color: #555;
-
+    color: #C47456;
     font-size: 15px;
 }
-
 
 /* =========================
    ESTADOS DE PEDIDOS
 ========================= */
-
 .dashboard-estados {
     display: flex;
-
     flex-direction: column;
-
     gap: 14px;
 }
 
-
 .dashboard-estado {
     display: grid;
-
     grid-template-columns:
         120px 1fr 35px;
-
     align-items: center;
-
     gap: 12px;
 }
 
-
 .dashboard-estado-nombre {
     font-size: 12px;
-
     color: #555;
 }
 
-
 .dashboard-estado-barra {
     height: 7px;
-
     overflow: hidden;
-
     background: #ebe8e5;
-
     border-radius: 20px;
 }
 
-
 .dashboard-estado-progreso {
     height: 100%;
-
-    background: #1d1a1a;
-
+    background: #C47456;
     border-radius: 20px;
-
     transition:
         width .4s ease;
 }
 
-
 .dashboard-estado-cantidad {
     text-align: right;
-
     font-size: 12px;
-
     font-weight: bold;
-
     color: #1d1a1a;
 }
 
-
 .dashboard-cargando {
     padding: 15px 0;
-
     font-size: 12px;
-
     color: #999;
 }
-
 
 /* =========================
    FINANZAS DEL DASHBOARD
@@ -1252,51 +1181,36 @@ h2 {
 
 .dashboard-finanza {
     padding: 15px 0 25px;
-
     border-bottom:
         1px solid #eee;
 }
 
-
 .dashboard-finanza-label {
     display: block;
-
     font-size: 11px;
-
     color: #888;
 }
 
-
 .dashboard-finanza-valor {
     display: block;
-
     margin-top: 8px;
-
     font-size: 30px;
-
-    color: #1d1a1a;
+    color: #C47456;
+    font-weight: 600;
 }
-
 
 .dashboard-finanza-linea {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     padding-top: 18px;
-
     font-size: 12px;
-
     color: #777;
 }
-
 
 .dashboard-finanza-linea strong {
     color: #1d1a1a;
 }
-
 
 /* =========================
    ACCESOS
@@ -1306,139 +1220,93 @@ h2 {
     margin-bottom: 30px;
 }
 
-
 .dashboard-accesos-grid {
     display: grid;
-
     grid-template-columns:
         repeat(4, 1fr);
-
     gap: 10px;
 }
 
-
 .dashboard-accesos-grid button {
     min-height: 85px;
-
     padding: 16px;
-
     background: #f8f7f6;
-
     border:
         1px solid #e1ddda;
-
     border-radius: 9px;
-
     text-align: left;
-
     cursor: pointer;
-
     transition:
         background .2s ease,
         border-color .2s ease;
 }
 
-
 .dashboard-accesos-grid button:hover {
     background: white;
-
-    border-color: #aaa39e;
+    border-color: #C47456;
 }
-
 
 .dashboard-accesos-grid span {
     display: block;
-
     font-size: 11px;
-
     font-weight: bold;
-
     letter-spacing: 1px;
-
     color: #1d1a1a;
 }
 
-
 .dashboard-accesos-grid small {
     display: block;
-
     margin-top: 8px;
-
     font-size: 10px;
-
     color: #888;
 }
-
 
 /* =========================
    VISTAS DE MÓDULOS
 ========================= */
-
 .modulo-view {
     width: 100%;
 }
 
-
 .modulo-header {
     display: flex;
-
     align-items: center;
-
     gap: 25px;
-
     margin-bottom: 30px;
 }
 
-
 .modulo-label {
     display: block;
-
     margin-bottom: 5px;
-
     font-size: 10px;
-
     font-weight: bold;
-
     letter-spacing: 1.5px;
-
     color: #888;
 }
 
-
 .modulo-header h2 {
     margin: 0;
-
     font-size: 28px;
-
     font-weight: 600;
+    color: #1d1a1a;
 }
-
 
 .btn-volver-dashboard {
     height: 40px;
-
-    padding:
-        0 15px;
-
+    padding: 0 15px;
     background: white;
-
-    border:
-        1px solid #d8d3cf;
-
+    border: 1px solid #d8d3cf;
     border-radius: 8px;
-
     color: #1d1a1a;
-
     font-size: 12px;
-
     cursor: pointer;
+   transition: border-color .2s ease, color .2s ease;
 }
-
 
 .btn-volver-dashboard:hover {
-    border-color: #999;
+    border-color: #C47456;
+    color: #C47456;
 }
-
 
 /* =========================
    RESPONSIVE TABLET
@@ -1451,93 +1319,65 @@ h2 {
             repeat(2, 1fr);
     }
 
-
     .dashboard-resumen {
         grid-template-columns:
             repeat(2, 1fr);
     }
-
 
     .dashboard-grid {
         grid-template-columns:
             1fr;
     }
 
-
     .dashboard-accesos-grid {
         grid-template-columns:
             repeat(2, 1fr);
     }
-
 }
-
 
 /* =========================
    RESPONSIVE CELULAR
 ========================= */
 
 @media (max-width: 550px) {
-
     .header-marca {
         display: block;
     }
 
-
     .header-marca span {
         display: none;
     }
-
-
     .dashboard-acciones {
         grid-template-columns:
             1fr;
     }
-
-
     .dashboard-resumen {
         grid-template-columns:
             1fr 1fr;
     }
-
-
     .dashboard-card {
         padding: 17px;
     }
-
-
     .dashboard-card-numero {
         font-size: 25px;
     }
-
-
     .dashboard-card-dinero {
         font-size: 19px;
     }
-
-
     .dashboard-panel {
         padding: 18px;
     }
-
-
     .dashboard-estado {
         grid-template-columns:
             90px 1fr 25px;
     }
-
-
     .dashboard-accesos-grid {
         grid-template-columns:
             1fr;
     }
-
-
     .modulo-header {
         align-items: flex-start;
-
         flex-direction: column;
-
         gap: 15px;
     }
-
 }
