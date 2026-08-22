@@ -5394,7 +5394,31 @@ async function iniciarClientes() {
         return;
     }
 
-    container.innerHTML = "<p>Cargando clientes...</p>";
+    container.innerHTML = `
+        <div class="clientes-toolbar">
+            <div class="clientes-buscador">
+                <span>⌕</span>
+                <input
+                    type="search"
+                    id="buscar-clientes"
+                    placeholder="Buscar por nombre, apellido, teléfono o Instagram..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <button
+                type="button"
+                class="btn-nuevo-cliente"
+                id="btn-nuevo-cliente"
+            >
+                + NUEVO CLIENTE
+            </button>
+        </div>
+
+        <div id="clientes-lista">
+            <p>Cargando clientes...</p>
+        </div>
+    `;
 
     try {
         const clientes = await llamarAPI(
@@ -5404,41 +5428,117 @@ async function iniciarClientes() {
 
         const clientesEmpresa = filtrarPorEmpresa(clientes);
 
-        if (!clientesEmpresa.length) {
-            container.innerHTML = `
-                <div class="clientes-vacio">
-                    <h3>No hay clientes registrados</h3>
-                    <p>Todavía no hay clientes cargados para esta empresa.</p>
-                </div>
-            `;
+        const lista = document.getElementById("clientes-lista");
+        const buscador = document.getElementById("buscar-clientes");
+
+        if (!lista) {
             return;
         }
 
-        container.innerHTML = clientesEmpresa.map(cliente => `
-            <article class="cliente-card">
-                <div class="cliente-card-info">
-                    <span class="cliente-card-label">CLIENTE</span>
-                    <h3>
-                        ${escaparHTML(
-                            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                        )}
-                    </h3>
-                    <p>
-                        ${escaparHTML(cliente.telefono || "Sin teléfono")}
-                    </p>
-                </div>
+        function mostrarListaClientes(clientesMostrados) {
+            if (!clientesMostrados.length) {
+                lista.innerHTML = `
+                    <div class="clientes-vacio">
+                        <h3>No se encontraron clientes</h3>
+                        <p>Probá con otro nombre, apellido, teléfono o Instagram.</p>
+                    </div>
+                `;
+                return;
+            }
 
-                <div class="cliente-card-medidas">
-                    <span>MEDIDAS</span>
-                    <p>
-                        Cuello: ${escaparHTML(cliente.medidas_cuello || "-")}
-                        · Busto: ${escaparHTML(cliente.medidas_busto || "-")}
-                        · Cintura: ${escaparHTML(cliente.medidas_cintura || "-")}
-                        · Alto: ${escaparHTML(cliente.medidas_alto || "-")}
-                    </p>
+            lista.innerHTML = `
+                <div class="clientes-lista">
+                    ${clientesMostrados.map(cliente => `
+                        <article class="cliente-fila">
+                            <div class="cliente-principal">
+                                <span class="cliente-label">CLIENTE</span>
+                                <h3>
+                                    ${escaparHTML(
+                                        `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                                    )}
+                                </h3>
+                            </div>
+
+                            <div class="cliente-dato">
+                                <span>TELÉFONO</span>
+                                <p>
+                                    ${escaparHTML(cliente.telefono || "-")}
+                                </p>
+                            </div>
+
+                            <div class="cliente-dato cliente-instagram">
+                                <span>INSTAGRAM</span>
+                                <p>
+                                    ${escaparHTML(cliente.instagram || "-")}
+                                </p>
+                            </div>
+
+                            <div class="cliente-dato cliente-localidad">
+                                <span>LOCALIDAD</span>
+                                <p>
+                                    ${escaparHTML(cliente.localidad || "-")}
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn-ver-cliente"
+                                data-cliente-id="${escaparHTML(cliente.cliente_id)}"
+                            >
+                                VER
+                            </button>
+                        </article>
+                    `).join("")}
                 </div>
-            </article>
-        `).join("");
+            `;
+
+            lista.querySelectorAll(".btn-ver-cliente").forEach(boton => {
+                boton.addEventListener("click", function() {
+                    const clienteId = this.dataset.clienteId;
+                    mostrarFichaCliente(clienteId, clientesEmpresa);
+                });
+            });
+        }
+
+        mostrarListaClientes(clientesEmpresa);
+
+        if (buscador) {
+            buscador.addEventListener("input", function() {
+                const texto = this.value
+                    .trim()
+                    .toLowerCase();
+
+                if (!texto) {
+                    mostrarListaClientes(clientesEmpresa);
+                    return;
+                }
+
+                const filtrados = clientesEmpresa.filter(cliente => {
+                    const nombre = String(cliente.nombre || "").toLowerCase();
+                    const apellido = String(cliente.apellido || "").toLowerCase();
+                    const telefono = String(cliente.telefono || "").toLowerCase();
+                    const instagram = String(cliente.instagram || "").toLowerCase();
+
+                    return (
+                        nombre.includes(texto) ||
+                        apellido.includes(texto) ||
+                        `${nombre} ${apellido}`.includes(texto) ||
+                        telefono.includes(texto) ||
+                        instagram.includes(texto)
+                    );
+                });
+
+                mostrarListaClientes(filtrados);
+            });
+        }
+
+        const botonNuevo = document.getElementById("btn-nuevo-cliente");
+
+        if (botonNuevo) {
+            botonNuevo.addEventListener("click", function() {
+                alert("La carga de nuevos clientes la hacemos en el siguiente paso.");
+            });
+        }
 
     } catch (error) {
         console.error("Error cargando clientes:", error);
@@ -5449,6 +5549,29 @@ async function iniciarClientes() {
             </div>
         `;
     }
+}
+
+/* =========================================================
+   FICHA DE CLIENTE
+   ========================================================= */
+
+function mostrarFichaCliente(id, clientes) {
+    const cliente = clientes.find(
+        item => String(item.cliente_id) === String(id)
+    );
+
+    if (!cliente) {
+        alert("No se encontró el cliente.");
+        return;
+    }
+
+    alert(
+        `Cliente: ${cliente.nombre || ""} ${cliente.apellido || ""}\n` +
+        `Teléfono: ${cliente.telefono || "-"}\n` +
+        `Instagram: ${cliente.instagram || "-"}\n` +
+        `Email: ${cliente.email || "-"}\n` +
+        `Observaciones: ${cliente.observaciones || "-"}`
+    );
 }
 
 /* =========================================================
