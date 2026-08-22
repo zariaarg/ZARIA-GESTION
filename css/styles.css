@@ -837,26 +837,19 @@ h2 {
 .empresa-selector {
     margin-left: auto;
 }
-
 .empresa-info {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-
 .empresa-logo {
     width: 38px;
     height: 38px;
-
     object-fit: contain;
-
     border-radius: 8px;
-
     background: white;
-
     padding: 4px;
 }
-
 .empresa-texto {
     display: flex;
     flex-direction: column;
@@ -865,32 +858,20 @@ h2 {
 
 .empresa-label {
     font-size: 9px;
-
     letter-spacing: 1.5px;
-
     opacity: 0.55;
 }
 
 #empresa-select {
-
     appearance: none;
-
     border: none;
-
     background: transparent;
-
     color: white;
-
     font-size: 14px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     outline: none;
-
     padding: 2px 22px 2px 0;
-
     background-image:
         linear-gradient(
             45deg,
@@ -923,7 +904,6 @@ h2 {
    CRAFT FLOW — DASHBOARD
    ========================================================= */
 
-
 /* =========================
    HEADER
 ========================= */
@@ -934,20 +914,15 @@ h2 {
     gap: 14px;
 }
 
-
 /* =========================
    VISTA GENERAL
 ========================= */
-
 .dashboard-view {
     width: 100%;
 }
-
-
 .dashboard-encabezado {
     margin-bottom: 30px;
 }
-
 
 .dashboard-saludo {
     margin: 0 0 7px;
@@ -957,7 +932,6 @@ h2 {
     color: #888;
 }
 
-
 .dashboard-encabezado h2 {
     margin: 0;
     font-size: 30px;
@@ -965,13 +939,11 @@ h2 {
     color: #1d1a1a;
 }
 
-
 .dashboard-descripcion {
     margin: 8px 0 0;
     color: #777;
     font-size: 14px;
 }
-
 
 /* =========================
    ACCIONES PRINCIPALES
@@ -981,106 +953,72 @@ h2 {
     display: grid;
     grid-template-columns:
         repeat(4, 1fr);
-
     gap: 12px;
-
     margin-bottom: 25px;
 }
 
-
 .dashboard-accion {
     min-height: 88px;
-
     display: flex;
     align-items: center;
-
     gap: 14px;
-
     padding: 18px;
-
     border:
         1px solid #ddd8d4;
-
     border-radius: 12px;
-
     background: white;
-
     color: #1d1a1a;
-
     text-align: left;
-
     cursor: pointer;
-
     transition:
         transform .2s ease,
         box-shadow .2s ease,
         border-color .2s ease;
 }
 
-
 .dashboard-accion:hover {
     transform: translateY(-2px);
-
-    border-color: #bdb7b2;
-
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, .07);
+    border-color: #C47456;
+    box-shadow: 0 8px 25px rgba(196, 116, 86, .12);
 }
-
 
 .dashboard-accion-principal {
-    background: #1d1a1a;
+    background: #C47456;
     color: white;
-
-    border-color: #1d1a1a;
+    border-color: #C47456;
 }
-
 
 .dashboard-accion-principal:hover {
-    border-color: #1d1a1a;
+    background: #b26549;
+    border-color: #b26549;
 }
-
 
 .dashboard-accion-icono {
     width: 38px;
     height: 38px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border:
         1px solid currentColor;
-
     border-radius: 50%;
-
     font-size: 20px;
     font-weight: 300;
 }
 
-
 .dashboard-accion strong {
     display: block;
-
     font-size: 13px;
-
     letter-spacing: .4px;
 }
 
-
 .dashboard-accion small {
     display: block;
-
     margin-top: 5px;
-
     font-size: 11px;
-
-    opacity: .65;
+    opacity: .75;
 }
-
 
 /* =========================
    TARJETAS RESUMEN
