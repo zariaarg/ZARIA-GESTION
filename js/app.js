@@ -5305,53 +5305,73 @@ async function mostrarVistaModelos() {
    ========================================================= */
 
 function configurarDashboard() {
-
-    const btnModelos =
-        document.getElementById("btn-dashboard-modelos");
-
-    const btnAccesoModelos =
-        document.getElementById("btn-acceso-modelos");
-
-    const btnVolver =
-        document.getElementById("btn-volver-dashboard");
-
+    const btnModelos = document.getElementById("btn-dashboard-modelos");
+    const btnAccesoModelos = document.getElementById("btn-acceso-modelos");
+    const btnClientes = document.getElementById("btn-dashboard-clientes");
+    const btnAccesoClientes = document.getElementById("btn-acceso-clientes");
+    const btnVolver = document.getElementById("btn-volver-dashboard");
 
     if (btnModelos) {
-
         btnModelos.onclick = function(event) {
-
             event.preventDefault();
-
             mostrarVistaModelos();
-
         };
     }
-
 
     if (btnAccesoModelos) {
-
         btnAccesoModelos.onclick = function(event) {
-
             event.preventDefault();
-
             mostrarVistaModelos();
-
         };
     }
 
+    if (btnClientes) {
+        btnClientes.onclick = function(event) {
+            event.preventDefault();
+            mostrarVistaClientes();
+        };
+    }
+
+    if (btnAccesoClientes) {
+        btnAccesoClientes.onclick = function(event) {
+            event.preventDefault();
+            mostrarVistaClientes();
+        };
+    }
 
     if (btnVolver) {
-
         btnVolver.onclick = function(event) {
-
             event.preventDefault();
-
             mostrarDashboard();
-
         };
     }
 }
 
+**Nueva función `mostrarVistaClientes()`**
+
+/* =========================================================
+   VISTA CLIENTES
+   ========================================================= */
+
+function mostrarVistaClientes() {
+    const dashboard = document.getElementById("dashboard-view");
+    const modelos = document.getElementById("modelos-view");
+    const clientes = document.getElementById("clientes-view");
+
+    if (dashboard) {
+        dashboard.style.display = "none";
+    }
+
+    if (modelos) {
+        modelos.style.display = "none";
+    }
+
+    if (clientes) {
+        clientes.style.display = "block";
+    }
+
+    iniciarClientes();
+}
 
 /* =========================================================
    PREPARAR VISTAS
