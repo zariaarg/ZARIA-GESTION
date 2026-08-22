@@ -4021,125 +4021,126 @@ function agregarEstilosNuevoModelo() {
             "zaria-nuevo-modelo-styles"
         )
     ) {
-
         return;
-
     }
-
 
     const style =
         document.createElement(
             "style"
         );
 
-
     style.id =
         "zaria-nuevo-modelo-styles";
 
-
     style.textContent = `
 
+        /* =====================================
+           MODAL NUEVO MODELO
+        ===================================== */
+
         .modelo-nuevo-modal {
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 99999;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 25px;
-
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 99999 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 25px !important;
+            box-sizing: border-box !important;
         }
 
-
-        .modelo-nuevo-overlay {
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                rgba(0,0,0,0.65);
-
+         .modelo-nuevo-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+           background:
+                rgba(0,0,0,0.65) !important;
             backdrop-filter:
                 blur(3px);
-
         }
 
+        /* =====================================
+           CONTENEDOR
+        ===================================== */
 
         .modelo-nuevo-contenido {
 
-            position: relative;
+            position: relative !important;
 
-            z-index: 2;
+            z-index: 2 !important;
 
             width: min(
                 850px,
                 100%
-            );
+            ) !important;
 
-            max-height: 92vh;
+            max-height: 92vh !important;
 
-            overflow-y: auto;
+            overflow-y: auto !important;
 
-            background: #ffffff;
+            background: #ffffff !important;
 
-            border-radius: 16px;
+            border-radius: 16px !important;
 
-            padding: 35px;
+            padding: 35px !important;
+
+            box-sizing: border-box !important;
 
             box-shadow:
                 0 20px 60px
-                rgba(0,0,0,0.25);
+                rgba(0,0,0,0.25) !important;
 
         }
 
+
+        /* =====================================
+           BOTÓN CERRAR
+        ===================================== */
 
         .modelo-nuevo-cerrar {
 
-            position: absolute;
+            position: absolute !important;
 
-            top: 15px;
+            top: 15px !important;
 
-            right: 18px;
+            right: 18px !important;
 
-            border: none;
+            border: none !important;
 
-            background: none;
+            background: none !important;
 
-            font-size: 30px;
+            font-size: 30px !important;
 
-            line-height: 1;
+            line-height: 1 !important;
 
-            cursor: pointer;
+            cursor: pointer !important;
 
-            color: #333;
+            color: #333 !important;
+
+            padding: 5px !important;
 
         }
 
 
+        /* =====================================
+           CABECERA
+        ===================================== */
+
         .modelo-nuevo-header {
 
-            margin-bottom: 28px;
+            margin-bottom: 28px !important;
 
-            padding-right: 35px;
+            padding-right: 35px !important;
 
         }
 
 
         .modelo-nuevo-header span {
 
-            font-size: 11px;
+            font-size: 11px !important;
 
-            letter-spacing: 2px;
+            letter-spacing: 2px !important;
 
-            color: #777;
+            color: #777 !important;
 
         }
 
@@ -4147,119 +4148,441 @@ function agregarEstilosNuevoModelo() {
         .modelo-nuevo-header h2 {
 
             margin:
-                6px 0 4px;
+                6px 0 4px !important;
 
-            font-size: 28px;
+            font-size: 28px !important;
 
         }
 
 
         .modelo-nuevo-header p {
 
-            margin: 0;
+            margin: 0 !important;
 
-            color: #777;
+            color: #777 !important;
 
-            font-size: 13px;
+            font-size: 13px !important;
 
         }
 
 
+        /* =====================================
+           FORMULARIO
+        ===================================== */
+
+        #form-nuevo-modelo {
+
+            width: 100% !important;
+
+            box-sizing: border-box !important;
+
+        }
+
+
+        /*
+         * ESTA ES LA PARTE IMPORTANTE.
+         *
+         * El formulario tendrá siempre
+         * dos columnas en escritorio.
+         */
+
+        #form-nuevo-modelo .form-grid {
+
+            display: grid !important;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr) !important;
+
+            column-gap: 22px !important;
+
+            row-gap: 20px !important;
+
+            width: 100% !important;
+
+            box-sizing: border-box !important;
+
+        }
+
+
+        /* =====================================
+           CAMPOS
+        ===================================== */
+
+        #form-nuevo-modelo .campo {
+
+            display: flex !important;
+
+            flex-direction: column !important;
+
+            min-width: 0 !important;
+
+            width: 100% !important;
+
+            box-sizing: border-box !important;
+
+        }
+
+
+        #form-nuevo-modelo .campo label {
+
+            display: block !important;
+
+            margin-bottom: 7px !important;
+
+            font-size: 11px !important;
+
+            font-weight: 700 !important;
+
+            letter-spacing: .7px !important;
+
+            color: #333 !important;
+
+        }
+
+
+        #form-nuevo-modelo .campo small {
+
+            display: block !important;
+
+            margin-top: 6px !important;
+
+            font-size: 11px !important;
+
+            line-height: 1.4 !important;
+
+            color: #888 !important;
+
+        }
+
+
+        /* =====================================
+           INPUTS Y SELECT
+        ===================================== */
+
+        #form-nuevo-modelo .campo input:not(
+            [type="checkbox"]
+        ),
+
+        #form-nuevo-modelo .campo select {
+
+            width: 100% !important;
+
+            height: 44px !important;
+
+            min-height: 44px !important;
+
+            padding:
+                0 12px !important;
+
+            border:
+                1px solid #d8d8d8 !important;
+
+            border-radius: 8px !important;
+
+            background: #fff !important;
+
+            color: #222 !important;
+
+            font-family: inherit !important;
+
+            font-size: 13px !important;
+
+            box-sizing: border-box !important;
+
+            outline: none !important;
+
+        }
+
+
+        #form-nuevo-modelo .campo input:not(
+            [type="checkbox"]
+        ):focus,
+
+        #form-nuevo-modelo .campo select:focus,
+
+        #form-nuevo-modelo .campo textarea:focus {
+
+            border-color: #8a8f62 !important;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(138,143,98,.12) !important;
+
+        }
+
+
+        /* =====================================
+           TEXTAREAS
+        ===================================== */
+
+        #form-nuevo-modelo .campo textarea {
+
+            width: 100% !important;
+
+            min-height: 120px !important;
+
+            padding:
+                12px !important;
+
+            border:
+                1px solid #d8d8d8 !important;
+
+            border-radius: 8px !important;
+
+            background: #fff !important;
+
+            color: #222 !important;
+
+            font-family: inherit !important;
+
+            font-size: 13px !important;
+
+            line-height: 1.5 !important;
+
+            resize: vertical !important;
+
+            box-sizing: border-box !important;
+
+            outline: none !important;
+
+        }
+
+
+        /* =====================================
+           CAMPOS QUE OCUPAN TODO EL ANCHO
+        ===================================== */
+
+        #form-nuevo-modelo .campo-completo {
+
+            grid-column:
+                1 / -1 !important;
+
+        }
+
+
+        /* =====================================
+           ACTIVO
+        ===================================== */
+
+        #form-nuevo-modelo .campo-activo {
+
+            display: flex !important;
+
+            flex-direction: row !important;
+
+            align-items: center !important;
+
+            gap: 12px !important;
+
+        }
+
+
+        #form-nuevo-modelo .campo-activo > label:first-child {
+
+            margin: 0 !important;
+
+        }
+
+
+        /* =====================================
+           SWITCH
+        ===================================== */
+
+        #form-nuevo-modelo .switch {
+
+            position: relative !important;
+
+            display: inline-block !important;
+
+            width: 46px !important;
+
+            height: 24px !important;
+
+            margin: 0 !important;
+
+        }
+
+
+        #form-nuevo-modelo .switch input {
+
+            opacity: 0 !important;
+
+            width: 0 !important;
+
+            height: 0 !important;
+
+            position: absolute !important;
+
+        }
+
+
+        #form-nuevo-modelo .slider {
+
+            position: absolute !important;
+
+            cursor: pointer !important;
+
+            inset: 0 !important;
+
+            background: #ccc !important;
+
+            border-radius: 24px !important;
+
+            transition: .2s !important;
+
+        }
+
+
+        #form-nuevo-modelo .slider:before {
+
+            content: "" !important;
+
+            position: absolute !important;
+
+            width: 18px !important;
+
+            height: 18px !important;
+
+            left: 3px !important;
+
+            top: 3px !important;
+
+            background: white !important;
+
+            border-radius: 50% !important;
+
+            transition: .2s !important;
+
+        }
+
+
+        #form-nuevo-modelo .switch input:checked
+        + .slider {
+
+            background: #8a8f62 !important;
+
+        }
+
+
+        #form-nuevo-modelo .switch input:checked
+        + .slider:before {
+
+            transform:
+                translateX(22px) !important;
+
+        }
+
+
+        /* =====================================
+           MENSAJE
+        ===================================== */
+
         .modelo-nuevo-mensaje {
 
-            min-height: 20px;
+            min-height: 20px !important;
 
-            margin-top: 20px;
+            margin-top: 20px !important;
 
-            font-size: 13px;
+            font-size: 13px !important;
 
         }
 
 
         .modelo-nuevo-mensaje.exito {
 
-            color: #2d6a3f;
+            color: #2d6a3f !important;
 
         }
 
 
         .modelo-nuevo-mensaje.error {
 
-            color: #a33;
+            color: #a33 !important;
 
         }
 
 
+        /* =====================================
+           BOTONES
+        ===================================== */
+
         .modelo-nuevo-botones {
 
-            display: flex;
+            display: flex !important;
 
-            justify-content: flex-end;
+            justify-content: flex-end !important;
 
-            gap: 10px;
+            gap: 10px !important;
 
-            margin-top: 25px;
+            margin-top: 25px !important;
 
-            padding-top: 20px;
+            padding-top: 20px !important;
 
             border-top:
-                1px solid #eee;
+                1px solid #eee !important;
 
         }
 
 
         .modelo-nuevo-botones button {
 
-            height: 42px;
+            height: 42px !important;
 
             padding:
-                0 20px;
+                0 20px !important;
 
-            border-radius: 8px;
+            border-radius: 8px !important;
 
-            font-size: 12px;
+            font-size: 12px !important;
 
-            font-weight: bold;
+            font-weight: bold !important;
 
-            letter-spacing: .5px;
+            letter-spacing: .5px !important;
 
-            cursor: pointer;
+            cursor: pointer !important;
+
+            box-sizing: border-box !important;
 
         }
 
 
         .btn-cancelar-nuevo {
 
-            background: white;
+            background: white !important;
 
-            color: #1d1a1a;
+            color: #1d1a1a !important;
 
             border:
-                1px solid #1d1a1a;
+                1px solid #1d1a1a !important;
 
         }
 
 
         .btn-guardar-nuevo {
 
-            background: #1d1a1a;
+            background: #1d1a1a !important;
 
-            color: white;
+            color: white !important;
 
             border:
-                1px solid #1d1a1a;
+                1px solid #1d1a1a !important;
 
         }
 
 
         .btn-guardar-nuevo:disabled {
 
-            opacity: .6;
+            opacity: .6 !important;
 
-            cursor: wait;
+            cursor: wait !important;
 
         }
 
+
+        /* =====================================
+           CELULAR
+        ===================================== */
 
         @media (
             max-width: 700px
@@ -4267,47 +4590,53 @@ function agregarEstilosNuevoModelo() {
 
             .modelo-nuevo-modal {
 
-                padding: 10px;
+                padding: 10px !important;
 
             }
 
 
             .modelo-nuevo-contenido {
 
-                padding:
-                    25px 20px;
+                width: 100% !important;
 
-                max-height: 95vh;
+                padding:
+                    25px 20px !important;
+
+                max-height: 95vh !important;
 
             }
 
 
-            .form-grid {
+            #form-nuevo-modelo .form-grid {
 
                 grid-template-columns:
-                    1fr;
+                    1fr !important;
+
+                column-gap: 0 !important;
+
+                row-gap: 18px !important;
 
             }
 
 
-            .campo-completo {
+            #form-nuevo-modelo .campo-completo {
 
                 grid-column:
-                    auto;
+                    auto !important;
 
             }
 
 
             .modelo-nuevo-botones {
 
-                flex-direction: column;
+                flex-direction: column !important;
 
             }
 
 
             .modelo-nuevo-botones button {
 
-                width: 100%;
+                width: 100% !important;
 
             }
 
