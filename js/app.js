@@ -5768,14 +5768,230 @@ function abrirNuevoCliente() {
         .querySelector(".btn-cancelar-cliente")
         .addEventListener("click", cerrarModal);
 
-    formulario.addEventListener("submit", async function(event) {
+   formulario.addEventListener(
+    "submit",
+    async function(event) {
+
         event.preventDefault();
 
         await guardarNuevoCliente(
             formulario,
             modal
         );
-    });
+
+    }
+);
+}
+
+/* =========================================================
+   GUARDAR NUEVO CLIENTE
+   ========================================================= */
+
+async function guardarNuevoCliente(
+    formulario,
+    modal
+) {
+
+    const boton =
+        formulario.querySelector(
+            ".btn-guardar-cliente"
+        );
+
+    const mensaje =
+        formulario.querySelector(
+            "#nuevo-cliente-mensaje"
+        );
+
+    const formData =
+        new FormData(formulario);
+
+    const nombre =
+        String(
+            formData.get("nombre") || ""
+        ).trim();
+
+    const apellido =
+        String(
+            formData.get("apellido") || ""
+        ).trim();
+
+    if (!nombre) {
+        alert("Ingresá el nombre.");
+        return;
+    }
+
+    if (!apellido) {
+        alert("Ingresá el apellido.");
+        return;
+    }
+
+    if (!empresaActual) {
+        alert("No hay una empresa seleccionada.");
+        return;
+    }
+
+    const data = {
+
+        empresa_id:
+            Number(
+                empresaActual.empresa_id
+            ),
+
+        nombre,
+        apellido,
+
+        telefono:
+            String(
+                formData.get("telefono") || ""
+            ).trim(),
+
+        instagram:
+            String(
+                formData.get("instagram") || ""
+            ).trim(),
+
+        email:
+            String(
+                formData.get("email") || ""
+            ).trim(),
+
+        direccion:
+            String(
+                formData.get("direccion") || ""
+            ).trim(),
+
+        localidad:
+            String(
+                formData.get("localidad") || ""
+            ).trim(),
+
+        provincia:
+            String(
+                formData.get("provincia") || ""
+            ).trim(),
+
+        medidas_cuello:
+            formData.get("medidas_cuello") === ""
+                ? ""
+                : Number(
+                    formData.get("medidas_cuello")
+                ),
+
+        medidas_busto:
+            formData.get("medidas_busto") === ""
+                ? ""
+                : Number(
+                    formData.get("medidas_busto")
+                ),
+
+        medidas_cintura:
+            formData.get("medidas_cintura") === ""
+                ? ""
+                : Number(
+                    formData.get("medidas_cintura")
+                ),
+
+        medidas_alto:
+            formData.get("medidas_alto") === ""
+                ? ""
+                : Number(
+                    formData.get("medidas_alto")
+                ),
+
+        observaciones:
+            String(
+                formData.get("observaciones") || ""
+            ).trim()
+
+    };
+
+    boton.disabled = true;
+    boton.textContent = "CREANDO...";
+
+    mensaje.textContent = "Guardando cliente...";
+    mensaje.className = "cliente-nuevo-mensaje";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "insert",
+
+                            resource:
+                                "clientes",
+
+                            data
+
+                        })
+
+                }
+            );
+
+        const resultado =
+            await response.json();
+
+        if (!resultado.success) {
+
+            throw new Error(
+                resultado.error ||
+                "No se pudo crear el cliente."
+            );
+
+        }
+
+        mensaje.textContent =
+            "Cliente creado correctamente.";
+
+        mensaje.className =
+            "cliente-nuevo-mensaje exito";
+
+        setTimeout(
+            async function() {
+
+                modal.remove();
+
+                await iniciarClientes();
+
+            },
+            700
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error creando cliente:",
+            error
+        );
+
+        mensaje.textContent =
+            "No se pudo crear el cliente.";
+
+        mensaje.className =
+            "cliente-nuevo-mensaje error";
+
+        boton.disabled = false;
+        boton.textContent = "CREAR CLIENTE";
+
+        alert(
+            "No se pudo crear el cliente.\n\n" +
+            error.message
+        );
+
+    }
+
 }
 
 /* =========================================================
