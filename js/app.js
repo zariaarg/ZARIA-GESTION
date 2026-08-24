@@ -5707,7 +5707,232 @@ function mostrarFichaPedido(id, pedidos) {
             abrirNuevoPedido();
         });
 }
+/* =========================================================
+   ESTILOS FICHA DE PEDIDO
+   ========================================================= */
 
+function agregarEstilosFichaPedido() {
+    if (document.getElementById("zaria-ficha-pedido-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-ficha-pedido-styles";
+
+    style.textContent = `
+        .pedido-ficha-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pedido-ficha-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+        }
+
+        .pedido-ficha-contenido {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 760px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .pedido-ficha-cerrar {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .pedido-ficha-header {
+            padding-right: 40px;
+            margin-bottom: 28px;
+        }
+
+        .pedido-ficha-header span {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #888;
+        }
+
+        .pedido-ficha-header h2 {
+            margin: 0 0 5px;
+            font-size: 24px;
+            color: #222;
+        }
+
+        .pedido-ficha-header p {
+            margin: 0;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .pedido-ficha-seccion {
+            margin-bottom: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .pedido-ficha-seccion-titulo {
+            margin-bottom: 16px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+            color: #888;
+        }
+
+        .pedido-ficha-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .pedido-ficha-dato span {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #999;
+        }
+
+        .pedido-ficha-dato strong {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            word-break: break-word;
+        }
+
+        .pedido-ficha-finanzas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .pedido-ficha-finanza {
+            padding: 15px;
+            background: #f7f7f7;
+            border-radius: 9px;
+        }
+
+        .pedido-ficha-finanza span {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        .pedido-ficha-finanza strong {
+            font-size: 17px;
+            color: #222;
+        }
+
+        .pedido-ficha-observaciones {
+            padding: 14px 16px;
+            background: #f7f7f7;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #555;
+            white-space: pre-wrap;
+        }
+
+        .pedido-ficha-botones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .pedido-ficha-botones button {
+            height: 40px;
+            padding: 0 18px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: .6px;
+            cursor: pointer;
+        }
+
+        .btn-ficha-pedido-cerrar {
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+        }
+
+        .btn-ficha-pedido-editar {
+            border: 1px solid #1d1a1a;
+            background: #1d1a1a;
+            color: #fff;
+        }
+
+        @media (max-width: 700px) {
+            .pedido-ficha-modal {
+                padding: 10px;
+            }
+
+            .pedido-ficha-contenido {
+                max-height: 94vh;
+                padding: 24px 18px;
+                border-radius: 12px;
+            }
+
+            .pedido-ficha-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pedido-ficha-finanzas {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .pedido-ficha-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pedido-ficha-header h2 {
+                font-size: 20px;
+            }
+
+            .pedido-ficha-botones {
+                flex-direction: column;
+            }
+
+            .pedido-ficha-botones button {
+                width: 100%;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+}
 /* =========================================================
    INICIAR PEDIDOS
    ========================================================= */
