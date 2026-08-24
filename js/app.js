@@ -5783,6 +5783,262 @@ function abrirNuevoCliente() {
 );
 }
 
+
+/* =========================================================
+   EDITAR CLIENTE
+   ========================================================= */
+
+function editarCliente(id, clientes) {
+    const cliente = clientes.find(
+        item => String(item.cliente_id) === String(id)
+    );
+
+    if (!cliente) {
+        alert("No se encontró el cliente.");
+        return;
+    }
+
+    const modal = document.createElement("div");
+    modal.className = "cliente-nuevo-modal";
+
+    modal.innerHTML = `
+        <div class="cliente-nuevo-overlay"></div>
+        <div class="cliente-nuevo-contenido">
+            <button type="button" class="cliente-nuevo-cerrar">×</button>
+
+            <div class="cliente-nuevo-header">
+                <span>EDITAR CLIENTE</span>
+                <h2>${escaparHTML(
+                    `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                )}</h2>
+                <p>
+                    Empresa:
+                    <strong>
+                        ${escaparHTML(
+                            empresaActual.nombre_comercial ||
+                            empresaActual.nombre ||
+                            ""
+                        )}
+                    </strong>
+                </p>
+            </div>
+
+            <form id="form-editar-cliente">
+                <div class="cliente-form-grid">
+
+                    <div class="cliente-campo">
+                        <label>NOMBRE</label>
+                        <input type="text" name="nombre" value="${escaparHTML(cliente.nombre || "")}" required>
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>APELLIDO</label>
+                        <input type="text" name="apellido" value="${escaparHTML(cliente.apellido || "")}" required>
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>TELÉFONO</label>
+                        <input type="tel" name="telefono" value="${escaparHTML(cliente.telefono || "")}">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>INSTAGRAM</label>
+                        <input type="text" name="instagram" value="${escaparHTML(cliente.instagram || "")}" placeholder="@usuario">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>EMAIL</label>
+                        <input type="email" name="email" value="${escaparHTML(cliente.email || "")}">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>DIRECCIÓN</label>
+                        <input type="text" name="direccion" value="${escaparHTML(cliente.direccion || "")}">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>LOCALIDAD</label>
+                        <input type="text" name="localidad" value="${escaparHTML(cliente.localidad || "")}">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>PROVINCIA</label>
+                        <input type="text" name="provincia" value="${escaparHTML(cliente.provincia || "")}">
+                    </div>
+
+                    <div class="cliente-separador">
+                        <span>MEDIDAS</span>
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>CUELLO</label>
+                        <input type="number" name="medidas_cuello" min="0" step="0.1" value="${escaparHTML(cliente.medidas_cuello ?? "")}" placeholder="cm">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>BUSTO</label>
+                        <input type="number" name="medidas_busto" min="0" step="0.1" value="${escaparHTML(cliente.medidas_busto ?? "")}" placeholder="cm">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>CINTURA</label>
+                        <input type="number" name="medidas_cintura" min="0" step="0.1" value="${escaparHTML(cliente.medidas_cintura ?? "")}" placeholder="cm">
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>ALTO</label>
+                        <input type="number" name="medidas_alto" min="0" step="0.1" value="${escaparHTML(cliente.medidas_alto ?? "")}" placeholder="cm">
+                    </div>
+
+                    <div class="cliente-campo cliente-campo-completo">
+                        <label>OBSERVACIONES</label>
+                        <textarea name="observaciones" rows="4" placeholder="Notas importantes sobre el cliente...">${escaparHTML(cliente.observaciones || "")}</textarea>
+                    </div>
+
+                </div>
+
+                <div class="cliente-nuevo-mensaje" id="editar-cliente-mensaje"></div>
+
+                <div class="cliente-nuevo-botones">
+                    <button type="button" class="btn-cancelar-cliente">
+                        CANCELAR
+                    </button>
+                    <button type="submit" class="btn-guardar-cliente">
+                        GUARDAR CAMBIOS
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    agregarEstilosNuevoCliente();
+
+    const formulario = modal.querySelector("#form-editar-cliente");
+    const cerrarModal = () => modal.remove();
+
+    modal.querySelector(".cliente-nuevo-cerrar")
+        .addEventListener("click", cerrarModal);
+
+    modal.querySelector(".cliente-nuevo-overlay")
+        .addEventListener("click", cerrarModal);
+
+    modal.querySelector(".btn-cancelar-cliente")
+        .addEventListener("click", cerrarModal);
+
+    formulario.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        await guardarCambiosCliente(cliente, formulario, modal);
+    });
+}
+
+/* =========================================================
+   GUARDAR CAMBIOS CLIENTE
+   ========================================================= */
+
+async function guardarCambiosCliente(cliente, formulario, modal) {
+    const boton = formulario.querySelector(".btn-guardar-cliente");
+    const mensaje = formulario.querySelector("#editar-cliente-mensaje");
+    const formData = new FormData(formulario);
+
+    const nombre = String(formData.get("nombre") || "").trim();
+    const apellido = String(formData.get("apellido") || "").trim();
+
+    if (!nombre) {
+        alert("Ingresá el nombre del cliente.");
+        return;
+    }
+
+    if (!apellido) {
+        alert("Ingresá el apellido del cliente.");
+        return;
+    }
+
+    if (!empresaActual) {
+        alert("No hay una empresa seleccionada.");
+        return;
+    }
+
+    const convertirMedida = nombreCampo => {
+        const valor = formData.get(nombreCampo);
+        return valor === "" ? "" : Number(valor);
+    };
+
+    const data = {
+        cliente_id: Number(cliente.cliente_id),
+        empresa_id: Number(empresaActual.empresa_id),
+        nombre: nombre,
+        apellido: apellido,
+        telefono: String(formData.get("telefono") || "").trim(),
+        instagram: String(formData.get("instagram") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        direccion: String(formData.get("direccion") || "").trim(),
+        localidad: String(formData.get("localidad") || "").trim(),
+        provincia: String(formData.get("provincia") || "").trim(),
+        medidas_cuello: convertirMedida("medidas_cuello"),
+        medidas_busto: convertirMedida("medidas_busto"),
+        medidas_cintura: convertirMedida("medidas_cintura"),
+        medidas_alto: convertirMedida("medidas_alto"),
+        observaciones: String(formData.get("observaciones") || "").trim()
+    };
+
+    boton.disabled = true;
+    boton.textContent = "GUARDANDO...";
+    mensaje.textContent = "Guardando cambios...";
+    mensaje.className = "cliente-nuevo-mensaje";
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+                action: "update",
+                resource: "clientes",
+                id: cliente.cliente_id,
+                data: data
+            })
+        });
+
+        const resultado = await response.json();
+
+        if (!resultado.success) {
+            throw new Error(
+                resultado.error ||
+                "No se pudieron guardar los cambios."
+            );
+        }
+
+        mensaje.textContent = "Cliente actualizado correctamente.";
+        mensaje.className = "cliente-nuevo-mensaje exito";
+
+        setTimeout(async function() {
+            modal.remove();
+
+            try {
+                await iniciarClientes();
+            } catch (error) {
+                console.error("Error actualizando clientes:", error);
+            }
+        }, 700);
+
+    } catch (error) {
+        console.error("Error editando cliente:", error);
+
+        mensaje.textContent = "No se pudieron guardar los cambios.";
+        mensaje.className = "cliente-nuevo-mensaje error";
+
+        boton.disabled = false;
+        boton.textContent = "GUARDAR CAMBIOS";
+
+        alert(
+            "No se pudieron guardar los cambios.\n\n" +
+            error.message
+        );
+    }
+}
+
 /* =========================================================
    GUARDAR NUEVO CLIENTE
    ========================================================= */
@@ -6262,18 +6518,11 @@ function mostrarFichaCliente(id, clientes) {
 
             <div class="cliente-ficha-header">
                 <span>CLIENTE</span>
-
-                <h2>
-                    ${escaparHTML(nombreCompleto)}
-                </h2>
-
-                <p>
-                    Ficha del cliente
-                </p>
+                <h2>${escaparHTML(nombreCompleto)}</h2>
+                <p>Ficha del cliente</p>
             </div>
 
             <div class="cliente-ficha-seccion">
-
                 <div class="cliente-ficha-seccion-titulo">
                     DATOS DE CONTACTO
                 </div>
@@ -6282,52 +6531,38 @@ function mostrarFichaCliente(id, clientes) {
 
                     <div class="cliente-ficha-dato">
                         <span>TELÉFONO</span>
-                        <strong>
-                            ${escaparHTML(cliente.telefono || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.telefono || "-")}</strong>
                     </div>
 
                     <div class="cliente-ficha-dato">
                         <span>INSTAGRAM</span>
-                        <strong>
-                            ${escaparHTML(cliente.instagram || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.instagram || "-")}</strong>
                     </div>
 
                     <div class="cliente-ficha-dato">
                         <span>EMAIL</span>
-                        <strong>
-                            ${escaparHTML(cliente.email || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.email || "-")}</strong>
                     </div>
 
                     <div class="cliente-ficha-dato">
                         <span>DIRECCIÓN</span>
-                        <strong>
-                            ${escaparHTML(cliente.direccion || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.direccion || "-")}</strong>
                     </div>
 
                     <div class="cliente-ficha-dato">
                         <span>LOCALIDAD</span>
-                        <strong>
-                            ${escaparHTML(cliente.localidad || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.localidad || "-")}</strong>
                     </div>
 
                     <div class="cliente-ficha-dato">
                         <span>PROVINCIA</span>
-                        <strong>
-                            ${escaparHTML(cliente.provincia || "-")}
-                        </strong>
+                        <strong>${escaparHTML(cliente.provincia || "-")}</strong>
                     </div>
 
                 </div>
-
             </div>
 
             <div class="cliente-ficha-seccion">
-
                 <div class="cliente-ficha-seccion-titulo">
                     MEDIDAS
                 </div>
@@ -6367,19 +6602,19 @@ function mostrarFichaCliente(id, clientes) {
                     </div>
 
                 </div>
-
             </div>
 
             <div class="cliente-ficha-seccion">
-
                 <div class="cliente-ficha-seccion-titulo">
                     OBSERVACIONES
                 </div>
 
                 <div class="cliente-ficha-observaciones">
-                    ${escaparHTML(cliente.observaciones || "Sin observaciones.")}
+                    ${escaparHTML(
+                        cliente.observaciones ||
+                        "Sin observaciones."
+                    )}
                 </div>
-
             </div>
 
             <div class="cliente-ficha-botones">
@@ -6389,6 +6624,13 @@ function mostrarFichaCliente(id, clientes) {
                     class="btn-ficha-cerrar"
                 >
                     CERRAR
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-ficha-editar"
+                >
+                    EDITAR CLIENTE
                 </button>
 
                 <button
@@ -6411,35 +6653,30 @@ function mostrarFichaCliente(id, clientes) {
 
     modal
         .querySelector(".cliente-ficha-cerrar")
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
+        .addEventListener("click", cerrarModal);
 
     modal
         .querySelector(".cliente-ficha-overlay")
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
+        .addEventListener("click", cerrarModal);
 
     modal
         .querySelector(".btn-ficha-cerrar")
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".btn-ficha-editar")
+        .addEventListener("click", function() {
+            modal.remove();
+            editarCliente(cliente.cliente_id, clientes);
+        });
 
     modal
         .querySelector(".btn-ficha-nuevo-pedido")
-        .addEventListener(
-            "click",
-            function() {
-                alert(
-                    "La carga de pedidos la hacemos en el siguiente paso."
-                );
-            }
-        );
+        .addEventListener("click", function() {
+            alert(
+                "La carga de pedidos la hacemos en el siguiente paso."
+            );
+        });
 }
 
 /* =========================================================
