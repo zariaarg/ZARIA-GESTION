@@ -5408,6 +5408,307 @@ function mostrarVistaPedidos() {
 }
 
 /* =========================================================
+   FICHA DE PEDIDO
+   ========================================================= */
+
+function mostrarFichaPedido(id, pedidos) {
+    const pedido = pedidos.find(
+        item => String(item.id_pedido) === String(id)
+    );
+
+    if (!pedido) {
+        alert("No se encontró el pedido.");
+        return;
+    }
+
+    const nombreCliente =
+        pedido.cliente_nombre || "Cliente sin nombre";
+
+    const medidas = [
+        pedido.cuello ? `Cuello: ${pedido.cuello} cm` : "",
+        pedido.busto ? `Busto: ${pedido.busto} cm` : "",
+        pedido.cintura ? `Cintura: ${pedido.cintura} cm` : "",
+        pedido.alto ? `Alto: ${pedido.alto} cm` : ""
+    ].filter(Boolean).join(" · ");
+
+    const modal = document.createElement("div");
+    modal.className = "pedido-ficha-modal";
+
+    modal.innerHTML = `
+        <div class="pedido-ficha-overlay"></div>
+
+        <div class="pedido-ficha-contenido">
+
+            <button
+                type="button"
+                class="pedido-ficha-cerrar"
+            >
+                ×
+            </button>
+
+            <div class="pedido-ficha-header">
+                <span>PEDIDO #${escaparHTML(pedido.id_pedido || "-")}</span>
+
+                <h2>
+                    ${escaparHTML(nombreCliente)}
+                </h2>
+
+                <p>
+                    ${escaparHTML(pedido.fecha || "-")}
+                </p>
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    ESTADO
+                </div>
+
+                <div class="pedido-ficha-estado">
+                    ${escaparHTML(pedido.estado || "-")}
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    CLIENTE
+                </div>
+
+                <div class="pedido-ficha-grid">
+
+                    <div class="pedido-ficha-dato">
+                        <span>NOMBRE</span>
+                        <strong>
+                            ${escaparHTML(nombreCliente)}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>TELÉFONO</span>
+                        <strong>
+                            ${escaparHTML(pedido.telefono || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>INSTAGRAM</span>
+                        <strong>
+                            ${escaparHTML(pedido.instagram || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>CANAL DE VENTA</span>
+                        <strong>
+                            ${escaparHTML(pedido.canal_venta || "-")}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    PRODUCTO
+                </div>
+
+                <div class="pedido-ficha-grid">
+
+                    <div class="pedido-ficha-dato">
+                        <span>MODELO</span>
+                        <strong>
+                            ${escaparHTML(pedido.modelo || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>CÓDIGO</span>
+                        <strong>
+                            ${escaparHTML(pedido.codigo || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>MATERIAL</span>
+                        <strong>
+                            ${escaparHTML(pedido.material || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>COLOR CUERO</span>
+                        <strong>
+                            ${escaparHTML(pedido.color_cuero || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>COLOR HILO</span>
+                        <strong>
+                            ${escaparHTML(pedido.color_hilo || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>TALLE</span>
+                        <strong>
+                            ${escaparHTML(pedido.talle || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>A MEDIDA</span>
+                        <strong>
+                            ${pedido.a_medida ? "Sí" : "No"}
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="pedido-ficha-subseccion">
+
+                    <span>MEDIDAS</span>
+
+                    <strong>
+                        ${escaparHTML(medidas || "Sin medidas cargadas.")}
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    VALORES Y COBRO
+                </div>
+
+                <div class="pedido-ficha-grid">
+
+                    <div class="pedido-ficha-dato">
+                        <span>PRECIO</span>
+                        <strong>
+                            $${escaparHTML(pedido.precio || "0")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>SEÑA</span>
+                        <strong>
+                            $${escaparHTML(pedido.sena || "0")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>SALDO</span>
+                        <strong>
+                            $${escaparHTML(pedido.saldo || "0")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>MÉTODO DE PAGO</span>
+                        <strong>
+                            ${escaparHTML(pedido.metodo_pago || "-")}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    ENTREGA
+                </div>
+
+                <div class="pedido-ficha-grid">
+
+                    <div class="pedido-ficha-dato">
+                        <span>TIPO DE ENTREGA</span>
+                        <strong>
+                            ${escaparHTML(pedido.tipo_entrega || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="pedido-ficha-dato">
+                        <span>FECHA DE ENTREGA</span>
+                        <strong>
+                            ${escaparHTML(pedido.fecha_entrega || "-")}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-seccion">
+
+                <div class="pedido-ficha-seccion-titulo">
+                    OBSERVACIONES
+                </div>
+
+                <div class="pedido-ficha-observaciones">
+                    ${escaparHTML(
+                        pedido.observaciones ||
+                        "Sin observaciones."
+                    )}
+                </div>
+
+            </div>
+
+            <div class="pedido-ficha-botones">
+
+                <button
+                    type="button"
+                    class="btn-pedido-ficha-cerrar"
+                >
+                    CERRAR
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-pedido-ficha-nuevo"
+                >
+                    NUEVO PEDIDO
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    agregarEstilosFichaPedido();
+
+    const cerrarModal = () => modal.remove();
+
+    modal
+        .querySelector(".pedido-ficha-cerrar")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".pedido-ficha-overlay")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".btn-pedido-ficha-cerrar")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".btn-pedido-ficha-nuevo")
+        .addEventListener("click", function() {
+            cerrarModal();
+            abrirNuevoPedido();
+        });
+}
+
+/* =========================================================
    INICIAR PEDIDOS
    ========================================================= */
 
