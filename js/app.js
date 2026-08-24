@@ -5532,13 +5532,13 @@ async function iniciarClientes() {
             });
         }
 
-        const botonNuevo = document.getElementById("btn-nuevo-cliente");
+  const botonNuevo = document.getElementById("btn-nuevo-cliente");
 
-        if (botonNuevo) {
-            botonNuevo.addEventListener("click", function() {
-                alert("La carga de nuevos clientes la hacemos en el siguiente paso.");
-            });
-        }
+   if (botonNuevo) {
+       botonNuevo.addEventListener("click", function() {
+           abrirNuevoCliente();
+       });
+   }
 
     } catch (error) {
         console.error("Error cargando clientes:", error);
@@ -5549,6 +5549,232 @@ async function iniciarClientes() {
             </div>
         `;
     }
+}
+
+/* =========================================================
+   NUEVO CLIENTE
+   ========================================================= */
+
+function abrirNuevoCliente() {
+    if (!empresaActual) {
+        alert("No hay una empresa seleccionada.");
+        return;
+    }
+
+    const modal = document.createElement("div");
+    modal.className = "cliente-nuevo-modal";
+
+    modal.innerHTML = `
+        <div class="cliente-nuevo-overlay"></div>
+
+        <div class="cliente-nuevo-contenido">
+
+            <button
+                type="button"
+                class="cliente-nuevo-cerrar"
+            >
+                ×
+            </button>
+
+            <div class="cliente-nuevo-header">
+                <span>NUEVO CLIENTE</span>
+                <h2>Crear cliente</h2>
+                <p>
+                    Empresa:
+                    <strong>
+                        ${escaparHTML(
+                            empresaActual.nombre_comercial ||
+                            empresaActual.nombre ||
+                            ""
+                        )}
+                    </strong>
+                </p>
+            </div>
+
+            <form id="form-nuevo-cliente">
+
+                <div class="cliente-form-grid">
+
+                    <div class="cliente-campo">
+                        <label>NOMBRE</label>
+                        <input
+                            type="text"
+                            name="nombre"
+                            required
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>APELLIDO</label>
+                        <input
+                            type="text"
+                            name="apellido"
+                            required
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>TELÉFONO</label>
+                        <input
+                            type="tel"
+                            name="telefono"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>INSTAGRAM</label>
+                        <input
+                            type="text"
+                            name="instagram"
+                            placeholder="@usuario"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>EMAIL</label>
+                        <input
+                            type="email"
+                            name="email"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>DIRECCIÓN</label>
+                        <input
+                            type="text"
+                            name="direccion"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>LOCALIDAD</label>
+                        <input
+                            type="text"
+                            name="localidad"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>PROVINCIA</label>
+                        <input
+                            type="text"
+                            name="provincia"
+                        >
+                    </div>
+
+                    <div class="cliente-separador">
+                        <span>MEDIDAS</span>
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>CUELLO</label>
+                        <input
+                            type="number"
+                            name="medidas_cuello"
+                            min="0"
+                            step="0.1"
+                            placeholder="cm"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>BUSTO</label>
+                        <input
+                            type="number"
+                            name="medidas_busto"
+                            min="0"
+                            step="0.1"
+                            placeholder="cm"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>CINTURA</label>
+                        <input
+                            type="number"
+                            name="medidas_cintura"
+                            min="0"
+                            step="0.1"
+                            placeholder="cm"
+                        >
+                    </div>
+
+                    <div class="cliente-campo">
+                        <label>ALTO</label>
+                        <input
+                            type="number"
+                            name="medidas_alto"
+                            min="0"
+                            step="0.1"
+                            placeholder="cm"
+                        >
+                    </div>
+
+                    <div class="cliente-campo cliente-campo-completo">
+                        <label>OBSERVACIONES</label>
+                        <textarea
+                            name="observaciones"
+                            rows="4"
+                            placeholder="Notas importantes sobre el cliente..."
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div
+                    class="cliente-nuevo-mensaje"
+                    id="nuevo-cliente-mensaje"
+                ></div>
+
+                <div class="cliente-nuevo-botones">
+
+                    <button
+                        type="button"
+                        class="btn-cancelar-cliente"
+                    >
+                        CANCELAR
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-guardar-cliente"
+                    >
+                        CREAR CLIENTE
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const formulario = modal.querySelector("#form-nuevo-cliente");
+
+    const cerrarModal = () => modal.remove();
+
+    modal
+        .querySelector(".cliente-nuevo-cerrar")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".cliente-nuevo-overlay")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".btn-cancelar-cliente")
+        .addEventListener("click", cerrarModal);
+
+    formulario.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        await guardarNuevoCliente(
+            formulario,
+            modal
+        );
+    });
 }
 
 /* =========================================================
