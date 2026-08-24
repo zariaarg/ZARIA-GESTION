@@ -6405,6 +6405,7 @@ function mostrarFichaCliente(id, clientes) {
     `;
 
     document.body.appendChild(modal);
+    agregarEstilosFichaCliente();
 
     const cerrarModal = () => modal.remove();
 
@@ -6441,6 +6442,224 @@ function mostrarFichaCliente(id, clientes) {
         );
 }
 
+/* =========================================================
+   ESTILOS FICHA DE CLIENTE
+   ========================================================= */
+
+function agregarEstilosFichaCliente() {
+    if (document.getElementById("zaria-ficha-cliente-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-ficha-cliente-styles";
+
+    style.textContent = `
+        .cliente-ficha-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .cliente-ficha-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(3px);
+        }
+
+        .cliente-ficha-contenido {
+            position: relative;
+            z-index: 2;
+            width: min(800px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .cliente-ficha-cerrar {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            border: none;
+            background: none;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cliente-ficha-header {
+            margin-bottom: 28px;
+            padding-right: 35px;
+        }
+
+        .cliente-ficha-header span {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #777;
+        }
+
+        .cliente-ficha-header h2 {
+            margin: 6px 0 4px;
+            font-size: 28px;
+            color: #222;
+        }
+
+        .cliente-ficha-header p {
+            margin: 0;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .cliente-ficha-seccion {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .cliente-ficha-seccion:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .cliente-ficha-seccion-titulo {
+            margin-bottom: 15px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #777;
+        }
+
+        .cliente-ficha-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px 25px;
+        }
+
+        .cliente-ficha-dato span,
+        .cliente-ficha-medida span {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #999;
+        }
+
+        .cliente-ficha-dato strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            word-break: break-word;
+        }
+
+        .cliente-ficha-medidas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .cliente-ficha-medida {
+            padding: 15px 12px;
+            background: #f7f7f7;
+            border-radius: 9px;
+            text-align: center;
+        }
+
+        .cliente-ficha-medida strong {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .cliente-ficha-observaciones {
+            min-height: 55px;
+            padding: 14px 15px;
+            background: #f7f7f7;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #555;
+            white-space: pre-wrap;
+        }
+
+        .cliente-ficha-botones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .cliente-ficha-botones button {
+            height: 42px;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: .5px;
+            cursor: pointer;
+        }
+
+        .btn-ficha-cerrar {
+            background: #fff;
+            color: #1d1a1a;
+            border: 1px solid #1d1a1a;
+        }
+
+        .btn-ficha-nuevo-pedido {
+            background: #1d1a1a;
+            color: #fff;
+            border: 1px solid #1d1a1a;
+        }
+
+        .cliente-ficha-botones button:hover {
+            opacity: .85;
+        }
+
+        @media (max-width: 700px) {
+            .cliente-ficha-modal {
+                padding: 10px;
+            }
+
+            .cliente-ficha-contenido {
+                padding: 25px 20px;
+                max-height: 95vh;
+            }
+
+            .cliente-ficha-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .cliente-ficha-medidas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cliente-ficha-botones {
+                flex-direction: column;
+            }
+
+            .cliente-ficha-botones button {
+                width: 100%;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+}
+               
 /* =========================================================
    ESTILOS CLIENTES
    ========================================================= */
