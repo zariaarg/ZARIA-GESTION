@@ -5419,7 +5419,7 @@ function configurarDashboard() {
    NUEVO PEDIDO
    ========================================================= */
 
-function mostrarNuevoPedido() {
+async function mostrarNuevoPedido() {
     if (!empresaActual) {
         alert("No hay una empresa seleccionada.");
         return;
@@ -5432,15 +5432,8 @@ function mostrarNuevoPedido() {
 
     modal.innerHTML = `
         <div class="pedido-nuevo-overlay"></div>
-
         <div class="pedido-nuevo-contenido">
-
-            <button
-                type="button"
-                class="pedido-nuevo-cerrar"
-            >
-                ×
-            </button>
+            <button type="button" class="pedido-nuevo-cerrar">×</button>
 
             <div class="pedido-nuevo-header">
                 <span>NUEVO PEDIDO</span>
@@ -5460,315 +5453,246 @@ function mostrarNuevoPedido() {
             <form id="form-nuevo-pedido">
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        CLIENTE
-                    </div>
-
+                    <div class="pedido-seccion-titulo">CLIENTE</div>
                     <div class="pedido-campo">
                         <label>CLIENTE</label>
                         <select name="cliente_id" id="pedido-cliente">
-                            <option value="">
-                                Seleccionar cliente...
-                            </option>
+                            <option value="">Cargando clientes...</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        PRODUCTO
-                    </div>
-
+                    <div class="pedido-seccion-titulo">PRODUCTO</div>
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
                             <label>MODELO</label>
                             <select name="modelo_id" id="pedido-modelo">
-                                <option value="">
-                                    Seleccionar modelo...
-                                </option>
+                                <option value="">Seleccionar modelo...</option>
                             </select>
                         </div>
 
                         <div class="pedido-campo">
                             <label>CÓDIGO</label>
-                            <input
-                                type="text"
-                                name="codigo"
-                                id="pedido-codigo"
-                                readonly
-                            >
+                            <input type="text" name="codigo" id="pedido-codigo" readonly>
                         </div>
-
                     </div>
                 </div>
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        PERSONALIZACIÓN
-                    </div>
+                    <div class="pedido-seccion-titulo">PERSONALIZACIÓN</div>
 
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
                             <label>MATERIAL</label>
-                            <input
-                                type="text"
-                                name="material"
-                                id="pedido-material"
-                                readonly
-                            >
+                            <input type="text" name="material" id="pedido-material" readonly>
                         </div>
 
                         <div class="pedido-campo">
                             <label>COLOR CUERO</label>
-                            <input
-                                type="text"
-                                name="color_cuero"
-                                id="pedido-color-cuero"
-                                placeholder="Color elegido"
-                            >
+                            <input type="text" name="color_cuero" id="pedido-color-cuero" placeholder="Color elegido">
                         </div>
 
                         <div class="pedido-campo">
                             <label>COLOR HILO</label>
-                            <input
-                                type="text"
-                                name="color_hilo"
-                                id="pedido-color-hilo"
-                                placeholder="Color elegido"
-                            >
+                            <input type="text" name="color_hilo" id="pedido-color-hilo" placeholder="Color elegido">
                         </div>
 
                         <div class="pedido-campo">
                             <label>TALLE</label>
-                            <input
-                                type="text"
-                                name="talle"
-                                id="pedido-talle"
-                                placeholder="Talle"
-                            >
+                            <input type="text" name="talle" id="pedido-talle" placeholder="Talle">
                         </div>
-
                     </div>
 
                     <div class="pedido-a-medida">
                         <label>
-                            <input
-                                type="checkbox"
-                                name="a_medida"
-                                id="pedido-a-medida"
-                            >
+                            <input type="checkbox" name="a_medida" id="pedido-a-medida">
                             A medida
                         </label>
                     </div>
 
-                    <div
-                        class="pedido-medidas"
-                        id="pedido-medidas"
-                    >
-
+                    <div class="pedido-medidas" id="pedido-medidas">
                         <div class="pedido-campo">
                             <label>CUELLO</label>
-                            <input
-                                type="number"
-                                name="cuello"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
+                            <input type="number" name="cuello" min="0" step="0.1" placeholder="cm">
                         </div>
 
                         <div class="pedido-campo">
                             <label>BUSTO</label>
-                            <input
-                                type="number"
-                                name="busto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
+                            <input type="number" name="busto" min="0" step="0.1" placeholder="cm">
                         </div>
 
                         <div class="pedido-campo">
                             <label>CINTURA</label>
-                            <input
-                                type="number"
-                                name="cintura"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
+                            <input type="number" name="cintura" min="0" step="0.1" placeholder="cm">
                         </div>
 
                         <div class="pedido-campo">
                             <label>ALTO</label>
-                            <input
-                                type="number"
-                                name="alto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
+                            <input type="number" name="alto" min="0" step="0.1" placeholder="cm">
                         </div>
-
                     </div>
                 </div>
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        VENTA
-                    </div>
+                    <div class="pedido-seccion-titulo">VENTA</div>
 
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
                             <label>PRECIO</label>
-                            <input
-                                type="number"
-                                name="precio"
-                                id="pedido-precio"
-                                min="0"
-                                step="0.01"
-                            >
+                            <input type="number" name="precio" id="pedido-precio" min="0" step="0.01">
                         </div>
 
                         <div class="pedido-campo">
                             <label>SEÑA</label>
-                            <input
-                                type="number"
-                                name="sena"
-                                id="pedido-sena"
-                                min="0"
-                                step="0.01"
-                            >
+                            <input type="number" name="sena" id="pedido-sena" min="0" step="0.01">
                         </div>
 
                         <div class="pedido-campo">
                             <label>SALDO</label>
-                            <input
-                                type="number"
-                                name="saldo"
-                                id="pedido-saldo"
-                                readonly
-                            >
+                            <input type="number" name="saldo" id="pedido-saldo" readonly>
                         </div>
 
                         <div class="pedido-campo">
                             <label>MÉTODO DE PAGO</label>
                             <select name="metodo_pago">
-                                <option value="">
-                                    Seleccionar...
-                                </option>
+                                <option value="">Seleccionar...</option>
                             </select>
                         </div>
-
                     </div>
                 </div>
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        ENTREGA Y ESTADO
-                    </div>
+                    <div class="pedido-seccion-titulo">ENTREGA Y ESTADO</div>
 
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
                             <label>TIPO DE ENTREGA</label>
                             <select name="tipo_entrega">
-                                <option value="">
-                                    Seleccionar...
-                                </option>
+                                <option value="">Seleccionar...</option>
                             </select>
                         </div>
 
                         <div class="pedido-campo">
                             <label>ESTADO</label>
                             <select name="estado">
-                                <option value="">
-                                    Seleccionar...
-                                </option>
+                                <option value="">Seleccionar...</option>
                             </select>
                         </div>
 
                         <div class="pedido-campo">
                             <label>FECHA DE ENTREGA</label>
-                            <input
-                                type="date"
-                                name="fecha_entrega"
-                            >
+                            <input type="date" name="fecha_entrega">
                         </div>
-
                     </div>
                 </div>
 
                 <div class="pedido-seccion">
-                    <div class="pedido-seccion-titulo">
-                        OBSERVACIONES
-                    </div>
-
+                    <div class="pedido-seccion-titulo">OBSERVACIONES</div>
                     <div class="pedido-campo">
-                        <textarea
-                            name="observaciones"
-                            rows="4"
-                            placeholder="Notas del pedido..."
-                        ></textarea>
+                        <textarea name="observaciones" rows="4" placeholder="Notas del pedido..."></textarea>
                     </div>
                 </div>
 
-                <div
-                    class="pedido-nuevo-mensaje"
-                    id="nuevo-pedido-mensaje"
-                ></div>
+                <div class="pedido-nuevo-mensaje" id="nuevo-pedido-mensaje"></div>
 
                 <div class="pedido-nuevo-botones">
-
-                    <button
-                        type="button"
-                        class="btn-cancelar-pedido"
-                    >
-                        CANCELAR
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="btn-guardar-pedido"
-                    >
-                        CREAR PEDIDO
-                    </button>
-
+                    <button type="button" class="btn-cancelar-pedido">CANCELAR</button>
+                    <button type="submit" class="btn-guardar-pedido">CREAR PEDIDO</button>
                 </div>
-
             </form>
-
         </div>
     `;
 
     document.body.appendChild(modal);
+    agregarEstilosNuevoPedido();
+
+    const formulario = modal.querySelector("#form-nuevo-pedido");
+    const selectCliente = modal.querySelector("#pedido-cliente");
 
     const cerrarModal = () => modal.remove();
 
-    modal
-        .querySelector(".pedido-nuevo-cerrar")
-        .addEventListener("click", cerrarModal);
+    modal.querySelector(".pedido-nuevo-cerrar").addEventListener("click", cerrarModal);
+    modal.querySelector(".pedido-nuevo-overlay").addEventListener("click", cerrarModal);
+    modal.querySelector(".btn-cancelar-pedido").addEventListener("click", cerrarModal);
 
-    modal
-        .querySelector(".pedido-nuevo-overlay")
-        .addEventListener("click", cerrarModal);
+    try {
+        const clientes = await llamarAPI(
+            "clientes",
+            empresaActual.empresa_id
+        );
 
-    modal
-        .querySelector(".btn-cancelar-pedido")
-        .addEventListener("click", cerrarModal);
+        const clientesEmpresa = filtrarPorEmpresa(clientes);
 
-    const formulario = modal.querySelector("#form-nuevo-pedido");
+        if (!clientesEmpresa.length) {
+            selectCliente.innerHTML = `
+                <option value="">
+                    No hay clientes registrados
+                </option>
+            `;
+        } else {
+            selectCliente.innerHTML = `
+                <option value="">
+                    Seleccionar cliente...
+                </option>
+                ${clientesEmpresa.map(cliente => `
+                    <option value="${escaparHTML(cliente.cliente_id)}">
+                        ${escaparHTML(
+                            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                        )}
+                    </option>
+                `).join("")}
+            `;
+        }
+
+        selectCliente.addEventListener("change", function() {
+            const clienteId = this.value;
+
+            if (!clienteId) {
+                return;
+            }
+
+            const cliente = clientesEmpresa.find(
+                item =>
+                    String(item.cliente_id) === String(clienteId)
+            );
+
+            if (!cliente) {
+                return;
+            }
+
+            formulario.elements["cuello"].value =
+                cliente.medidas_cuello || "";
+
+            formulario.elements["busto"].value =
+                cliente.medidas_busto || "";
+
+            formulario.elements["cintura"].value =
+                cliente.medidas_cintura || "";
+
+            formulario.elements["alto"].value =
+                cliente.medidas_alto || "";
+        });
+
+    } catch (error) {
+        console.error("Error cargando clientes para pedido:", error);
+
+        selectCliente.innerHTML = `
+            <option value="">
+                No se pudieron cargar los clientes
+            </option>
+        `;
+    }
 
     formulario.addEventListener("submit", function(event) {
         event.preventDefault();
-        alert("La carga del pedido la conectamos en el siguiente paso.");
-    });
 
-    agregarEstilosNuevoPedido();
+        alert(
+            "La carga del pedido la conectamos en el siguiente paso."
+        );
+    });
 }
+
 /* =========================================================
    ESTILOS NUEVO PEDIDO
    ========================================================= */
