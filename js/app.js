@@ -5778,6 +5778,240 @@ function abrirNuevoCliente() {
 }
 
 /* =========================================================
+   ESTILOS NUEVO CLIENTE
+   ========================================================= */
+
+function agregarEstilosNuevoCliente() {
+    if (document.getElementById("zaria-nuevo-cliente-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-nuevo-cliente-styles";
+
+    style.textContent = `
+        .cliente-nuevo-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .cliente-nuevo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(3px);
+        }
+
+        .cliente-nuevo-contenido {
+            position: relative;
+            z-index: 2;
+            width: min(850px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .cliente-nuevo-cerrar {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            border: none;
+            background: none;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cliente-nuevo-header {
+            margin-bottom: 28px;
+            padding-right: 35px;
+        }
+
+        .cliente-nuevo-header span {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #777;
+        }
+
+        .cliente-nuevo-header h2 {
+            margin: 6px 0 4px;
+            font-size: 28px;
+            color: #222;
+        }
+
+        .cliente-nuevo-header p {
+            margin: 0;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .cliente-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 20px;
+        }
+
+        .cliente-campo {
+            min-width: 0;
+        }
+
+        .cliente-campo label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #555;
+        }
+
+        .cliente-campo input,
+        .cliente-campo textarea {
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            background: #fff;
+            color: #222;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .cliente-campo input {
+            height: 44px;
+            padding: 0 13px;
+        }
+
+        .cliente-campo textarea {
+            min-height: 100px;
+            padding: 12px 13px;
+            resize: vertical;
+        }
+
+        .cliente-campo input:focus,
+        .cliente-campo textarea:focus {
+            border-color: #999;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+        }
+
+        .cliente-campo input::placeholder,
+        .cliente-campo textarea::placeholder {
+            color: #aaa;
+        }
+
+        .cliente-campo-completo {
+            grid-column: 1 / -1;
+        }
+
+        .cliente-separador {
+            grid-column: 1 / -1;
+            margin-top: 5px;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cliente-separador span {
+            display: block;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #777;
+        }
+
+        .cliente-nuevo-mensaje {
+            min-height: 20px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .cliente-nuevo-mensaje.exito {
+            color: #2d6a3f;
+        }
+
+        .cliente-nuevo-mensaje.error {
+            color: #a33;
+        }
+
+        .cliente-nuevo-botones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .cliente-nuevo-botones button {
+            height: 42px;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: .5px;
+            cursor: pointer;
+        }
+
+        .btn-cancelar-cliente {
+            background: #fff;
+            color: #1d1a1a;
+            border: 1px solid #1d1a1a;
+        }
+
+        .btn-guardar-cliente {
+            background: #1d1a1a;
+            color: #fff;
+            border: 1px solid #1d1a1a;
+        }
+
+        .btn-guardar-cliente:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        @media (max-width: 700px) {
+            .cliente-nuevo-modal {
+                padding: 10px;
+            }
+
+            .cliente-nuevo-contenido {
+                padding: 25px 20px;
+                max-height: 95vh;
+            }
+
+            .cliente-form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .cliente-campo-completo,
+            .cliente-separador {
+                grid-column: auto;
+            }
+
+            .cliente-nuevo-botones {
+                flex-direction: column;
+            }
+
+            .cliente-nuevo-botones button {
+                width: 100%;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+}
+
+/* =========================================================
    FICHA DE CLIENTE
    ========================================================= */
 
