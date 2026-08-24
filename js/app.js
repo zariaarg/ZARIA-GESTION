@@ -6242,13 +6242,203 @@ function mostrarFichaCliente(id, clientes) {
         return;
     }
 
-    alert(
-        `Cliente: ${cliente.nombre || ""} ${cliente.apellido || ""}\n` +
-        `Teléfono: ${cliente.telefono || "-"}\n` +
-        `Instagram: ${cliente.instagram || "-"}\n` +
-        `Email: ${cliente.email || "-"}\n` +
-        `Observaciones: ${cliente.observaciones || "-"}`
-    );
+    const nombreCompleto =
+        `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim();
+
+    const modal = document.createElement("div");
+    modal.className = "cliente-ficha-modal";
+
+    modal.innerHTML = `
+        <div class="cliente-ficha-overlay"></div>
+
+        <div class="cliente-ficha-contenido">
+
+            <button
+                type="button"
+                class="cliente-ficha-cerrar"
+            >
+                ×
+            </button>
+
+            <div class="cliente-ficha-header">
+                <span>CLIENTE</span>
+
+                <h2>
+                    ${escaparHTML(nombreCompleto)}
+                </h2>
+
+                <p>
+                    Ficha del cliente
+                </p>
+            </div>
+
+            <div class="cliente-ficha-seccion">
+
+                <div class="cliente-ficha-seccion-titulo">
+                    DATOS DE CONTACTO
+                </div>
+
+                <div class="cliente-ficha-grid">
+
+                    <div class="cliente-ficha-dato">
+                        <span>TELÉFONO</span>
+                        <strong>
+                            ${escaparHTML(cliente.telefono || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-dato">
+                        <span>INSTAGRAM</span>
+                        <strong>
+                            ${escaparHTML(cliente.instagram || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-dato">
+                        <span>EMAIL</span>
+                        <strong>
+                            ${escaparHTML(cliente.email || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-dato">
+                        <span>DIRECCIÓN</span>
+                        <strong>
+                            ${escaparHTML(cliente.direccion || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-dato">
+                        <span>LOCALIDAD</span>
+                        <strong>
+                            ${escaparHTML(cliente.localidad || "-")}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-dato">
+                        <span>PROVINCIA</span>
+                        <strong>
+                            ${escaparHTML(cliente.provincia || "-")}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="cliente-ficha-seccion">
+
+                <div class="cliente-ficha-seccion-titulo">
+                    MEDIDAS
+                </div>
+
+                <div class="cliente-ficha-medidas">
+
+                    <div class="cliente-ficha-medida">
+                        <span>CUELLO</span>
+                        <strong>
+                            ${escaparHTML(cliente.medidas_cuello || "-")}
+                            ${cliente.medidas_cuello ? " cm" : ""}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-medida">
+                        <span>BUSTO</span>
+                        <strong>
+                            ${escaparHTML(cliente.medidas_busto || "-")}
+                            ${cliente.medidas_busto ? " cm" : ""}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-medida">
+                        <span>CINTURA</span>
+                        <strong>
+                            ${escaparHTML(cliente.medidas_cintura || "-")}
+                            ${cliente.medidas_cintura ? " cm" : ""}
+                        </strong>
+                    </div>
+
+                    <div class="cliente-ficha-medida">
+                        <span>ALTO</span>
+                        <strong>
+                            ${escaparHTML(cliente.medidas_alto || "-")}
+                            ${cliente.medidas_alto ? " cm" : ""}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="cliente-ficha-seccion">
+
+                <div class="cliente-ficha-seccion-titulo">
+                    OBSERVACIONES
+                </div>
+
+                <div class="cliente-ficha-observaciones">
+                    ${escaparHTML(cliente.observaciones || "Sin observaciones.")}
+                </div>
+
+            </div>
+
+            <div class="cliente-ficha-botones">
+
+                <button
+                    type="button"
+                    class="btn-ficha-cerrar"
+                >
+                    CERRAR
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-ficha-nuevo-pedido"
+                    data-cliente-id="${escaparHTML(cliente.cliente_id)}"
+                >
+                    NUEVO PEDIDO
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const cerrarModal = () => modal.remove();
+
+    modal
+        .querySelector(".cliente-ficha-cerrar")
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+    modal
+        .querySelector(".cliente-ficha-overlay")
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+    modal
+        .querySelector(".btn-ficha-cerrar")
+        .addEventListener(
+            "click",
+            cerrarModal
+        );
+
+    modal
+        .querySelector(".btn-ficha-nuevo-pedido")
+        .addEventListener(
+            "click",
+            function() {
+                alert(
+                    "La carga de pedidos la hacemos en el siguiente paso."
+                );
+            }
+        );
 }
 
 /* =========================================================
