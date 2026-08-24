@@ -5308,8 +5308,11 @@ function configurarDashboard() {
     const btnAccesoModelos = document.getElementById("btn-acceso-modelos");
     const btnClientes = document.getElementById("btn-dashboard-clientes");
     const btnAccesoClientes = document.getElementById("btn-acceso-clientes");
+    const btnPedidos = document.getElementById("btn-dashboard-pedidos");
+    const btnAccesoPedidos = document.getElementById("btn-acceso-pedidos");
     const btnVolverModelos = document.getElementById("btn-volver-dashboard");
     const btnVolverClientes = document.getElementById("btn-volver-dashboard-clientes");
+    const btnVolverPedidos = document.getElementById("btn-volver-dashboard-pedidos");
 
     if (btnModelos) {
         btnModelos.onclick = function(event) {
@@ -5339,6 +5342,20 @@ function configurarDashboard() {
         };
     }
 
+    if (btnPedidos) {
+        btnPedidos.onclick = function(event) {
+            event.preventDefault();
+            mostrarVistaPedidos();
+        };
+    }
+
+    if (btnAccesoPedidos) {
+        btnAccesoPedidos.onclick = function(event) {
+            event.preventDefault();
+            mostrarVistaPedidos();
+        };
+    }
+
     if (btnVolverModelos) {
         btnVolverModelos.onclick = function(event) {
             event.preventDefault();
@@ -5352,8 +5369,14 @@ function configurarDashboard() {
             mostrarDashboard();
         };
     }
-}
 
+    if (btnVolverPedidos) {
+        btnVolverPedidos.onclick = function(event) {
+            event.preventDefault();
+            mostrarDashboard();
+        };
+    }
+}
 /* =========================================================
    VISTA CLIENTES
    ========================================================= */
