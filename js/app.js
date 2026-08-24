@@ -5245,12 +5245,12 @@ function convertirFecha(
    ========================================================= */
 
 async function mostrarDashboard() {
+    cerrarModalesAbiertos();
 
-    const dashboard =
-        document.getElementById("dashboard-view");
-
-    const modelosView =
-        document.getElementById("modelos-view");
+    const dashboard = document.getElementById("dashboard-view");
+    const modelosView = document.getElementById("modelos-view");
+    const clientesView = document.getElementById("clientes-view");
+    const pedidosView = document.getElementById("pedidos-view");
 
     vistaActual = "dashboard";
 
@@ -5264,11 +5264,20 @@ async function mostrarDashboard() {
         modelosView.setAttribute("aria-hidden", "true");
     }
 
+    if (clientesView) {
+        clientesView.style.display = "none";
+        clientesView.setAttribute("aria-hidden", "true");
+    }
+
+    if (pedidosView) {
+        pedidosView.style.display = "none";
+        pedidosView.setAttribute("aria-hidden", "true");
+    }
+
     if (typeof iniciarDashboard === "function") {
         await iniciarDashboard();
     }
 }
-
 
 /* =========================================================
    MOSTRAR MODELOS
@@ -5377,12 +5386,13 @@ function configurarDashboard() {
         };
     }
 }
-
 /* =========================================================
    VISTA PEDIDOS
    ========================================================= */
 
 function mostrarVistaPedidos() {
+    cerrarModalesAbiertos();
+
     const dashboard = document.getElementById("dashboard-view");
     const modelos = document.getElementById("modelos-view");
     const pedidos = document.getElementById("pedidos-view");
