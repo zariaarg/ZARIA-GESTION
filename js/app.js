@@ -5751,6 +5751,7 @@ function abrirNuevoCliente() {
 
     document.body.appendChild(modal);
 
+    agregarEstilosNuevoCliente();
     const formulario = modal.querySelector("#form-nuevo-cliente");
 
     const cerrarModal = () => modal.remove();
