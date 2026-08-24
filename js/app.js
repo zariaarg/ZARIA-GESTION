@@ -5278,6 +5278,27 @@ async function mostrarDashboard() {
         await iniciarDashboard();
     }
 }
+/* =========================================================
+   CERRAR MODALES ABIERTOS
+   ========================================================= */
+
+function cerrarModalesAbiertos() {
+    const selectores = [
+        ".pedido-ficha-modal",
+        ".cliente-ficha-modal",
+        ".cliente-nuevo-modal",
+        ".cliente-editar-modal",
+        ".modelo-ficha-modal",
+        ".modelo-nuevo-modal",
+        ".modelo-editar-modal"
+    ];
+
+    selectores.forEach(selector => {
+        document.querySelectorAll(selector).forEach(modal => {
+            modal.remove();
+        });
+    });
+}
 
 /* =========================================================
    MOSTRAR MODELOS
