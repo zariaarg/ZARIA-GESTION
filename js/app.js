@@ -5434,7 +5434,6 @@ async function iniciarPedidos() {
                     autocomplete="off"
                 >
             </div>
-
             <button
                 type="button"
                 class="btn-nuevo-pedido"
@@ -5445,77 +5444,183 @@ async function iniciarPedidos() {
         </div>
 
         <div class="pedidos-filtros">
-            <button
-                type="button"
-                class="pedido-filtro activo"
-                data-estado=""
-            >
-                TODOS
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="Consulta"
-            >
-                CONSULTA
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="Confirmado"
-            >
-                CONFIRMADO
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="En producción"
-            >
-                EN PRODUCCIÓN
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="Terminado"
-            >
-                TERMINADO
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="Entregado"
-            >
-                ENTREGADO
-            </button>
-
-            <button
-                type="button"
-                class="pedido-filtro"
-                data-estado="Cancelado"
-            >
-                CANCELADO
-            </button>
+            <button type="button" class="pedido-filtro activo" data-estado="">TODOS</button>
+            <button type="button" class="pedido-filtro" data-estado="Consulta">CONSULTA</button>
+            <button type="button" class="pedido-filtro" data-estado="Confirmado">CONFIRMADO</button>
+            <button type="button" class="pedido-filtro" data-estado="En producción">EN PRODUCCIÓN</button>
+            <button type="button" class="pedido-filtro" data-estado="Terminado">TERMINADO</button>
+            <button type="button" class="pedido-filtro" data-estado="Entregado">ENTREGADO</button>
+            <button type="button" class="pedido-filtro" data-estado="Cancelado">CANCELADO</button>
         </div>
 
         <div id="pedidos-lista">
-            <div class="pedidos-vacio">
-                <h3>Pedidos</h3>
-                <p>La gestión de pedidos estará disponible en este módulo.</p>
-            </div>
+            <p>Cargando pedidos...</p>
         </div>
     `;
 
-    const botonNuevo = document.getElementById("btn-nuevo-pedido");
+    try {
+        const pedidos = await llamarAPI(
+            "pedidos",
+            empresaActual.empresa_id
+        );
 
-    if (botonNuevo) {
-        botonNuevo.addEventListener("click", function() {
-            abrirNuevoPedido();
+        const pedidosEmpresa = filtrarPorEmpresa(pedidos);
+
+        const lista = document.getElementById("pedidos-lista");
+        const buscador = document.getElementById("buscar-pedidos");
+        const filtros = document.querySelectorAll(".pedido-filtro");
+
+        if (!lista) {
+            return;
+        }
+
+        let estadoActual = "";
+
+        function mostrarListaPedidos(pedidosMostrados) {
+            if (!pedidosMostrados.length) {
+                lista.innerHTML = `
+                    <div class="pedidos-vacio">
+                        <h3>No se encontraron pedidos</h3>
+                        <p>Probá con otro cliente, teléfono, modelo, código o estado.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            lista.innerHTML = `
+                <div class="pedidos-lista">
+                    ${pedidosMostrados.map(pedido => `
+                        <article class="pedido-fila">
+                            <div class="pedido-principal">
+                                <span>PEDIDO #${escaparHTML(pedido.id_pedido || "-")}</span>
+                                <h3>
+                                    ${escaparHTML(
+                                        pedido.cliente_nombre ||
+                                        "Cliente sin nombre"
+                                    )}
+                                </h3>
+                            </div>
+
+                            <div class="pedido-dato">
+                                <span>FECHA</span>
+                                <p>
+                                    ${escaparHTML(pedido.fecha || "-")}
+                                </p>
+                            </div>
+
+                            <div class="pedido-dato">
+                                <span>MODELO</span>
+                                <p>
+                                    ${escaparHTML(pedido.modelo || "-")}
+                                </p>
+                            </div>
+
+                            <div class="pedido-dato">
+                                <span>CÓDIGO</span>
+                                <p>
+                                    ${escaparHTML(pedido.codigo || "-")}
+                                </p>
+                            </div>
+
+                            <div class="pedido-dato">
+                                <span>ESTADO</span>
+                                <p class="pedido-estado">
+                                    ${escaparHTML(pedido.estado || "-")}
+                                </p>
+                            </div>
+
+                            <div class="pedido-dato pedido-dinero">
+                                <span>TOTAL</span>
+                                <p>
+                                    $${escaparHTML(pedido.precio || "0")}
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn-ver-pedido"
+                                data-pedido-id="${escaparHTML(pedido.id_pedido)}"
+                            >
+                                VER
+                            </button>
+                        </article>
+                    `).join("")}
+                </div>
+            `;
+
+            lista.querySelectorAll(".btn-ver-pedido").forEach(boton => {
+                boton.addEventListener("click", function() {
+                    const pedidoId = this.dataset.pedidoId;
+                    mostrarFichaPedido(pedidoId, pedidosEmpresa);
+                });
+            });
+        }
+
+        function aplicarFiltros() {
+            const texto = buscador
+                ? buscador.value.trim().toLowerCase()
+                : "";
+
+            const filtrados = pedidosEmpresa.filter(pedido => {
+                const cliente = String(pedido.cliente_nombre || "").toLowerCase();
+                const telefono = String(pedido.telefono || "").toLowerCase();
+                const instagram = String(pedido.instagram || "").toLowerCase();
+                const modelo = String(pedido.modelo || "").toLowerCase();
+                const codigo = String(pedido.codigo || "").toLowerCase();
+                const estado = String(pedido.estado || "").toLowerCase();
+
+                const coincideTexto =
+                    !texto ||
+                    cliente.includes(texto) ||
+                    telefono.includes(texto) ||
+                    instagram.includes(texto) ||
+                    modelo.includes(texto) ||
+                    codigo.includes(texto);
+
+                const coincideEstado =
+                    !estadoActual ||
+                    estado === estadoActual.toLowerCase();
+
+                return coincideTexto && coincideEstado;
+            });
+
+            mostrarListaPedidos(filtrados);
+        }
+
+        mostrarListaPedidos(pedidosEmpresa);
+
+        if (buscador) {
+            buscador.addEventListener("input", aplicarFiltros);
+        }
+
+        filtros.forEach(filtro => {
+            filtro.addEventListener("click", function() {
+                filtros.forEach(item => {
+                    item.classList.remove("activo");
+                });
+
+                this.classList.add("activo");
+                estadoActual = this.dataset.estado || "";
+                aplicarFiltros();
+            });
         });
+
+        const botonNuevo = document.getElementById("btn-nuevo-pedido");
+
+        if (botonNuevo) {
+            botonNuevo.addEventListener("click", function() {
+                abrirNuevoPedido();
+            });
+        }
+
+    } catch (error) {
+        console.error("Error cargando pedidos:", error);
+
+        container.innerHTML = `
+            <div class="pedidos-error">
+                <p>No se pudieron cargar los pedidos.</p>
+            </div>
+        `;
     }
 }
 /* =========================================================
