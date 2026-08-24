@@ -5343,6 +5343,7 @@ function configurarDashboard() {
     const btnVolverModelos = document.getElementById("btn-volver-dashboard");
     const btnVolverClientes = document.getElementById("btn-volver-dashboard-clientes");
     const btnVolverPedidos = document.getElementById("btn-volver-dashboard-pedidos");
+    const btnNuevoPedido = document.getElementById("btn-dashboard-nuevo-pedido");
 
     if (btnModelos) {
         btnModelos.onclick = function(event) {
@@ -5406,7 +5407,632 @@ function configurarDashboard() {
             mostrarDashboard();
         };
     }
+   if (btnNuevoPedido) {
+    btnNuevoPedido.onclick = function(event) {
+        event.preventDefault();
+        mostrarNuevoPedido();
+    };
 }
+}
+
+/* =========================================================
+   NUEVO PEDIDO
+   ========================================================= */
+
+function mostrarNuevoPedido() {
+    if (!empresaActual) {
+        alert("No hay una empresa seleccionada.");
+        return;
+    }
+
+    cerrarModalesAbiertos();
+
+    const modal = document.createElement("div");
+    modal.className = "pedido-nuevo-modal";
+
+    modal.innerHTML = `
+        <div class="pedido-nuevo-overlay"></div>
+
+        <div class="pedido-nuevo-contenido">
+
+            <button
+                type="button"
+                class="pedido-nuevo-cerrar"
+            >
+                ×
+            </button>
+
+            <div class="pedido-nuevo-header">
+                <span>NUEVO PEDIDO</span>
+                <h2>Registrar pedido</h2>
+                <p>
+                    Empresa:
+                    <strong>
+                        ${escaparHTML(
+                            empresaActual.nombre_comercial ||
+                            empresaActual.nombre ||
+                            ""
+                        )}
+                    </strong>
+                </p>
+            </div>
+
+            <form id="form-nuevo-pedido">
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        CLIENTE
+                    </div>
+
+                    <div class="pedido-campo">
+                        <label>CLIENTE</label>
+                        <select name="cliente_id" id="pedido-cliente">
+                            <option value="">
+                                Seleccionar cliente...
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        PRODUCTO
+                    </div>
+
+                    <div class="pedido-grid">
+
+                        <div class="pedido-campo">
+                            <label>MODELO</label>
+                            <select name="modelo_id" id="pedido-modelo">
+                                <option value="">
+                                    Seleccionar modelo...
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>CÓDIGO</label>
+                            <input
+                                type="text"
+                                name="codigo"
+                                id="pedido-codigo"
+                                readonly
+                            >
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        PERSONALIZACIÓN
+                    </div>
+
+                    <div class="pedido-grid">
+
+                        <div class="pedido-campo">
+                            <label>MATERIAL</label>
+                            <input
+                                type="text"
+                                name="material"
+                                id="pedido-material"
+                                readonly
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>COLOR CUERO</label>
+                            <input
+                                type="text"
+                                name="color_cuero"
+                                id="pedido-color-cuero"
+                                placeholder="Color elegido"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>COLOR HILO</label>
+                            <input
+                                type="text"
+                                name="color_hilo"
+                                id="pedido-color-hilo"
+                                placeholder="Color elegido"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>TALLE</label>
+                            <input
+                                type="text"
+                                name="talle"
+                                id="pedido-talle"
+                                placeholder="Talle"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="pedido-a-medida">
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="a_medida"
+                                id="pedido-a-medida"
+                            >
+                            A medida
+                        </label>
+                    </div>
+
+                    <div
+                        class="pedido-medidas"
+                        id="pedido-medidas"
+                    >
+
+                        <div class="pedido-campo">
+                            <label>CUELLO</label>
+                            <input
+                                type="number"
+                                name="cuello"
+                                min="0"
+                                step="0.1"
+                                placeholder="cm"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>BUSTO</label>
+                            <input
+                                type="number"
+                                name="busto"
+                                min="0"
+                                step="0.1"
+                                placeholder="cm"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>CINTURA</label>
+                            <input
+                                type="number"
+                                name="cintura"
+                                min="0"
+                                step="0.1"
+                                placeholder="cm"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>ALTO</label>
+                            <input
+                                type="number"
+                                name="alto"
+                                min="0"
+                                step="0.1"
+                                placeholder="cm"
+                            >
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        VENTA
+                    </div>
+
+                    <div class="pedido-grid">
+
+                        <div class="pedido-campo">
+                            <label>PRECIO</label>
+                            <input
+                                type="number"
+                                name="precio"
+                                id="pedido-precio"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>SEÑA</label>
+                            <input
+                                type="number"
+                                name="sena"
+                                id="pedido-sena"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>SALDO</label>
+                            <input
+                                type="number"
+                                name="saldo"
+                                id="pedido-saldo"
+                                readonly
+                            >
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>MÉTODO DE PAGO</label>
+                            <select name="metodo_pago">
+                                <option value="">
+                                    Seleccionar...
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        ENTREGA Y ESTADO
+                    </div>
+
+                    <div class="pedido-grid">
+
+                        <div class="pedido-campo">
+                            <label>TIPO DE ENTREGA</label>
+                            <select name="tipo_entrega">
+                                <option value="">
+                                    Seleccionar...
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>ESTADO</label>
+                            <select name="estado">
+                                <option value="">
+                                    Seleccionar...
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="pedido-campo">
+                            <label>FECHA DE ENTREGA</label>
+                            <input
+                                type="date"
+                                name="fecha_entrega"
+                            >
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="pedido-seccion">
+                    <div class="pedido-seccion-titulo">
+                        OBSERVACIONES
+                    </div>
+
+                    <div class="pedido-campo">
+                        <textarea
+                            name="observaciones"
+                            rows="4"
+                            placeholder="Notas del pedido..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div
+                    class="pedido-nuevo-mensaje"
+                    id="nuevo-pedido-mensaje"
+                ></div>
+
+                <div class="pedido-nuevo-botones">
+
+                    <button
+                        type="button"
+                        class="btn-cancelar-pedido"
+                    >
+                        CANCELAR
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-guardar-pedido"
+                    >
+                        CREAR PEDIDO
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const cerrarModal = () => modal.remove();
+
+    modal
+        .querySelector(".pedido-nuevo-cerrar")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".pedido-nuevo-overlay")
+        .addEventListener("click", cerrarModal);
+
+    modal
+        .querySelector(".btn-cancelar-pedido")
+        .addEventListener("click", cerrarModal);
+
+    const formulario = modal.querySelector("#form-nuevo-pedido");
+
+    formulario.addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("La carga del pedido la conectamos en el siguiente paso.");
+    });
+
+    agregarEstilosNuevoPedido();
+}
+/* =========================================================
+   ESTILOS NUEVO PEDIDO
+   ========================================================= */
+
+function agregarEstilosNuevoPedido() {
+    if (document.getElementById("zaria-nuevo-pedido-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-nuevo-pedido-styles";
+
+    style.textContent = `
+        .pedido-nuevo-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pedido-nuevo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+        }
+
+        .pedido-nuevo-contenido {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 850px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .pedido-nuevo-cerrar {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .pedido-nuevo-header {
+            padding-right: 40px;
+            margin-bottom: 28px;
+        }
+
+        .pedido-nuevo-header > span {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: #888;
+        }
+
+        .pedido-nuevo-header h2 {
+            margin: 0 0 5px;
+            font-size: 24px;
+            color: #222;
+        }
+
+        .pedido-nuevo-header p {
+            margin: 0;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .pedido-seccion {
+            margin-bottom: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .pedido-seccion-titulo {
+            margin-bottom: 16px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+            color: #888;
+        }
+
+        .pedido-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .pedido-campo {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .pedido-campo label {
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        .pedido-campo input,
+        .pedido-campo select,
+        .pedido-campo textarea {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 42px;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            color: #222;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .pedido-campo textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .pedido-campo input:focus,
+        .pedido-campo select:focus,
+        .pedido-campo textarea:focus {
+            border-color: #999;
+        }
+
+        .pedido-campo input[readonly] {
+            background: #f6f6f6;
+            color: #777;
+        }
+
+        .pedido-a-medida {
+            margin-top: 16px;
+        }
+
+        .pedido-a-medida label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .pedido-a-medida input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .pedido-medidas {
+            display: none;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+            padding: 16px;
+            background: #f7f7f7;
+            border-radius: 9px;
+        }
+
+        .pedido-medidas.visible {
+            display: grid;
+        }
+
+        .pedido-nuevo-mensaje {
+            min-height: 20px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .pedido-nuevo-botones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .pedido-nuevo-botones button {
+            height: 42px;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: .6px;
+            cursor: pointer;
+        }
+
+        .btn-cancelar-pedido {
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+        }
+
+        .btn-guardar-pedido {
+            border: 1px solid #1d1a1a;
+            background: #1d1a1a;
+            color: #fff;
+        }
+
+        @media (max-width: 700px) {
+            .pedido-nuevo-modal {
+                padding: 10px;
+            }
+
+            .pedido-nuevo-contenido {
+                max-height: 94vh;
+                padding: 24px 18px;
+            }
+
+            .pedido-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pedido-medidas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 450px) {
+            .pedido-medidas {
+                grid-template-columns: 1fr;
+            }
+
+            .pedido-nuevo-header h2 {
+                font-size: 20px;
+            }
+
+            .pedido-nuevo-botones {
+                flex-direction: column;
+            }
+
+            .pedido-nuevo-botones button {
+                width: 100%;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+
+    const checkbox = document.getElementById("pedido-a-medida");
+    const medidas = document.getElementById("pedido-medidas");
+
+    if (checkbox && medidas) {
+        checkbox.addEventListener("change", function() {
+            medidas.classList.toggle("visible", this.checked);
+        });
+    }
+}
+
 /* =========================================================
    VISTA PEDIDOS
    ========================================================= */
