@@ -5377,6 +5377,147 @@ function configurarDashboard() {
         };
     }
 }
+
+/* =========================================================
+   VISTA PEDIDOS
+   ========================================================= */
+
+function mostrarVistaPedidos() {
+    const dashboard = document.getElementById("dashboard-view");
+    const modelos = document.getElementById("modelos-view");
+    const pedidos = document.getElementById("pedidos-view");
+    const clientes = document.getElementById("clientes-view");
+
+    if (dashboard) {
+        dashboard.style.display = "none";
+    }
+
+    if (modelos) {
+        modelos.style.display = "none";
+    }
+
+    if (clientes) {
+        clientes.style.display = "none";
+    }
+
+    if (pedidos) {
+        pedidos.style.display = "block";
+    }
+
+    iniciarPedidos();
+}
+
+/* =========================================================
+   INICIAR PEDIDOS
+   ========================================================= */
+
+async function iniciarPedidos() {
+    const container = document.getElementById("pedidos-container");
+
+    if (!container) {
+        return;
+    }
+
+    if (!empresaActual) {
+        container.innerHTML = "<p>No hay una empresa seleccionada.</p>";
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="pedidos-toolbar">
+            <div class="pedidos-buscador">
+                <span>⌕</span>
+                <input
+                    type="search"
+                    id="buscar-pedidos"
+                    placeholder="Buscar por cliente, teléfono, Instagram, modelo o código..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <button
+                type="button"
+                class="btn-nuevo-pedido"
+                id="btn-nuevo-pedido"
+            >
+                + NUEVO PEDIDO
+            </button>
+        </div>
+
+        <div class="pedidos-filtros">
+            <button
+                type="button"
+                class="pedido-filtro activo"
+                data-estado=""
+            >
+                TODOS
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="Consulta"
+            >
+                CONSULTA
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="Confirmado"
+            >
+                CONFIRMADO
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="En producción"
+            >
+                EN PRODUCCIÓN
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="Terminado"
+            >
+                TERMINADO
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="Entregado"
+            >
+                ENTREGADO
+            </button>
+
+            <button
+                type="button"
+                class="pedido-filtro"
+                data-estado="Cancelado"
+            >
+                CANCELADO
+            </button>
+        </div>
+
+        <div id="pedidos-lista">
+            <div class="pedidos-vacio">
+                <h3>Pedidos</h3>
+                <p>La gestión de pedidos estará disponible en este módulo.</p>
+            </div>
+        </div>
+    `;
+
+    const botonNuevo = document.getElementById("btn-nuevo-pedido");
+
+    if (botonNuevo) {
+        botonNuevo.addEventListener("click", function() {
+            abrirNuevoPedido();
+        });
+    }
+}
 /* =========================================================
    VISTA CLIENTES
    ========================================================= */
