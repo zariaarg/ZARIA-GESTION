@@ -2,8 +2,8 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb
 
 /* =========================
    EMPRESA ACTUAL
-========================= */
-// Probando conexion con VS Code y Prettier VANE
+================git remote add origin https://github.com/ZARIA/ https://github.com/zariaarg/ZARIA-GESTION.git ========= */
+// Probando conexion con VS Code y Prettier VANEE
 
 let empresas = [];
 
