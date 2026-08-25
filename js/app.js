@@ -5606,6 +5606,7 @@ async function mostrarNuevoPedido() {
 
     document.body.appendChild(modal);
     agregarEstilosNuevoPedido();
+    cargarConfiguracionPedido(modal);
 
     const formulario = modal.querySelector("#form-nuevo-pedido");
     const selectCliente = modal.querySelector("#pedido-cliente");
@@ -5691,6 +5692,107 @@ async function mostrarNuevoPedido() {
             "La carga del pedido la conectamos en el siguiente paso."
         );
     });
+}
+
+/* =========================================================
+   CARGAR CONFIGURACIÓN PEDIDO
+   ========================================================= */
+
+async function cargarConfiguracionPedido(modal) {
+    const formulario = modal.querySelector("#form-nuevo-pedido");
+
+    if (!formulario) {
+        return;
+    }
+
+    const selectMetodoPago = formulario.elements["metodo_pago"];
+    const selectTipoEntrega = formulario.elements["tipo_entrega"];
+    const selectEstado = formulario.elements["estado"];
+
+    try {
+        const configuracion = await llamarAPI(
+            "configuracion",
+            empresaActual.empresa_id
+        );
+
+        const configuracionActiva = configuracion.filter(item => {
+            return (
+                String(item.activo).toLowerCase() === "true" ||
+                item.activo === true ||
+                item.activo === 1
+            );
+        });
+
+        const cargarOpciones = (
+            select,
+            categoria,
+            textoInicial
+        ) => {
+            if (!select) {
+                return;
+            }
+
+            const opciones = configuracionActiva
+                .filter(item =>
+                    String(item.categoria || "").toUpperCase() ===
+                    categoria
+                )
+                .sort((a, b) =>
+                    Number(a.orden || 0) -
+                    Number(b.orden || 0)
+                );
+
+            select.innerHTML = `
+                <option value="">
+                    ${textoInicial}
+                </option>
+                ${opciones.map(item => `
+                    <option value="${escaparHTML(item.valor || "")}">
+                        ${escaparHTML(item.valor || "")}
+                    </option>
+                `).join("")}
+            `;
+        };
+
+        cargarOpciones(
+            selectMetodoPago,
+            "METODO_PAGO",
+            "Seleccionar..."
+        );
+
+        cargarOpciones(
+            selectTipoEntrega,
+            "TIPO_ENTREGA",
+            "Seleccionar..."
+        );
+
+        cargarOpciones(
+            selectEstado,
+            "ESTADO_PEDIDO",
+            "Seleccionar..."
+        );
+
+    } catch (error) {
+        console.error(
+            "Error cargando configuración del pedido:",
+            error
+        );
+
+        if (selectMetodoPago) {
+            selectMetodoPago.innerHTML =
+                `<option value="">No disponible</option>`;
+        }
+
+        if (selectTipoEntrega) {
+            selectTipoEntrega.innerHTML =
+                `<option value="">No disponible</option>`;
+        }
+
+        if (selectEstado) {
+            selectEstado.innerHTML =
+                `<option value="">No disponible</option>`;
+        }
+    }
 }
 
 /* =========================================================
