@@ -6716,42 +6716,51 @@ async function guardarNuevoPedido(
             );
         }
 
-        mensaje.textContent = "Pedido creado correctamente.";
-        mensaje.className = "pedido-nuevo-mensaje exito";
+        mensaje.textContent =
+            "Pedido creado correctamente.";
+
+        mensaje.className =
+            "pedido-nuevo-mensaje exito";
 
         setTimeout(async function() {
             modal.remove();
 
             try {
-
-               try {
-                   await iniciarPedidos();
-               } catch (error) {
-                   console.error("Error actualizando pedidos:", error);
-               }
-               
-               try {
-                   await iniciarDashboard();
-               } catch (error) {
-                   console.error("Error actualizando Dashboard:", error);
-               }
-                           
+                await iniciarPedidos();
+                console.log("Pedidos actualizados correctamente.");
             } catch (error) {
                 console.error(
-                    "Error actualizando pedido y Dashboard:",
+                    "Error actualizando pedidos:",
+                    error
+                );
+            }
+
+            try {
+                await iniciarDashboard();
+                console.log("Dashboard actualizado correctamente.");
+            } catch (error) {
+                console.error(
+                    "ERROR REAL ACTUALIZANDO DASHBOARD:",
                     error
                 );
             }
         }, 700);
 
     } catch (error) {
-        console.error("Error creando pedido:", error);
+        console.error(
+            "Error creando pedido:",
+            error
+        );
 
-        mensaje.textContent = "No se pudo crear el pedido.";
-        mensaje.className = "pedido-nuevo-mensaje error";
+        mensaje.textContent =
+            "No se pudo crear el pedido.";
+
+        mensaje.className =
+            "pedido-nuevo-mensaje error";
 
         boton.disabled = false;
-        boton.textContent = "CREAR PEDIDO";
+        boton.textContent =
+            "CREAR PEDIDO";
 
         alert(
             "No se pudo crear el pedido.\n\n" +
