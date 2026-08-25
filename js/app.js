@@ -3,7 +3,6 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb
 /* =========================
    EMPRESA ACTUAL
 ========================= */
-// Probando conexion exitosa con GitHub VANE
 
 let empresas = [];
 
@@ -42,8 +41,6 @@ function llamarAPI(
                 document.createElement(
                     "script"
                 );
-
-
             window[callbackName] =
                 function(result) {
 
@@ -52,8 +49,6 @@ function llamarAPI(
                     ];
 
                     script.remove();
-
-
                     if (!result.success) {
 
                         reject(
@@ -62,29 +57,18 @@ function llamarAPI(
                                 "Error en la API"
                             )
                         );
-
                         return;
-
                     }
-
-
                     resolve(
                         result.data
                     );
-
                 };
-
-
             script.onerror =
                 function() {
-
                     delete window[
                         callbackName
                     ];
-
                     script.remove();
-
-
                     reject(
                         new Error(
                             "No se pudo conectar con la API"
