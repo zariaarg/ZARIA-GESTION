@@ -5774,215 +5774,261 @@ async function mostrarNuevoPedido() {
             "click",
             cerrarModal
         );
+/* =====================================================
+   CARGAR CLIENTES
+   ===================================================== */
+
+let clientesEmpresa = [];
 
 
-    /* =====================================================
-       CARGAR CLIENTES
-       ===================================================== */
+async function cargarClientesPedido(
+    clienteSeleccionadoId = ""
+) {
 
-    let clientesEmpresa = [];
+    try {
 
-
-    async function cargarClientesPedido(
-        clienteSeleccionadoId = ""
-    ) {
-
-        try {
-
-            const clientes =
-                await llamarAPI(
-                    "clientes",
-                    empresaActual.empresa_id
-                );
-
-
-            clientesEmpresa =
-                filtrarPorEmpresa(
-                    clientes
-                );
-
-
-            if (!clientesEmpresa.length) {
-
-                selectCliente.innerHTML = `
-                    <option value="">
-                        No hay clientes registrados
-                    </option>
-                `;
-
-            } else {
-
-                selectCliente.innerHTML = `
-                    <option value="">
-                        Seleccionar cliente...
-                    </option>
-
-                    ${clientesEmpresa
-                        .map(
-                            cliente => `
-                                <option
-                                    value="${escaparHTML(
-                                        cliente.cliente_id
-                                    )}"
-                                >
-                                    ${escaparHTML(
-                                        `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                                    )}
-                                </option>
-                            `
-                        )
-                        .join("")}
-
-                `;
-
-                if (clienteSeleccionadoId) {
-
-                    selectCliente.value =
-                        String(
-                            clienteSeleccionadoId
-                        );
-
-                    cargarMedidasCliente(
-                        clienteSeleccionadoId
-                    );
-
-                }
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Error cargando clientes para pedido:",
-                error
+        const clientes =
+            await llamarAPI(
+                "clientes",
+                empresaActual.empresa_id
             );
+
+
+        clientesEmpresa =
+            filtrarPorEmpresa(
+                clientes
+            );
+
+
+        if (!clientesEmpresa.length) {
 
             selectCliente.innerHTML = `
                 <option value="">
-                    No se pudieron cargar los clientes
+                    No hay clientes registrados
                 </option>
             `;
 
-        }
+        } else {
 
-    }
+            selectCliente.innerHTML = `
+                <option value="">
+                    Seleccionar cliente...
+                </option>
 
-
-    function cargarMedidasCliente(
-        clienteId
-    ) {
-
-        const cliente =
-            clientesEmpresa.find(
-                item =>
-                    String(
-                        item.cliente_id
-                    ) ===
-                    String(
-                        clienteId
+                ${clientesEmpresa
+                    .map(
+                        cliente => `
+                            <option
+                                value="${escaparHTML(
+                                    cliente.cliente_id
+                                )}"
+                            >
+                                ${escaparHTML(
+                                    `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                                )}
+                            </option>
+                        `
                     )
-            );
+                    .join("")}
 
+            `;
 
-        if (!cliente) {
-            return;
-        }
+            /*
+             * Si recibimos un cliente específico,
+             * lo seleccionamos automáticamente.
+             */
 
+            if (clienteSeleccionadoId) {
 
-        formulario.elements[
-            "cuello"
-        ].value =
-            cliente.medidas_cuello || "";
+                selectCliente.value =
+                    String(
+                        clienteSeleccionadoId
+                    );
 
+                cargarMedidasCliente(
+                    clienteSeleccionadoId
+                );
 
-        formulario.elements[
-            "busto"
-        ].value =
-            cliente.medidas_busto || "";
-
-
-        formulario.elements[
-            "cintura"
-        ].value =
-            cliente.medidas_cintura || "";
-
-
-        formulario.elements[
-            "alto"
-        ].value =
-            cliente.medidas_alto || "";
-
-    }
-
-
-    selectCliente.addEventListener(
-        "change",
-        function() {
-
-            const clienteId =
-                this.value;
-
-            if (!clienteId) {
-                return;
             }
 
-            cargarMedidasCliente(
-                clienteId
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando clientes para pedido:",
+            error
+        );
+
+        selectCliente.innerHTML = `
+            <option value="">
+                No se pudieron cargar los clientes
+            </option>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   CARGAR MEDIDAS DEL CLIENTE
+   ===================================================== */
+
+function cargarMedidasCliente(
+    clienteId
+) {
+
+    const cliente =
+        clientesEmpresa.find(
+            item =>
+                String(
+                    item.cliente_id
+                ) ===
+                String(
+                    clienteId
+                )
+        );
+
+
+    if (!cliente) {
+        return;
+    }
+
+
+    formulario.elements[
+        "cuello"
+    ].value =
+        cliente.medidas_cuello || "";
+
+
+    formulario.elements[
+        "busto"
+    ].value =
+        cliente.medidas_busto || "";
+
+
+    formulario.elements[
+        "cintura"
+    ].value =
+        cliente.medidas_cintura || "";
+
+
+    formulario.elements[
+        "alto"
+    ].value =
+        cliente.medidas_alto || "";
+
+}
+
+
+/* =====================================================
+   SELECCIONAR CLIENTE
+   ===================================================== */
+
+selectCliente.addEventListener(
+    "change",
+    function() {
+
+        const clienteId =
+            this.value;
+
+
+        if (!clienteId) {
+
+            /*
+             * Si se deselecciona el cliente,
+             * limpiamos las medidas.
+             */
+
+            formulario.elements[
+                "cuello"
+            ].value = "";
+
+            formulario.elements[
+                "busto"
+            ].value = "";
+
+            formulario.elements[
+                "cintura"
+            ].value = "";
+
+            formulario.elements[
+                "alto"
+            ].value = "";
+
+            return;
+
+        }
+
+
+        cargarMedidasCliente(
+            clienteId
+        );
+
+    }
+);
+
+
+/* =====================================================
+   CARGAR CLIENTES INICIALES
+   ===================================================== */
+
+await cargarClientesPedido();
+
+
+/* =====================================================
+   NUEVO CLIENTE DESDE PEDIDO
+   ===================================================== */
+
+if (botonNuevoCliente) {
+
+    botonNuevoCliente.addEventListener(
+        "click",
+        function() {
+
+            abrirNuevoCliente(
+                async function(
+                    clienteCreado
+                ) {
+
+                    /*
+                     * Volvemos a cargar la lista
+                     * de clientes porque ahora
+                     * existe uno nuevo.
+                     */
+
+                    await cargarClientesPedido(
+                        clienteCreado.cliente_id
+                    );
+
+
+                    /*
+                     * Lo dejamos seleccionado
+                     * automáticamente.
+                     */
+
+                    selectCliente.value =
+                        String(
+                            clienteCreado.cliente_id
+                        );
+
+
+                    /*
+                     * Cargamos sus medidas.
+                     */
+
+                    cargarMedidasCliente(
+                        clienteCreado.cliente_id
+                    );
+
+                }
             );
 
         }
     );
 
-
-    await cargarClientesPedido();
-
-
-    /* =====================================================
-       NUEVO CLIENTE DESDE PEDIDO
-       ===================================================== */
-
-    if (botonNuevoCliente) {
-
-        botonNuevoCliente.addEventListener(
-            "click",
-            function() {
-
-                abrirNuevoCliente(
-                    async function(
-                        clienteCreado
-                    ) {
-
-                        /*
-                         * Recargamos los clientes
-                         * del pedido.
-                         */
-
-                        await cargarClientesPedido(
-                            clienteCreado.cliente_id
-                        );
-
-                        /*
-                         * Nos aseguramos de que
-                         * el cliente quede seleccionado.
-                         */
-
-                        selectCliente.value =
-                            String(
-                                clienteCreado.cliente_id
-                            );
-
-                        cargarMedidasCliente(
-                            clienteCreado.cliente_id
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-    }
-
+}
 
     /* =====================================================
        SALDO AUTOMÁTICO
