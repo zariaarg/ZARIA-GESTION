@@ -4607,6 +4607,15 @@ async function iniciarDashboard() {
         const modelosEmpresa =
             filtrarPorEmpresa(modelosDashboard);
 
+        console.log("========== ACTUALIZACIÓN DASHBOARD ==========");
+        console.log("Empresa:", empresaActual);
+        console.log("Pedidos recibidos:", pedidos);
+        console.log("Cantidad de pedidos:", pedidosEmpresa.length);
+        console.log("Último pedido:", pedidosEmpresa[pedidosEmpresa.length - 1]);
+        console.log("Clientes:", clientesEmpresa.length);
+        console.log("Modelos:", modelosEmpresa.length);
+        console.log("=============================================");
+
         mostrarResumenDashboard(
             pedidosEmpresa,
             clientesEmpresa,
@@ -4617,14 +4626,6 @@ async function iniciarDashboard() {
             pedidosEmpresa
         );
 
-        console.log(
-            "Dashboard actualizado correctamente.",
-            {
-                pedidos: pedidosEmpresa.length,
-                clientes: clientesEmpresa.length,
-                modelos: modelosEmpresa.length
-            }
-        );
     } catch (error) {
         console.error(
             "Error cargando dashboard:",
@@ -4632,6 +4633,7 @@ async function iniciarDashboard() {
         );
     }
 }
+
 
 
 /* =========================================================
