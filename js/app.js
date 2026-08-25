@@ -2471,289 +2471,134 @@ function abrirNuevoModelo() {
 
 }
 
-/* =========================
+
+/* =========================================================
    GUARDAR NUEVO MODELO
-========================= */
+   ========================================================= */
 
-async function guardarNuevoModelo(
-    formulario,
-    modal
-) {
+async function guardarNuevoModelo(formulario, modal) {
+    const boton = formulario.querySelector(".btn-guardar-nuevo");
+    const mensaje = formulario.querySelector("#nuevo-mensaje");
+    const formData = new FormData(formulario);
 
-    const boton =
-        formulario.querySelector(
-            ".btn-guardar-nuevo"
-        );
-
-
-    const mensaje =
-        formulario.querySelector(
-            "#nuevo-mensaje"
-        );
-
-
-    const formData =
-        new FormData(formulario);
-
-
-    const codigo =
-        String(
-            formData.get("codigo") || ""
-        ).trim();
-
-
-    const nombre =
-        String(
-            formData.get("nombre") || ""
-        ).trim();
-
-
-    const tipo =
-        String(
-            formData.get("tipo") || ""
-        ).trim();
-
+    const codigo = String(formData.get("codigo") || "").trim();
+    const nombre = String(formData.get("nombre") || "").trim();
+    const tipo = String(formData.get("tipo") || "").trim();
 
     if (!codigo) {
-
-        alert(
-            "Ingresá el código del modelo."
-        );
-
+        alert("Ingresá el código del modelo.");
         return;
-
     }
-
 
     if (!nombre) {
-
-        alert(
-            "Ingresá el nombre del modelo."
-        );
-
+        alert("Ingresá el nombre del modelo.");
         return;
-
     }
-
 
     if (!tipo) {
-
-        alert(
-            "Seleccioná un tipo."
-        );
-
+        alert("Seleccioná un tipo.");
         return;
-
     }
-
 
     if (!empresaActual) {
-
-        alert(
-            "No hay una empresa seleccionada."
-        );
-
+        alert("No hay una empresa seleccionada.");
         return;
-
     }
 
-
     const data = {
-
-        empresa_id:
-            Number(
-                empresaActual.empresa_id
-            ),
-
-        codigo:
-            codigo,
-
-        nombre:
-            nombre,
-
-        tipo:
-            tipo,
-
-        material_base:
-            String(
-                formData.get(
-                    "material_base"
-                ) || ""
-            ).trim(),
-
-        costo:
-            formData.get("costo") === ""
-                ? ""
-                : Number(
-                    formData.get("costo")
-                ),
-
-        precio_venta:
-            formData.get("precio_venta") === ""
-                ? ""
-                : Number(
-                    formData.get(
-                        "precio_venta"
-                    )
-                ),
-
-        imagen:
-            String(
-                formData.get(
-                    "imagen"
-                ) || ""
-            ).trim(),
-
-        imagen_2:
-            String(
-                formData.get(
-                    "imagen_2"
-                ) || ""
-            ).trim(),
-
-        descripcion:
-            String(
-                formData.get(
-                    "descripcion"
-                ) || ""
-            ).trim(),
-
-        medidas:
-            String(
-                formData.get(
-                    "medidas"
-                ) || ""
-            ).trim(),
-
-        activo:
-            formData.get("activo") === "on"
-
+        empresa_id: Number(empresaActual.empresa_id),
+        codigo,
+        nombre,
+        tipo,
+        material_base: String(
+            formData.get("material_base") || ""
+        ).trim(),
+        costo: formData.get("costo") === ""
+            ? ""
+            : Number(formData.get("costo")),
+        precio_venta: formData.get("precio_venta") === ""
+            ? ""
+            : Number(formData.get("precio_venta")),
+        imagen: String(
+            formData.get("imagen") || ""
+        ).trim(),
+        imagen_2: String(
+            formData.get("imagen_2") || ""
+        ).trim(),
+        descripcion: String(
+            formData.get("descripcion") || ""
+        ).trim(),
+        medidas: String(
+            formData.get("medidas") || ""
+        ).trim(),
+        activo: formData.get("activo") === "on"
     };
 
-
     boton.disabled = true;
-
-    boton.textContent =
-        "CREANDO...";
-
-    mensaje.textContent =
-        "Guardando modelo...";
-
-    mensaje.className =
-        "modelo-nuevo-mensaje";
-
+    boton.textContent = "CREANDO...";
+    mensaje.textContent = "Guardando modelo...";
+    mensaje.className = "modelo-nuevo-mensaje";
 
     try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+                action: "insert",
+                resource: "modelos",
+                data
+            })
+        });
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                "insert",
-
-                            resource:
-                                "modelos",
-
-                            data:
-                                data
-
-                        })
-
-                }
-            );
-
-
-        const resultado =
-            await response.json();
-
+        const resultado = await response.json();
 
         if (!resultado.success) {
-
             throw new Error(
                 resultado.error ||
                 "No se pudo crear el modelo."
             );
-
         }
 
+        mensaje.textContent = "Modelo creado correctamente.";
+        mensaje.className = "modelo-nuevo-mensaje exito";
 
-        mensaje.textContent =
-            "Modelo creado correctamente.";
+        setTimeout(async function() {
+            modal.remove();
 
-        mensaje.className =
-            "modelo-nuevo-mensaje exito";
+            try {
+                modelos = await llamarAPI(
+                    "modelos",
+                    empresaActual.empresa_id
+                );
 
-
-        setTimeout(
-            async function() {
-
-                modal.remove();
-
-
-                try {
-
-                    modelos =
-                        await llamarAPI(
-                            "modelos",
-                            empresaActual.empresa_id
-                        );
-
-                    mostrarModelos();
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-                }
-
-            },
-            700
-        );
-
+                mostrarModelos();
+                await iniciarDashboard();
+            } catch (error) {
+                console.error(
+                    "Error actualizando modelo y Dashboard:",
+                    error
+                );
+            }
+        }, 700);
 
     } catch (error) {
+        console.error("Error creando modelo:", error);
 
-        console.error(
-            "Error creando modelo:",
-            error
-        );
+        mensaje.textContent = "No se pudo crear el modelo.";
+        mensaje.className = "modelo-nuevo-mensaje error";
 
-
-        mensaje.textContent =
-            "No se pudo crear el modelo.";
-
-        mensaje.className =
-            "modelo-nuevo-mensaje error";
-
-
-        boton.disabled =
-            false;
-
-        boton.textContent =
-            "CREAR MODELO";
-
+        boton.disabled = false;
+        boton.textContent = "CREAR MODELO";
 
         alert(
             "No se pudo crear el modelo.\n\n" +
             error.message
         );
-
     }
-
 }
+
 
 /* =========================
    EDITAR MODELO
@@ -6703,28 +6548,17 @@ async function guardarNuevoPedido(
     clientesEmpresa,
     modelosEmpresa
 ) {
-    const boton =
-        formulario.querySelector(
-            ".btn-guardar-pedido"
-        );
+    const boton = formulario.querySelector(".btn-guardar-pedido");
+    const mensaje = formulario.querySelector("#nuevo-pedido-mensaje");
+    const formData = new FormData(formulario);
 
-    const mensaje =
-        formulario.querySelector(
-            "#nuevo-pedido-mensaje"
-        );
+    const clienteId = String(
+        formData.get("cliente_id") || ""
+    ).trim();
 
-    const formData =
-        new FormData(formulario);
-
-    const clienteId =
-        String(
-            formData.get("cliente_id") || ""
-        ).trim();
-
-    const modeloId =
-        String(
-            formData.get("modelo_id") || ""
-        ).trim();
+    const modeloId = String(
+        formData.get("modelo_id") || ""
+    ).trim();
 
     if (!clienteId) {
         alert("Seleccioná un cliente.");
@@ -6741,42 +6575,37 @@ async function guardarNuevoPedido(
         return;
     }
 
-    const cliente =
-        clientesEmpresa.find(
-            item =>
-                String(item.cliente_id) ===
-                String(clienteId)
-        );
+    const cliente = clientesEmpresa.find(
+        item =>
+            String(item.cliente_id) ===
+            String(clienteId)
+    );
 
     if (!cliente) {
         alert("No se encontró el cliente seleccionado.");
         return;
     }
 
-    const modelo =
-        modelosEmpresa.find(
-            item =>
-                String(item.modelo_id) ===
-                String(modeloId)
-        );
+    const modelo = modelosEmpresa.find(
+        item =>
+            String(item.modelo_id) ===
+            String(modeloId)
+    );
 
     if (!modelo) {
         alert("No se encontró el modelo seleccionado.");
         return;
     }
 
-    const precio =
-        Number(
-            formData.get("precio") || 0
-        );
+    const precio = Number(
+        formData.get("precio") || 0
+    );
 
-    const sena =
-        Number(
-            formData.get("sena") || 0
-        );
+    const sena = Number(
+        formData.get("sena") || 0
+    );
 
-    const saldo =
-        precio - sena;
+    const saldo = precio - sena;
 
     if (precio < 0) {
         alert("El precio no puede ser negativo.");
@@ -6793,175 +6622,96 @@ async function guardarNuevoPedido(
         return;
     }
 
-    const convertirMedida =
-        nombreCampo => {
-            const valor =
-                formData.get(nombreCampo);
-
-            return valor === ""
-                ? ""
-                : Number(valor);
-        };
+    const convertirMedida = nombreCampo => {
+        const valor = formData.get(nombreCampo);
+        return valor === "" ? "" : Number(valor);
+    };
 
     const data = {
-
-        empresa_id:
-            Number(
-                empresaActual.empresa_id
-            ),
-
+        empresa_id: Number(empresaActual.empresa_id),
         fecha:
             formData.get("fecha") ||
             new Date().toISOString().split("T")[0],
-
-        cliente_id:
-            Number(cliente.cliente_id),
-
+        cliente_id: Number(cliente.cliente_id),
         cliente_nombre:
             `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim(),
-
-        telefono:
-            String(
-                cliente.telefono || ""
-            ).trim(),
-
-        instagram:
-            String(
-                cliente.instagram || ""
-            ).trim(),
-
-        canal_venta:
-            String(
-                formData.get("canal_venta") || ""
-            ).trim(),
-
-        modelo_id:
-            Number(modelo.modelo_id),
-
-        modelo:
-            String(
-                modelo.nombre || ""
-            ).trim(),
-
-        codigo:
-            String(
-                modelo.codigo || ""
-            ).trim(),
-
-        material:
-            String(
-                formData.get("material") ||
-                modelo.material ||
-                ""
-            ).trim(),
-
-        color_cuero:
-            String(
-                formData.get("color_cuero") || ""
-            ).trim(),
-
-        color_hilo:
-            String(
-                formData.get("color_hilo") || ""
-            ).trim(),
-
-        talle:
-            String(
-                formData.get("talle") || ""
-            ).trim(),
-
+        telefono: String(
+            cliente.telefono || ""
+        ).trim(),
+        instagram: String(
+            cliente.instagram || ""
+        ).trim(),
+        canal_venta: String(
+            formData.get("canal_venta") || ""
+        ).trim(),
+        modelo_id: Number(modelo.modelo_id),
+        modelo: String(
+            modelo.nombre || ""
+        ).trim(),
+        codigo: String(
+            modelo.codigo || ""
+        ).trim(),
+        material: String(
+            formData.get("material") ||
+            modelo.material_base ||
+            ""
+        ).trim(),
+        color_cuero: String(
+            formData.get("color_cuero") || ""
+        ).trim(),
+        color_hilo: String(
+            formData.get("color_hilo") || ""
+        ).trim(),
+        talle: String(
+            formData.get("talle") || ""
+        ).trim(),
         a_medida:
             formulario.elements["a_medida"] &&
             formulario.elements["a_medida"].checked
                 ? true
                 : false,
-
-        cuello:
-            convertirMedida("cuello"),
-
-        busto:
-            convertirMedida("busto"),
-
-        cintura:
-            convertirMedida("cintura"),
-
-        alto:
-            convertirMedida("alto"),
-
-        precio:
-            precio,
-
-        sena:
-            sena,
-
-        saldo:
-            saldo,
-
-        metodo_pago:
-            String(
-                formData.get("metodo_pago") || ""
-            ).trim(),
-
-        tipo_entrega:
-            String(
-                formData.get("tipo_entrega") || ""
-            ).trim(),
-
-        estado:
-            String(
-                formData.get("estado") || ""
-            ).trim(),
-
+        cuello: convertirMedida("cuello"),
+        busto: convertirMedida("busto"),
+        cintura: convertirMedida("cintura"),
+        alto: convertirMedida("alto"),
+        precio,
+        sena,
+        saldo,
+        metodo_pago: String(
+            formData.get("metodo_pago") || ""
+        ).trim(),
+        tipo_entrega: String(
+            formData.get("tipo_entrega") || ""
+        ).trim(),
+        estado: String(
+            formData.get("estado") || ""
+        ).trim(),
         fecha_entrega:
             formData.get("fecha_entrega") || "",
-
-        observaciones:
-            String(
-                formData.get("observaciones") || ""
-            ).trim()
-
+        observaciones: String(
+            formData.get("observaciones") || ""
+        ).trim()
     };
 
     boton.disabled = true;
     boton.textContent = "CREANDO...";
-
-    mensaje.textContent =
-        "Guardando pedido...";
-
-    mensaje.className =
-        "pedido-nuevo-mensaje";
+    mensaje.textContent = "Guardando pedido...";
+    mensaje.className = "pedido-nuevo-mensaje";
 
     try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+                action: "insert",
+                resource: "pedidos",
+                data
+            })
+        });
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                "insert",
-
-                            resource:
-                                "pedidos",
-
-                            data:
-                                data
-
-                        })
-                }
-            );
-
-        const resultado =
-            await response.json();
+        const resultado = await response.json();
 
         if (!resultado.success) {
             throw new Error(
@@ -6970,40 +6720,31 @@ async function guardarNuevoPedido(
             );
         }
 
-        mensaje.textContent =
-            "Pedido creado correctamente.";
+        mensaje.textContent = "Pedido creado correctamente.";
+        mensaje.className = "pedido-nuevo-mensaje exito";
 
-        mensaje.className =
-            "pedido-nuevo-mensaje exito";
+        setTimeout(async function() {
+            modal.remove();
 
-        setTimeout(
-            async function() {
-
-                modal.remove();
-
+            try {
                 await iniciarPedidos();
-
-            },
-            700
-        );
+                await iniciarDashboard();
+            } catch (error) {
+                console.error(
+                    "Error actualizando pedido y Dashboard:",
+                    error
+                );
+            }
+        }, 700);
 
     } catch (error) {
+        console.error("Error creando pedido:", error);
 
-        console.error(
-            "Error creando pedido:",
-            error
-        );
-
-        mensaje.textContent =
-            "No se pudo crear el pedido.";
-
-        mensaje.className =
-            "pedido-nuevo-mensaje error";
+        mensaje.textContent = "No se pudo crear el pedido.";
+        mensaje.className = "pedido-nuevo-mensaje error";
 
         boton.disabled = false;
-
-        boton.textContent =
-            "CREAR PEDIDO";
+        boton.textContent = "CREAR PEDIDO";
 
         alert(
             "No se pudo crear el pedido.\n\n" +
@@ -7011,6 +6752,7 @@ async function guardarNuevoPedido(
         );
     }
 }
+
 /* =========================================================
    CARGAR CONFIGURACIÓN PEDIDO
    ========================================================= */
@@ -8913,37 +8655,18 @@ async function guardarCambiosCliente(cliente, formulario, modal) {
     }
 }
 
+
 /* =========================================================
    GUARDAR NUEVO CLIENTE
    ========================================================= */
 
-async function guardarNuevoCliente(
-    formulario,
-    modal
-) {
+async function guardarNuevoCliente(formulario, modal) {
+    const boton = formulario.querySelector(".btn-guardar-cliente");
+    const mensaje = formulario.querySelector("#nuevo-cliente-mensaje");
+    const formData = new FormData(formulario);
 
-    const boton =
-        formulario.querySelector(
-            ".btn-guardar-cliente"
-        );
-
-    const mensaje =
-        formulario.querySelector(
-            "#nuevo-cliente-mensaje"
-        );
-
-    const formData =
-        new FormData(formulario);
-
-    const nombre =
-        String(
-            formData.get("nombre") || ""
-        ).trim();
-
-    const apellido =
-        String(
-            formData.get("apellido") || ""
-        ).trim();
+    const nombre = String(formData.get("nombre") || "").trim();
+    const apellido = String(formData.get("apellido") || "").trim();
 
     if (!nombre) {
         alert("Ingresá el nombre.");
@@ -8961,156 +8684,79 @@ async function guardarNuevoCliente(
     }
 
     const data = {
-
-        empresa_id:
-            Number(
-                empresaActual.empresa_id
-            ),
-
+        empresa_id: Number(empresaActual.empresa_id),
         nombre,
         apellido,
-
-        telefono:
-            String(
-                formData.get("telefono") || ""
-            ).trim(),
-
-        instagram:
-            String(
-                formData.get("instagram") || ""
-            ).trim(),
-
-        email:
-            String(
-                formData.get("email") || ""
-            ).trim(),
-
-        direccion:
-            String(
-                formData.get("direccion") || ""
-            ).trim(),
-
-        localidad:
-            String(
-                formData.get("localidad") || ""
-            ).trim(),
-
-        provincia:
-            String(
-                formData.get("provincia") || ""
-            ).trim(),
-
-        medidas_cuello:
-            formData.get("medidas_cuello") === ""
-                ? ""
-                : Number(
-                    formData.get("medidas_cuello")
-                ),
-
-        medidas_busto:
-            formData.get("medidas_busto") === ""
-                ? ""
-                : Number(
-                    formData.get("medidas_busto")
-                ),
-
-        medidas_cintura:
-            formData.get("medidas_cintura") === ""
-                ? ""
-                : Number(
-                    formData.get("medidas_cintura")
-                ),
-
-        medidas_alto:
-            formData.get("medidas_alto") === ""
-                ? ""
-                : Number(
-                    formData.get("medidas_alto")
-                ),
-
-        observaciones:
-            String(
-                formData.get("observaciones") || ""
-            ).trim()
-
+        telefono: String(formData.get("telefono") || "").trim(),
+        instagram: String(formData.get("instagram") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        direccion: String(formData.get("direccion") || "").trim(),
+        localidad: String(formData.get("localidad") || "").trim(),
+        provincia: String(formData.get("provincia") || "").trim(),
+        medidas_cuello: formData.get("medidas_cuello") === ""
+            ? ""
+            : Number(formData.get("medidas_cuello")),
+        medidas_busto: formData.get("medidas_busto") === ""
+            ? ""
+            : Number(formData.get("medidas_busto")),
+        medidas_cintura: formData.get("medidas_cintura") === ""
+            ? ""
+            : Number(formData.get("medidas_cintura")),
+        medidas_alto: formData.get("medidas_alto") === ""
+            ? ""
+            : Number(formData.get("medidas_alto")),
+        observaciones: String(formData.get("observaciones") || "").trim()
     };
 
     boton.disabled = true;
     boton.textContent = "CREANDO...";
-
     mensaje.textContent = "Guardando cliente...";
     mensaje.className = "cliente-nuevo-mensaje";
 
     try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+                action: "insert",
+                resource: "clientes",
+                data
+            })
+        });
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                "insert",
-
-                            resource:
-                                "clientes",
-
-                            data
-
-                        })
-
-                }
-            );
-
-        const resultado =
-            await response.json();
+        const resultado = await response.json();
 
         if (!resultado.success) {
-
             throw new Error(
                 resultado.error ||
                 "No se pudo crear el cliente."
             );
-
         }
 
-        mensaje.textContent =
-            "Cliente creado correctamente.";
+        mensaje.textContent = "Cliente creado correctamente.";
+        mensaje.className = "cliente-nuevo-mensaje exito";
 
-        mensaje.className =
-            "cliente-nuevo-mensaje exito";
+        setTimeout(async function() {
+            modal.remove();
 
-        setTimeout(
-            async function() {
-
-                modal.remove();
-
+            try {
                 await iniciarClientes();
-
-            },
-            700
-        );
+                await iniciarDashboard();
+            } catch (error) {
+                console.error(
+                    "Error actualizando cliente y Dashboard:",
+                    error
+                );
+            }
+        }, 700);
 
     } catch (error) {
+        console.error("Error creando cliente:", error);
 
-        console.error(
-            "Error creando cliente:",
-            error
-        );
-
-        mensaje.textContent =
-            "No se pudo crear el cliente.";
-
-        mensaje.className =
-            "cliente-nuevo-mensaje error";
+        mensaje.textContent = "No se pudo crear el cliente.";
+        mensaje.className = "cliente-nuevo-mensaje error";
 
         boton.disabled = false;
         boton.textContent = "CREAR CLIENTE";
@@ -9119,10 +8765,9 @@ async function guardarNuevoCliente(
             "No se pudo crear el cliente.\n\n" +
             error.message
         );
-
     }
-
 }
+
 
 /* =========================================================
    ESTILOS NUEVO CLIENTE
