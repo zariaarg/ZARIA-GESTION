@@ -5420,6 +5420,7 @@ function configurarDashboard() {
    ========================================================= */
 
 async function mostrarNuevoPedido() {
+
     if (!empresaActual) {
         alert("No hay una empresa seleccionada.");
         return;
@@ -5432,12 +5433,24 @@ async function mostrarNuevoPedido() {
 
     modal.innerHTML = `
         <div class="pedido-nuevo-overlay"></div>
+
         <div class="pedido-nuevo-contenido">
-            <button type="button" class="pedido-nuevo-cerrar">×</button>
+
+            <button
+                type="button"
+                class="pedido-nuevo-cerrar"
+            >
+                ×
+            </button>
 
             <div class="pedido-nuevo-header">
+
                 <span>NUEVO PEDIDO</span>
-                <h2>Registrar pedido</h2>
+
+                <h2>
+                    Registrar pedido
+                </h2>
+
                 <p>
                     Empresa:
                     <strong>
@@ -5448,6 +5461,7 @@ async function mostrarNuevoPedido() {
                         )}
                     </strong>
                 </p>
+
             </div>
 
             <form id="form-nuevo-pedido">
@@ -5459,7 +5473,10 @@ async function mostrarNuevoPedido() {
                     </div>
 
                     <div class="pedido-campo">
-                        <label>CLIENTE</label>
+
+                        <label>
+                            CLIENTE
+                        </label>
 
                         <select
                             name="cliente_id"
@@ -5469,19 +5486,27 @@ async function mostrarNuevoPedido() {
                                 Cargando clientes...
                             </option>
                         </select>
+
                     </div>
 
                     <div class="pedido-campo">
-                        <label>CANAL DE VENTA</label>
+
+                        <label>
+                            CANAL DE VENTA
+                        </label>
 
                         <select name="canal_venta">
+
                             <option value="">
                                 Seleccionar canal...
                             </option>
+
                         </select>
+
                     </div>
 
                 </div>
+
 
                 <div class="pedido-seccion">
 
@@ -5492,7 +5517,10 @@ async function mostrarNuevoPedido() {
                     <div class="pedido-grid">
 
                         <div class="pedido-campo">
-                            <label>MODELO</label>
+
+                            <label>
+                                MODELO
+                            </label>
 
                             <select
                                 name="modelo_id"
@@ -5502,10 +5530,14 @@ async function mostrarNuevoPedido() {
                                     Seleccionar modelo...
                                 </option>
                             </select>
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>CÓDIGO</label>
+
+                            <label>
+                                CÓDIGO
+                            </label>
 
                             <input
                                 type="text"
@@ -5513,11 +5545,13 @@ async function mostrarNuevoPedido() {
                                 id="pedido-codigo"
                                 readonly
                             >
+
                         </div>
 
                     </div>
 
                 </div>
+
 
                 <div class="pedido-seccion">
 
@@ -5528,7 +5562,10 @@ async function mostrarNuevoPedido() {
                     <div class="pedido-grid">
 
                         <div class="pedido-campo">
-                            <label>MATERIAL</label>
+
+                            <label>
+                                MATERIAL
+                            </label>
 
                             <input
                                 type="text"
@@ -5536,10 +5573,14 @@ async function mostrarNuevoPedido() {
                                 id="pedido-material"
                                 readonly
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>COLOR CUERO</label>
+
+                            <label>
+                                COLOR CUERO
+                            </label>
 
                             <input
                                 type="text"
@@ -5547,10 +5588,14 @@ async function mostrarNuevoPedido() {
                                 id="pedido-color-cuero"
                                 placeholder="Color elegido"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>COLOR HILO</label>
+
+                            <label>
+                                COLOR HILO
+                            </label>
 
                             <input
                                 type="text"
@@ -5558,10 +5603,14 @@ async function mostrarNuevoPedido() {
                                 id="pedido-color-hilo"
                                 placeholder="Color elegido"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>TALLE</label>
+
+                            <label>
+                                TALLE
+                            </label>
 
                             <input
                                 type="text"
@@ -5569,20 +5618,28 @@ async function mostrarNuevoPedido() {
                                 id="pedido-talle"
                                 placeholder="Talle"
                             >
+
                         </div>
 
                     </div>
 
+
                     <div class="pedido-a-medida">
+
                         <label>
+
                             <input
                                 type="checkbox"
                                 name="a_medida"
                                 id="pedido-a-medida"
                             >
+
                             A medida
+
                         </label>
+
                     </div>
+
 
                     <div
                         class="pedido-medidas"
@@ -5590,7 +5647,10 @@ async function mostrarNuevoPedido() {
                     >
 
                         <div class="pedido-campo">
-                            <label>CUELLO</label>
+
+                            <label>
+                                CUELLO
+                            </label>
 
                             <input
                                 type="number"
@@ -5599,10 +5659,14 @@ async function mostrarNuevoPedido() {
                                 step="0.1"
                                 placeholder="cm"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>BUSTO</label>
+
+                            <label>
+                                BUSTO
+                            </label>
 
                             <input
                                 type="number"
@@ -5611,10 +5675,14 @@ async function mostrarNuevoPedido() {
                                 step="0.1"
                                 placeholder="cm"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>CINTURA</label>
+
+                            <label>
+                                CINTURA
+                            </label>
 
                             <input
                                 type="number"
@@ -5623,10 +5691,14 @@ async function mostrarNuevoPedido() {
                                 step="0.1"
                                 placeholder="cm"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>ALTO</label>
+
+                            <label>
+                                ALTO
+                            </label>
 
                             <input
                                 type="number"
@@ -5635,11 +5707,13 @@ async function mostrarNuevoPedido() {
                                 step="0.1"
                                 placeholder="cm"
                             >
+
                         </div>
 
                     </div>
 
                 </div>
+
 
                 <div class="pedido-seccion">
 
@@ -5650,7 +5724,10 @@ async function mostrarNuevoPedido() {
                     <div class="pedido-grid">
 
                         <div class="pedido-campo">
-                            <label>PRECIO</label>
+
+                            <label>
+                                PRECIO
+                            </label>
 
                             <input
                                 type="number"
@@ -5659,10 +5736,14 @@ async function mostrarNuevoPedido() {
                                 min="0"
                                 step="0.01"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>SEÑA</label>
+
+                            <label>
+                                SEÑA
+                            </label>
 
                             <input
                                 type="number"
@@ -5671,10 +5752,14 @@ async function mostrarNuevoPedido() {
                                 min="0"
                                 step="0.01"
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>SALDO</label>
+
+                            <label>
+                                SALDO
+                            </label>
 
                             <input
                                 type="number"
@@ -5682,21 +5767,29 @@ async function mostrarNuevoPedido() {
                                 id="pedido-saldo"
                                 readonly
                             >
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>MÉTODO DE PAGO</label>
+
+                            <label>
+                                MÉTODO DE PAGO
+                            </label>
 
                             <select name="metodo_pago">
+
                                 <option value="">
                                     Seleccionar...
                                 </option>
+
                             </select>
+
                         </div>
 
                     </div>
 
                 </div>
+
 
                 <div class="pedido-seccion">
 
@@ -5707,37 +5800,54 @@ async function mostrarNuevoPedido() {
                     <div class="pedido-grid">
 
                         <div class="pedido-campo">
-                            <label>TIPO DE ENTREGA</label>
+
+                            <label>
+                                TIPO DE ENTREGA
+                            </label>
 
                             <select name="tipo_entrega">
+
                                 <option value="">
                                     Seleccionar...
                                 </option>
+
                             </select>
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>ESTADO</label>
+
+                            <label>
+                                ESTADO
+                            </label>
 
                             <select name="estado">
+
                                 <option value="">
                                     Seleccionar...
                                 </option>
+
                             </select>
+
                         </div>
 
                         <div class="pedido-campo">
-                            <label>FECHA DE ENTREGA</label>
+
+                            <label>
+                                FECHA DE ENTREGA
+                            </label>
 
                             <input
                                 type="date"
                                 name="fecha_entrega"
                             >
+
                         </div>
 
                     </div>
 
                 </div>
+
 
                 <div class="pedido-seccion">
 
@@ -5757,10 +5867,12 @@ async function mostrarNuevoPedido() {
 
                 </div>
 
+
                 <div
                     class="pedido-nuevo-mensaje"
                     id="nuevo-pedido-mensaje"
                 ></div>
+
 
                 <div class="pedido-nuevo-botones">
 
@@ -5785,41 +5897,65 @@ async function mostrarNuevoPedido() {
         </div>
     `;
 
+
     document.body.appendChild(modal);
 
     agregarEstilosNuevoPedido();
 
     cargarConfiguracionPedido(modal);
 
+
     const formulario =
-        modal.querySelector("#form-nuevo-pedido");
+        modal.querySelector(
+            "#form-nuevo-pedido"
+        );
 
     const selectCliente =
-        modal.querySelector("#pedido-cliente");
+        modal.querySelector(
+            "#pedido-cliente"
+        );
+
 
     const cerrarModal =
         () => modal.remove();
 
+
     modal
-        .querySelector(".pedido-nuevo-cerrar")
+        .querySelector(
+            ".pedido-nuevo-cerrar"
+        )
         .addEventListener(
             "click",
             cerrarModal
         );
 
+
     modal
-        .querySelector(".pedido-nuevo-overlay")
+        .querySelector(
+            ".pedido-nuevo-overlay"
+        )
         .addEventListener(
             "click",
             cerrarModal
         );
 
+
     modal
-        .querySelector(".btn-cancelar-pedido")
+        .querySelector(
+            ".btn-cancelar-pedido"
+        )
         .addEventListener(
             "click",
             cerrarModal
         );
+
+
+    /* =====================================================
+       CARGAR CLIENTES
+    ===================================================== */
+
+    let clientesEmpresa = [];
+
 
     try {
 
@@ -5829,8 +5965,10 @@ async function mostrarNuevoPedido() {
                 empresaActual.empresa_id
             );
 
-        const clientesEmpresa =
+
+        clientesEmpresa =
             filtrarPorEmpresa(clientes);
+
 
         if (!clientesEmpresa.length) {
 
@@ -5847,18 +5985,28 @@ async function mostrarNuevoPedido() {
                     Seleccionar cliente...
                 </option>
 
-                ${clientesEmpresa.map(cliente => `
-                    <option
-                        value="${escaparHTML(cliente.cliente_id)}"
-                    >
-                        ${escaparHTML(
-                            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                        )}
-                    </option>
-                `).join("")}
+                ${clientesEmpresa.map(
+                    cliente => `
+                        <option
+                            value="${escaparHTML(
+                                cliente.cliente_id
+                            )}"
+                        >
+                            ${escaparHTML(
+                                `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                            )}
+                        </option>
+                    `
+                ).join("")}
+
             `;
 
         }
+
+
+        /* =================================================
+           SELECCIONAR CLIENTE
+        ================================================= */
 
         selectCliente.addEventListener(
             "change",
@@ -5867,35 +6015,55 @@ async function mostrarNuevoPedido() {
                 const clienteId =
                     this.value;
 
+
                 if (!clienteId) {
                     return;
                 }
 
+
                 const cliente =
                     clientesEmpresa.find(
                         item =>
-                            String(item.cliente_id) ===
-                            String(clienteId)
+                            String(
+                                item.cliente_id
+                            ) ===
+                            String(
+                                clienteId
+                            )
                     );
+
 
                 if (!cliente) {
                     return;
                 }
 
-                formulario.elements["cuello"].value =
+
+                formulario.elements[
+                    "cuello"
+                ].value =
                     cliente.medidas_cuello || "";
 
-                formulario.elements["busto"].value =
+
+                formulario.elements[
+                    "busto"
+                ].value =
                     cliente.medidas_busto || "";
 
-                formulario.elements["cintura"].value =
+
+                formulario.elements[
+                    "cintura"
+                ].value =
                     cliente.medidas_cintura || "";
 
-                formulario.elements["alto"].value =
+
+                formulario.elements[
+                    "alto"
+                ].value =
                     cliente.medidas_alto || "";
 
             }
         );
+
 
     } catch (error) {
 
@@ -5903,6 +6071,7 @@ async function mostrarNuevoPedido() {
             "Error cargando clientes para pedido:",
             error
         );
+
 
         selectCliente.innerHTML = `
             <option value="">
@@ -5912,15 +6081,482 @@ async function mostrarNuevoPedido() {
 
     }
 
+
+    /* =====================================================
+       SALDO AUTOMÁTICO
+    ===================================================== */
+
+    const precio =
+        formulario.querySelector(
+            "#pedido-precio"
+        );
+
+    const sena =
+        formulario.querySelector(
+            "#pedido-sena"
+        );
+
+    const saldo =
+        formulario.querySelector(
+            "#pedido-saldo"
+        );
+
+
+    function actualizarSaldo() {
+
+        const precioValor =
+            Number(
+                precio.value || 0
+            );
+
+        const senaValor =
+            Number(
+                sena.value || 0
+            );
+
+
+        saldo.value =
+            precioValor -
+            senaValor;
+
+    }
+
+
+    precio.addEventListener(
+        "input",
+        actualizarSaldo
+    );
+
+    sena.addEventListener(
+        "input",
+        actualizarSaldo
+    );
+
+
+    /* =====================================================
+       GUARDAR PEDIDO
+    ===================================================== */
+
     formulario.addEventListener(
         "submit",
-        function(event) {
+        async function(event) {
 
             event.preventDefault();
 
-            alert(
-                "La carga del pedido la conectamos en el siguiente paso."
-            );
+
+            const boton =
+                formulario.querySelector(
+                    ".btn-guardar-pedido"
+                );
+
+            const mensaje =
+                formulario.querySelector(
+                    "#nuevo-pedido-mensaje"
+                );
+
+
+            const formData =
+                new FormData(
+                    formulario
+                );
+
+
+            const clienteId =
+                formData.get(
+                    "cliente_id"
+                );
+
+
+            const modeloId =
+                formData.get(
+                    "modelo_id"
+                );
+
+
+            if (!clienteId) {
+
+                alert(
+                    "Seleccioná un cliente."
+                );
+
+                return;
+
+            }
+
+
+            if (!modeloId) {
+
+                alert(
+                    "Seleccioná un modelo."
+                );
+
+                return;
+
+            }
+
+
+            const precioValor =
+                Number(
+                    formData.get(
+                        "precio"
+                    ) || 0
+                );
+
+
+            const senaValor =
+                Number(
+                    formData.get(
+                        "sena"
+                    ) || 0
+                );
+
+
+            if (
+                precioValor < 0 ||
+                senaValor < 0
+            ) {
+
+                alert(
+                    "El precio y la seña no pueden ser negativos."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                senaValor >
+                precioValor
+            ) {
+
+                alert(
+                    "La seña no puede ser mayor que el precio."
+                );
+
+                return;
+
+            }
+
+
+            const cliente =
+                clientesEmpresa.find(
+                    item =>
+                        String(
+                            item.cliente_id
+                        ) ===
+                        String(
+                            clienteId
+                        )
+                );
+
+
+            const data = {
+
+                empresa_id:
+                    Number(
+                        empresaActual.empresa_id
+                    ),
+
+                fecha:
+                    new Date()
+                        .toISOString()
+                        .split("T")[0],
+
+                cliente_id:
+                    Number(
+                        clienteId
+                    ),
+
+                cliente_nombre:
+                    cliente
+                        ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                        : "",
+
+                telefono:
+                    cliente
+                        ? String(
+                            cliente.telefono || ""
+                        ).trim()
+                        : "",
+
+                instagram:
+                    cliente
+                        ? String(
+                            cliente.instagram || ""
+                        ).trim()
+                        : "",
+
+                canal_venta:
+                    String(
+                        formData.get(
+                            "canal_venta"
+                        ) || ""
+                    ).trim(),
+
+                modelo_id:
+                    Number(
+                        modeloId
+                    ),
+
+                codigo:
+                    String(
+                        formData.get(
+                            "codigo"
+                        ) || ""
+                    ).trim(),
+
+                modelo:
+                    String(
+                        formData.get(
+                            "modelo"
+                        ) || ""
+                    ).trim(),
+
+                material:
+                    String(
+                        formData.get(
+                            "material"
+                        ) || ""
+                    ).trim(),
+
+                color_cuero:
+                    String(
+                        formData.get(
+                            "color_cuero"
+                        ) || ""
+                    ).trim(),
+
+                color_hilo:
+                    String(
+                        formData.get(
+                            "color_hilo"
+                        ) || ""
+                    ).trim(),
+
+                talle:
+                    String(
+                        formData.get(
+                            "talle"
+                        ) || ""
+                    ).trim(),
+
+                a_medida:
+                    formulario.querySelector(
+                        "#pedido-a-medida"
+                    ).checked,
+
+                cuello:
+                    formData.get(
+                        "cuello"
+                    ) === ""
+                        ? ""
+                        : Number(
+                            formData.get(
+                                "cuello"
+                            )
+                        ),
+
+                busto:
+                    formData.get(
+                        "busto"
+                    ) === ""
+                        ? ""
+                        : Number(
+                            formData.get(
+                                "busto"
+                            )
+                        ),
+
+                cintura:
+                    formData.get(
+                        "cintura"
+                    ) === ""
+                        ? ""
+                        : Number(
+                            formData.get(
+                                "cintura"
+                            )
+                        ),
+
+                alto:
+                    formData.get(
+                        "alto"
+                    ) === ""
+                        ? ""
+                        : Number(
+                            formData.get(
+                                "alto"
+                            )
+                        ),
+
+                precio:
+                    precioValor,
+
+                sena:
+                    senaValor,
+
+                saldo:
+                    precioValor -
+                    senaValor,
+
+                metodo_pago:
+                    String(
+                        formData.get(
+                            "metodo_pago"
+                        ) || ""
+                    ).trim(),
+
+                tipo_entrega:
+                    String(
+                        formData.get(
+                            "tipo_entrega"
+                        ) || ""
+                    ).trim(),
+
+                estado:
+                    String(
+                        formData.get(
+                            "estado"
+                        ) || ""
+                    ).trim(),
+
+                fecha_entrega:
+                    String(
+                        formData.get(
+                            "fecha_entrega"
+                        ) || ""
+                    ).trim(),
+
+                observaciones:
+                    String(
+                        formData.get(
+                            "observaciones"
+                        ) || ""
+                    ).trim()
+
+            };
+
+
+            boton.disabled =
+                true;
+
+            boton.textContent =
+                "CREANDO...";
+
+
+            mensaje.textContent =
+                "Guardando pedido...";
+
+            mensaje.className =
+                "pedido-nuevo-mensaje";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "insert",
+
+                                    resource:
+                                        "pedidos",
+
+                                    data:
+                                        data
+
+                                })
+
+                        }
+                    );
+
+
+                const resultado =
+                    await response.json();
+
+
+                if (!resultado.success) {
+
+                    throw new Error(
+                        resultado.error ||
+                        "No se pudo crear el pedido."
+                    );
+
+                }
+
+
+                mensaje.textContent =
+                    "Pedido creado correctamente.";
+
+                mensaje.className =
+                    "pedido-nuevo-mensaje exito";
+
+
+                setTimeout(
+                    async function() {
+
+                        modal.remove();
+
+
+                        try {
+
+                            await iniciarPedidos();
+
+                        } catch (error) {
+
+                            console.error(
+                                "Error actualizando pedidos:",
+                                error
+                            );
+
+                        }
+
+                    },
+                    700
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error creando pedido:",
+                    error
+                );
+
+
+                mensaje.textContent =
+                    "No se pudo crear el pedido.";
+
+                mensaje.className =
+                    "pedido-nuevo-mensaje error";
+
+
+                boton.disabled =
+                    false;
+
+                boton.textContent =
+                    "CREAR PEDIDO";
+
+
+                alert(
+                    "No se pudo crear el pedido.\n\n" +
+                    error.message
+                );
+
+            }
 
         }
     );
