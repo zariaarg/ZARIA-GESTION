@@ -5046,133 +5046,66 @@ function mostrarResumenDashboard(
    ESTADOS DE PEDIDOS
    ========================================================= */
 
-function mostrarEstadosDashboard(
-    pedidos
-) {
-
-    const container =
-        document.getElementById(
-            "dashboard-estados"
-        );
-
+function mostrarEstadosDashboard(pedidos) {
+    const container = document.getElementById("dashboard-estados");
 
     if (!container) {
-
         return;
-
     }
 
-
     if (!pedidos.length) {
-
         container.innerHTML = `
             <div class="dashboard-cargando">
                 Todavía no hay pedidos registrados.
             </div>
         `;
-
         return;
-
     }
-
 
     const estados = {};
 
+    pedidos.forEach(pedido => {
+        const estado = String(
+            pedido.estado || "SIN ESTADO"
+        ).trim().toUpperCase();
 
-    pedidos.forEach(
-        pedido => {
+        estados[estado] = (estados[estado] || 0) + 1;
+    });
 
-            const estado =
-                String(
-                    pedido.estado ||
-                    "SIN ESTADO"
-                )
-                .trim()
-                .toUpperCase();
+    const estadosOrdenados = Object.entries(estados)
+        .sort((a, b) => b[1] - a[1]);
 
+    const totalPedidos = pedidos.length;
 
-            estados[estado] =
-                (
-                    estados[estado] ||
-                    0
-                ) + 1;
+    container.innerHTML = estadosOrdenados
+        .map(([estado, cantidad]) => {
+            const porcentaje = totalPedidos > 0
+                ? (cantidad / totalPedidos) * 100
+                : 0;
 
-        }
-    );
+            return `
+                <div class="dashboard-estado">
+                    <span class="dashboard-estado-nombre">
+                        ${escaparHTML(
+                            formatearEstado(estado)
+                        )}
+                    </span>
 
+                    <div class="dashboard-estado-barra">
+                        <div
+                            class="dashboard-estado-progreso"
+                            style="width: ${porcentaje}%"
+                        ></div>
+                    </div>
 
-    const estadosOrdenados =
-        Object.entries(
-            estados
-        )
-        .sort(
-            (
-                a,
-                b
-            ) =>
-                b[1] - a[1]
-        );
-
-
-    const maximo =
-        Math.max(
-            ...estadosOrdenados
-                .map(
-                    item =>
-                        item[1]
-                )
-        );
-
-
-    container.innerHTML =
-        estadosOrdenados
-            .map(
-                (
-                    [estado, cantidad]
-                ) => {
-
-                    const porcentaje =
-                        maximo > 0
-                        ? (
-                            cantidad /
-                            maximo
-                        ) * 100
-                        : 0;
-
-
-                    return `
-                        <div class="dashboard-estado">
-
-                            <span class="dashboard-estado-nombre">
-                                ${escaparHTML(
-                                    formatearEstado(
-                                        estado
-                                    )
-                                )}
-                            </span>
-
-                            <div class="dashboard-estado-barra">
-
-                                <div
-                                    class="dashboard-estado-progreso"
-                                    style="width: ${porcentaje}%"
-                                ></div>
-
-                            </div>
-
-                            <span class="dashboard-estado-cantidad">
-                                ${cantidad}
-                            </span>
-
-                        </div>
-                    `;
-
-                }
-            )
-            .join("");
-
+                    <span class="dashboard-estado-cantidad">
+                        ${cantidad}
+                    </span>
+                </div>
+            `;
+        })
+        .join("");
 }
-
 
 /* =========================================================
    FORMATEAR ESTADO
