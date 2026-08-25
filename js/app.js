@@ -5527,7 +5527,7 @@ async function mostrarNuevoPedido() {
                                 id="pedido-modelo"
                             >
                                 <option value="">
-                                    Seleccionar modelo...
+                                    Cargando modelos...
                                 </option>
                             </select>
 
@@ -5915,6 +5915,21 @@ async function mostrarNuevoPedido() {
             "#pedido-cliente"
         );
 
+    const selectModelo =
+        modal.querySelector(
+            "#pedido-modelo"
+        );
+
+    const inputCodigo =
+        modal.querySelector(
+            "#pedido-codigo"
+        );
+
+    const inputMaterial =
+        modal.querySelector(
+            "#pedido-material"
+        );
+
 
     const cerrarModal =
         () => modal.remove();
@@ -6076,6 +6091,130 @@ async function mostrarNuevoPedido() {
         selectCliente.innerHTML = `
             <option value="">
                 No se pudieron cargar los clientes
+            </option>
+        `;
+
+    }
+
+
+    /* =====================================================
+       CARGAR MODELOS
+    ===================================================== */
+
+    let modelosEmpresa = [];
+
+
+    try {
+
+        const modelos =
+            await llamarAPI(
+                "modelos",
+                empresaActual.empresa_id
+            );
+
+
+        modelosEmpresa =
+            filtrarPorEmpresa(modelos);
+
+
+        if (!modelosEmpresa.length) {
+
+            selectModelo.innerHTML = `
+                <option value="">
+                    No hay modelos registrados
+                </option>
+            `;
+
+        } else {
+
+            selectModelo.innerHTML = `
+                <option value="">
+                    Seleccionar modelo...
+                </option>
+
+                ${modelosEmpresa.map(
+                    modelo => `
+                        <option
+                            value="${escaparHTML(
+                                modelo.modelo_id
+                            )}"
+                        >
+                            ${escaparHTML(
+                                modelo.nombre || ""
+                            )}
+                        </option>
+                    `
+                ).join("")}
+
+            `;
+
+        }
+
+
+        /* =================================================
+           SELECCIONAR MODELO
+        ================================================= */
+
+        selectModelo.addEventListener(
+            "change",
+            function() {
+
+                const modeloId =
+                    this.value;
+
+
+                if (!modeloId) {
+
+                    inputCodigo.value =
+                        "";
+
+                    inputMaterial.value =
+                        "";
+
+                    return;
+
+                }
+
+
+                const modelo =
+                    modelosEmpresa.find(
+                        item =>
+                            String(
+                                item.modelo_id
+                            ) ===
+                            String(
+                                modeloId
+                            )
+                    );
+
+
+                if (!modelo) {
+                    return;
+                }
+
+
+                inputCodigo.value =
+                    modelo.codigo || "";
+
+
+                inputMaterial.value =
+                    modelo.material || "";
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando modelos para pedido:",
+            error
+        );
+
+
+        selectModelo.innerHTML = `
+            <option value="">
+                No se pudieron cargar los modelos
             </option>
         `;
 
@@ -6251,6 +6390,18 @@ async function mostrarNuevoPedido() {
                 );
 
 
+            const modelo =
+                modelosEmpresa.find(
+                    item =>
+                        String(
+                            item.modelo_id
+                        ) ===
+                        String(
+                            modeloId
+                        )
+                );
+
+
             const data = {
 
                 empresa_id:
@@ -6300,25 +6451,25 @@ async function mostrarNuevoPedido() {
                     ),
 
                 codigo:
-                    String(
-                        formData.get(
-                            "codigo"
-                        ) || ""
-                    ).trim(),
+                    modelo
+                        ? String(
+                            modelo.codigo || ""
+                        ).trim()
+                        : "",
 
                 modelo:
-                    String(
-                        formData.get(
-                            "modelo"
-                        ) || ""
-                    ).trim(),
+                    modelo
+                        ? String(
+                            modelo.nombre || ""
+                        ).trim()
+                        : "",
 
                 material:
-                    String(
-                        formData.get(
-                            "material"
-                        ) || ""
-                    ).trim(),
+                    modelo
+                        ? String(
+                            modelo.material || ""
+                        ).trim()
+                        : "",
 
                 color_cuero:
                     String(
