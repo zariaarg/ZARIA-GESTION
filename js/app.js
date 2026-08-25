@@ -6727,8 +6727,19 @@ async function guardarNuevoPedido(
             modal.remove();
 
             try {
-                await iniciarPedidos();
-                await iniciarDashboard();
+
+               try {
+                   await iniciarPedidos();
+               } catch (error) {
+                   console.error("Error actualizando pedidos:", error);
+               }
+               
+               try {
+                   await iniciarDashboard();
+               } catch (error) {
+                   console.error("Error actualizando Dashboard:", error);
+               }
+                           
             } catch (error) {
                 console.error(
                     "Error actualizando pedido y Dashboard:",
