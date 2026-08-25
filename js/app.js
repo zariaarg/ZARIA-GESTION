@@ -5571,7 +5571,7 @@ async function mostrarNuevoPedido() {
                                 type="text"
                                 name="material"
                                 id="pedido-material"
-                                readonly
+                                placeholder="Material"
                             >
 
                         </div>
@@ -5930,6 +5930,11 @@ async function mostrarNuevoPedido() {
             "#pedido-material"
         );
 
+    const inputPrecio =
+        modal.querySelector(
+            "#pedido-precio"
+        );
+
 
     const cerrarModal =
         () => modal.remove();
@@ -6171,6 +6176,11 @@ async function mostrarNuevoPedido() {
                     inputMaterial.value =
                         "";
 
+                    inputPrecio.value =
+                        "";
+
+                    actualizarSaldo();
+
                     return;
 
                 }
@@ -6193,12 +6203,37 @@ async function mostrarNuevoPedido() {
                 }
 
 
+                /*
+                 * CÓDIGO DEL MODELO
+                 */
+
                 inputCodigo.value =
                     modelo.codigo || "";
 
 
+                /*
+                 * MATERIAL BASE DEL MODELO
+                 *
+                 * Se carga como valor inicial,
+                 * pero el usuario puede modificarlo.
+                 */
+
                 inputMaterial.value =
-                    modelo.material || "";
+                    modelo.material_base || "";
+
+
+                /*
+                 * PRECIO DE VENTA DEL MODELO
+                 *
+                 * Se carga como valor inicial,
+                 * pero el usuario puede modificarlo.
+                 */
+
+                inputPrecio.value =
+                    modelo.precio_venta || "";
+
+
+                actualizarSaldo();
 
             }
         );
@@ -6464,12 +6499,19 @@ async function mostrarNuevoPedido() {
                         ).trim()
                         : "",
 
+                /*
+                 * IMPORTANTE:
+                 * Guardamos el MATERIAL que quedó
+                 * en el pedido, no necesariamente
+                 * el material_base del modelo.
+                 */
+
                 material:
-                    modelo
-                        ? String(
-                            modelo.material || ""
-                        ).trim()
-                        : "",
+                    String(
+                        formData.get(
+                            "material"
+                        ) || ""
+                    ).trim(),
 
                 color_cuero:
                     String(
@@ -6540,6 +6582,11 @@ async function mostrarNuevoPedido() {
                                 "alto"
                             )
                         ),
+
+                /*
+                 * El precio guardado es el que quedó
+                 * finalmente en el pedido.
+                 */
 
                 precio:
                     precioValor,
