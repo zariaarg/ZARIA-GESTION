@@ -5194,7 +5194,6 @@ function configurarDashboard() {
    ========================================================= */
 
 async function mostrarNuevoPedido() {
-
     if (!empresaActual) {
         alert("No hay una empresa seleccionada.");
         return;
@@ -5207,24 +5206,11 @@ async function mostrarNuevoPedido() {
 
     modal.innerHTML = `
         <div class="pedido-nuevo-overlay"></div>
-
         <div class="pedido-nuevo-contenido">
-
-            <button
-                type="button"
-                class="pedido-nuevo-cerrar"
-            >
-                ×
-            </button>
-
+            <button type="button" class="pedido-nuevo-cerrar">×</button>
             <div class="pedido-nuevo-header">
-
                 <span>NUEVO PEDIDO</span>
-
-                <h2>
-                    Registrar pedido
-                </h2>
-
+                <h2>Registrar pedido</h2>
                 <p>
                     Empresa:
                     <strong>
@@ -5235,1303 +5221,552 @@ async function mostrarNuevoPedido() {
                         )}
                     </strong>
                 </p>
-
             </div>
-
             <form id="form-nuevo-pedido">
-
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        CLIENTE
-                    </div>
-
+                    <div class="pedido-seccion-titulo">CLIENTE</div>
                     <div class="pedido-campo">
-
-                        <label>
-                            CLIENTE
-                        </label>
-
-                        <select
-                            name="cliente_id"
-                            id="pedido-cliente"
-                        >
-                            <option value="">
-                                Cargando clientes...
-                            </option>
+                        <label>CLIENTE</label>
+                        <select name="cliente_id" id="pedido-cliente">
+                            <option value="">Cargando clientes...</option>
                         </select>
-
                     </div>
-
                     <div class="pedido-campo">
-
-                        <label>
-                            CANAL DE VENTA
-                        </label>
-
+                        <label>CANAL DE VENTA</label>
                         <select name="canal_venta">
-
-                            <option value="">
-                                Seleccionar canal...
-                            </option>
-
+                            <option value="">Seleccionar canal...</option>
                         </select>
-
                     </div>
-
                 </div>
 
-
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        PRODUCTO
-                    </div>
-
+                    <div class="pedido-seccion-titulo">PRODUCTO</div>
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
-
-                            <label>
-                                MODELO
-                            </label>
-
-                            <select
-                                name="modelo_id"
-                                id="pedido-modelo"
-                            >
-                                <option value="">
-                                    Cargando modelos...
-                                </option>
+                            <label>MODELO</label>
+                            <select name="modelo_id" id="pedido-modelo">
+                                <option value="">Cargando modelos...</option>
                             </select>
-
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                CÓDIGO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="codigo"
-                                id="pedido-codigo"
-                                readonly
-                            >
-
+                            <label>CÓDIGO</label>
+                            <input type="text" name="codigo" id="pedido-codigo" readonly>
                         </div>
-
                     </div>
-
                 </div>
 
-
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        PERSONALIZACIÓN
-                    </div>
-
+                    <div class="pedido-seccion-titulo">PERSONALIZACIÓN</div>
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
-
-                            <label>
-                                MATERIAL
-                            </label>
-
-                            <input
-                                type="text"
-                                name="material"
-                                id="pedido-material"
-                                placeholder="Material"
-                            >
-
+                            <label>MATERIAL</label>
+                            <input type="text" name="material" id="pedido-material" placeholder="Material">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                COLOR CUERO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="color_cuero"
-                                id="pedido-color-cuero"
-                                placeholder="Color elegido"
-                            >
-
+                            <label>COLOR CUERO</label>
+                            <input type="text" name="color_cuero" id="pedido-color-cuero" placeholder="Color elegido">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                COLOR HILO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="color_hilo"
-                                id="pedido-color-hilo"
-                                placeholder="Color elegido"
-                            >
-
+                            <label>COLOR HILO</label>
+                            <input type="text" name="color_hilo" id="pedido-color-hilo" placeholder="Color elegido">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                TALLE
-                            </label>
-
-                            <input
-                                type="text"
-                                name="talle"
-                                id="pedido-talle"
-                                placeholder="Talle"
-                            >
-
+                            <label>TALLE</label>
+                            <input type="text" name="talle" id="pedido-talle" placeholder="Talle">
                         </div>
-
                     </div>
-
 
                     <div class="pedido-a-medida">
-
                         <label>
-
-                            <input
-                                type="checkbox"
-                                name="a_medida"
-                                id="pedido-a-medida"
-                            >
-
+                            <input type="checkbox" name="a_medida" id="pedido-a-medida">
                             A medida
-
                         </label>
-
                     </div>
 
-
-                    <div
-                        class="pedido-medidas"
-                        id="pedido-medidas"
-                    >
-
+                    <div class="pedido-medidas" id="pedido-medidas">
                         <div class="pedido-campo">
-
-                            <label>
-                                CUELLO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="cuello"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
+                            <label>CUELLO</label>
+                            <input type="number" name="cuello" min="0" step="0.1" placeholder="cm">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                BUSTO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="busto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
+                            <label>BUSTO</label>
+                            <input type="number" name="busto" min="0" step="0.1" placeholder="cm">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                CINTURA
-                            </label>
-
-                            <input
-                                type="number"
-                                name="cintura"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
+                            <label>CINTURA</label>
+                            <input type="number" name="cintura" min="0" step="0.1" placeholder="cm">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                ALTO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="alto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
+                            <label>ALTO</label>
+                            <input type="number" name="alto" min="0" step="0.1" placeholder="cm">
                         </div>
-
                     </div>
-
                 </div>
 
-
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        VENTA
-                    </div>
-
+                    <div class="pedido-seccion-titulo">VENTA</div>
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
-
-                            <label>
-                                PRECIO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="precio"
-                                id="pedido-precio"
-                                min="0"
-                                step="0.01"
-                            >
-
+                            <label>PRECIO</label>
+                            <input type="number" name="precio" id="pedido-precio" min="0" step="0.01">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                SEÑA
-                            </label>
-
-                            <input
-                                type="number"
-                                name="sena"
-                                id="pedido-sena"
-                                min="0"
-                                step="0.01"
-                            >
-
+                            <label>SEÑA</label>
+                            <input type="number" name="sena" id="pedido-sena" min="0" step="0.01">
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                SALDO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="saldo"
-                                id="pedido-saldo"
-                                readonly
-                            >
-
+                            <label>SALDO</label>
+                            <input type="number" name="saldo" id="pedido-saldo" readonly>
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                MÉTODO DE PAGO
-                            </label>
-
+                            <label>MÉTODO DE PAGO</label>
                             <select name="metodo_pago">
-
-                                <option value="">
-                                    Seleccionar...
-                                </option>
-
+                                <option value="">Seleccionar...</option>
                             </select>
-
                         </div>
-
                     </div>
-
                 </div>
 
-
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        ENTREGA Y ESTADO
-                    </div>
-
+                    <div class="pedido-seccion-titulo">ENTREGA Y ESTADO</div>
                     <div class="pedido-grid">
-
                         <div class="pedido-campo">
-
-                            <label>
-                                TIPO DE ENTREGA
-                            </label>
-
+                            <label>TIPO DE ENTREGA</label>
                             <select name="tipo_entrega">
-
-                                <option value="">
-                                    Seleccionar...
-                                </option>
-
+                                <option value="">Seleccionar...</option>
                             </select>
-
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                ESTADO
-                            </label>
-
+                            <label>ESTADO</label>
                             <select name="estado">
-
-                                <option value="">
-                                    Seleccionar...
-                                </option>
-
+                                <option value="">Seleccionar...</option>
                             </select>
-
                         </div>
-
                         <div class="pedido-campo">
-
-                            <label>
-                                FECHA DE ENTREGA
-                            </label>
-
-                            <input
-                                type="date"
-                                name="fecha_entrega"
-                            >
-
+                            <label>FECHA DE ENTREGA</label>
+                            <input type="date" name="fecha_entrega">
                         </div>
-
                     </div>
-
                 </div>
-
 
                 <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        OBSERVACIONES
-                    </div>
-
+                    <div class="pedido-seccion-titulo">OBSERVACIONES</div>
                     <div class="pedido-campo">
-
-                        <textarea
-                            name="observaciones"
-                            rows="4"
-                            placeholder="Notas del pedido..."
-                        ></textarea>
-
+                        <textarea name="observaciones" rows="4" placeholder="Notas del pedido..."></textarea>
                     </div>
-
                 </div>
 
-
-                <div
-                    class="pedido-nuevo-mensaje"
-                    id="nuevo-pedido-mensaje"
-                ></div>
-
+                <div class="pedido-nuevo-mensaje" id="nuevo-pedido-mensaje"></div>
 
                 <div class="pedido-nuevo-botones">
-
-                    <button
-                        type="button"
-                        class="btn-cancelar-pedido"
-                    >
-                        CANCELAR
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="btn-guardar-pedido"
-                    >
-                        CREAR PEDIDO
-                    </button>
-
+                    <button type="button" class="btn-cancelar-pedido">CANCELAR</button>
+                    <button type="submit" class="btn-guardar-pedido">CREAR PEDIDO</button>
                 </div>
-
             </form>
-
         </div>
     `;
 
-
     document.body.appendChild(modal);
-
     agregarEstilosNuevoPedido();
-
     cargarConfiguracionPedido(modal);
 
+    const formulario = modal.querySelector("#form-nuevo-pedido");
+    const selectCliente = modal.querySelector("#pedido-cliente");
+    const selectModelo = modal.querySelector("#pedido-modelo");
+    const inputCodigo = modal.querySelector("#pedido-codigo");
+    const inputMaterial = modal.querySelector("#pedido-material");
+    const inputPrecio = modal.querySelector("#pedido-precio");
 
-    const formulario =
-        modal.querySelector(
-            "#form-nuevo-pedido"
-        );
+    const cerrarModal = () => modal.remove();
 
-    const selectCliente =
-        modal.querySelector(
-            "#pedido-cliente"
-        );
-
-    const selectModelo =
-        modal.querySelector(
-            "#pedido-modelo"
-        );
-
-    const inputCodigo =
-        modal.querySelector(
-            "#pedido-codigo"
-        );
-
-    const inputMaterial =
-        modal.querySelector(
-            "#pedido-material"
-        );
-
-    const inputPrecio =
-        modal.querySelector(
-            "#pedido-precio"
-        );
-
-
-    const cerrarModal =
-        () => modal.remove();
-
-
-    modal
-        .querySelector(
-            ".pedido-nuevo-cerrar"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
-
-    modal
-        .querySelector(
-            ".pedido-nuevo-overlay"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
-
-    modal
-        .querySelector(
-            ".btn-cancelar-pedido"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
+    modal.querySelector(".pedido-nuevo-cerrar").addEventListener("click", cerrarModal);
+    modal.querySelector(".pedido-nuevo-overlay").addEventListener("click", cerrarModal);
+    modal.querySelector(".btn-cancelar-pedido").addEventListener("click", cerrarModal);
 
     /* =====================================================
        CARGAR CLIENTES
-    ===================================================== */
+       ===================================================== */
 
     let clientesEmpresa = [];
 
-
     try {
+        const clientes = await llamarAPI(
+            "clientes",
+            empresaActual.empresa_id
+        );
 
-        const clientes =
-            await llamarAPI(
-                "clientes",
-                empresaActual.empresa_id
-            );
-
-
-        clientesEmpresa =
-            filtrarPorEmpresa(clientes);
-
+        clientesEmpresa = filtrarPorEmpresa(clientes);
 
         if (!clientesEmpresa.length) {
-
             selectCliente.innerHTML = `
-                <option value="">
-                    No hay clientes registrados
-                </option>
+                <option value="">No hay clientes registrados</option>
             `;
-
         } else {
-
             selectCliente.innerHTML = `
-                <option value="">
-                    Seleccionar cliente...
-                </option>
-
+                <option value="">Seleccionar cliente...</option>
                 ${clientesEmpresa.map(
                     cliente => `
-                        <option
-                            value="${escaparHTML(
-                                cliente.cliente_id
-                            )}"
-                        >
+                        <option value="${escaparHTML(cliente.cliente_id)}">
                             ${escaparHTML(
                                 `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
                             )}
                         </option>
                     `
                 ).join("")}
-
             `;
-
         }
 
+        selectCliente.addEventListener("change", function() {
+            const clienteId = this.value;
 
-        /* =================================================
-           SELECCIONAR CLIENTE
-        ================================================= */
-
-        selectCliente.addEventListener(
-            "change",
-            function() {
-
-                const clienteId =
-                    this.value;
-
-
-                if (!clienteId) {
-                    return;
-                }
-
-
-                const cliente =
-                    clientesEmpresa.find(
-                        item =>
-                            String(
-                                item.cliente_id
-                            ) ===
-                            String(
-                                clienteId
-                            )
-                    );
-
-
-                if (!cliente) {
-                    return;
-                }
-
-
-                formulario.elements[
-                    "cuello"
-                ].value =
-                    cliente.medidas_cuello || "";
-
-
-                formulario.elements[
-                    "busto"
-                ].value =
-                    cliente.medidas_busto || "";
-
-
-                formulario.elements[
-                    "cintura"
-                ].value =
-                    cliente.medidas_cintura || "";
-
-
-                formulario.elements[
-                    "alto"
-                ].value =
-                    cliente.medidas_alto || "";
-
+            if (!clienteId) {
+                return;
             }
-        );
 
+            const cliente = clientesEmpresa.find(
+                item =>
+                    String(item.cliente_id) ===
+                    String(clienteId)
+            );
 
+            if (!cliente) {
+                return;
+            }
+
+            formulario.elements["cuello"].value =
+                cliente.medidas_cuello || "";
+
+            formulario.elements["busto"].value =
+                cliente.medidas_busto || "";
+
+            formulario.elements["cintura"].value =
+                cliente.medidas_cintura || "";
+
+            formulario.elements["alto"].value =
+                cliente.medidas_alto || "";
+        });
     } catch (error) {
-
         console.error(
             "Error cargando clientes para pedido:",
             error
         );
 
-
         selectCliente.innerHTML = `
-            <option value="">
-                No se pudieron cargar los clientes
-            </option>
+            <option value="">No se pudieron cargar los clientes</option>
         `;
-
     }
 
+    /* =====================================================
+       SALDO AUTOMÁTICO
+       ===================================================== */
+
+    const precio = formulario.querySelector("#pedido-precio");
+    const sena = formulario.querySelector("#pedido-sena");
+    const saldo = formulario.querySelector("#pedido-saldo");
+
+    function actualizarSaldo() {
+        const precioValor = Number(precio.value || 0);
+        const senaValor = Number(sena.value || 0);
+
+        saldo.value = precioValor - senaValor;
+    }
+
+    precio.addEventListener("input", actualizarSaldo);
+    sena.addEventListener("input", actualizarSaldo);
 
     /* =====================================================
        CARGAR MODELOS
-    ===================================================== */
+       ===================================================== */
 
     let modelosEmpresa = [];
 
-
     try {
+        const modelos = await llamarAPI(
+            "modelos",
+            empresaActual.empresa_id
+        );
 
-        const modelos =
-            await llamarAPI(
-                "modelos",
-                empresaActual.empresa_id
-            );
-
-
-        modelosEmpresa =
-            filtrarPorEmpresa(modelos);
-
+        modelosEmpresa = filtrarPorEmpresa(modelos);
 
         if (!modelosEmpresa.length) {
-
             selectModelo.innerHTML = `
-                <option value="">
-                    No hay modelos registrados
-                </option>
+                <option value="">No hay modelos registrados</option>
             `;
-
         } else {
-
             selectModelo.innerHTML = `
-                <option value="">
-                    Seleccionar modelo...
-                </option>
-
+                <option value="">Seleccionar modelo...</option>
                 ${modelosEmpresa.map(
                     modelo => `
-                        <option
-                            value="${escaparHTML(
-                                modelo.modelo_id
-                            )}"
-                        >
-                            ${escaparHTML(
-                                modelo.nombre || ""
-                            )}
+                        <option value="${escaparHTML(modelo.modelo_id)}">
+                            ${escaparHTML(modelo.nombre || "")}
                         </option>
                     `
                 ).join("")}
-
             `;
-
         }
 
+        selectModelo.addEventListener("change", function() {
+            const modeloId = this.value;
 
-        /* =================================================
-           SELECCIONAR MODELO
-        ================================================= */
-
-        selectModelo.addEventListener(
-            "change",
-            function() {
-
-                const modeloId =
-                    this.value;
-
-
-                if (!modeloId) {
-
-                    inputCodigo.value =
-                        "";
-
-                    inputMaterial.value =
-                        "";
-
-                    inputPrecio.value =
-                        "";
-
-                    actualizarSaldo();
-
-                    return;
-
-                }
-
-
-                const modelo =
-                    modelosEmpresa.find(
-                        item =>
-                            String(
-                                item.modelo_id
-                            ) ===
-                            String(
-                                modeloId
-                            )
-                    );
-
-
-                if (!modelo) {
-                    return;
-                }
-
-
-                /*
-                 * CÓDIGO DEL MODELO
-                 */
-
-                inputCodigo.value =
-                    modelo.codigo || "";
-
-
-                /*
-                 * MATERIAL BASE DEL MODELO
-                 *
-                 * Se carga como valor inicial,
-                 * pero el usuario puede modificarlo.
-                 */
-
-                inputMaterial.value =
-                    modelo.material_base || "";
-
-
-                /*
-                 * PRECIO DE VENTA DEL MODELO
-                 *
-                 * Se carga como valor inicial,
-                 * pero el usuario puede modificarlo.
-                 */
-
-                inputPrecio.value =
-                    modelo.precio_venta || "";
-
-
+            if (!modeloId) {
+                inputCodigo.value = "";
+                inputMaterial.value = "";
+                inputPrecio.value = "";
                 actualizarSaldo();
-
+                return;
             }
-        );
 
+            const modelo = modelosEmpresa.find(
+                item =>
+                    String(item.modelo_id) ===
+                    String(modeloId)
+            );
 
+            if (!modelo) {
+                return;
+            }
+
+            inputCodigo.value = modelo.codigo || "";
+            inputMaterial.value = modelo.material_base || "";
+            inputPrecio.value = modelo.precio_venta || "";
+
+            actualizarSaldo();
+        });
     } catch (error) {
-
         console.error(
             "Error cargando modelos para pedido:",
             error
         );
 
-
         selectModelo.innerHTML = `
-            <option value="">
-                No se pudieron cargar los modelos
-            </option>
+            <option value="">No se pudieron cargar los modelos</option>
         `;
-
     }
-
-
-    /* =====================================================
-       SALDO AUTOMÁTICO
-    ===================================================== */
-
-    const precio =
-        formulario.querySelector(
-            "#pedido-precio"
-        );
-
-    const sena =
-        formulario.querySelector(
-            "#pedido-sena"
-        );
-
-    const saldo =
-        formulario.querySelector(
-            "#pedido-saldo"
-        );
-
-
-    function actualizarSaldo() {
-
-        const precioValor =
-            Number(
-                precio.value || 0
-            );
-
-        const senaValor =
-            Number(
-                sena.value || 0
-            );
-
-
-        saldo.value =
-            precioValor -
-            senaValor;
-
-    }
-
-
-    precio.addEventListener(
-        "input",
-        actualizarSaldo
-    );
-
-    sena.addEventListener(
-        "input",
-        actualizarSaldo
-    );
-
 
     /* =====================================================
        GUARDAR PEDIDO
     ===================================================== */
 
-    formulario.addEventListener(
-        "submit",
-        async function(event) {
+    formulario.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-            event.preventDefault();
+        const boton = formulario.querySelector(".btn-guardar-pedido");
+        const mensaje = formulario.querySelector("#nuevo-pedido-mensaje");
+        const formData = new FormData(formulario);
 
+        const clienteId = formData.get("cliente_id");
+        const modeloId = formData.get("modelo_id");
 
-            const boton =
-                formulario.querySelector(
-                    ".btn-guardar-pedido"
+        if (!clienteId) {
+            alert("Seleccioná un cliente.");
+            return;
+        }
+
+        if (!modeloId) {
+            alert("Seleccioná un modelo.");
+            return;
+        }
+
+        const precioValor = Number(
+            formData.get("precio") || 0
+        );
+
+        const senaValor = Number(
+            formData.get("sena") || 0
+        );
+
+        if (precioValor < 0 || senaValor < 0) {
+            alert("El precio y la seña no pueden ser negativos.");
+            return;
+        }
+
+        if (senaValor > precioValor) {
+            alert("La seña no puede ser mayor que el precio.");
+            return;
+        }
+
+        const cliente = clientesEmpresa.find(
+            item =>
+                String(item.cliente_id) ===
+                String(clienteId)
+        );
+
+        const modelo = modelosEmpresa.find(
+            item =>
+                String(item.modelo_id) ===
+                String(modeloId)
+        );
+
+        const data = {
+            empresa_id: Number(empresaActual.empresa_id),
+            fecha:
+                new Date()
+                    .toISOString()
+                    .split("T")[0],
+            cliente_id: Number(clienteId),
+            cliente_nombre:
+                cliente
+                    ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                    : "",
+            telefono:
+                cliente
+                    ? String(cliente.telefono || "").trim()
+                    : "",
+            instagram:
+                cliente
+                    ? String(cliente.instagram || "").trim()
+                    : "",
+            canal_venta:
+                String(
+                    formData.get("canal_venta") || ""
+                ).trim(),
+            modelo_id: Number(modeloId),
+            codigo:
+                modelo
+                    ? String(modelo.codigo || "").trim()
+                    : "",
+            modelo:
+                modelo
+                    ? String(modelo.nombre || "").trim()
+                    : "",
+            material:
+                String(
+                    formData.get("material") || ""
+                ).trim(),
+            color_cuero:
+                String(
+                    formData.get("color_cuero") || ""
+                ).trim(),
+            color_hilo:
+                String(
+                    formData.get("color_hilo") || ""
+                ).trim(),
+            talle:
+                String(
+                    formData.get("talle") || ""
+                ).trim(),
+            a_medida:
+                formulario.querySelector("#pedido-a-medida").checked,
+            cuello:
+                formData.get("cuello") === ""
+                    ? ""
+                    : Number(formData.get("cuello")),
+            busto:
+                formData.get("busto") === ""
+                    ? ""
+                    : Number(formData.get("busto")),
+            cintura:
+                formData.get("cintura") === ""
+                    ? ""
+                    : Number(formData.get("cintura")),
+            alto:
+                formData.get("alto") === ""
+                    ? ""
+                    : Number(formData.get("alto")),
+            precio: precioValor,
+            sena: senaValor,
+            saldo:
+                precioValor -
+                senaValor,
+            metodo_pago:
+                String(
+                    formData.get("metodo_pago") || ""
+                ).trim(),
+            tipo_entrega:
+                String(
+                    formData.get("tipo_entrega") || ""
+                ).trim(),
+            estado:
+                String(
+                    formData.get("estado") || ""
+                ).trim(),
+            fecha_entrega:
+                String(
+                    formData.get("fecha_entrega") || ""
+                ).trim(),
+            observaciones:
+                String(
+                    formData.get("observaciones") || ""
+                ).trim()
+        };
+
+        boton.disabled = true;
+        boton.textContent = "CREANDO...";
+        mensaje.textContent = "Guardando pedido...";
+        mensaje.className = "pedido-nuevo-mensaje";
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify({
+                    action: "insert",
+                    resource: "pedidos",
+                    data
+                })
+            });
+
+            const resultado = await response.json();
+
+            if (!resultado.success) {
+                throw new Error(
+                    resultado.error ||
+                    "No se pudo crear el pedido."
                 );
-
-            const mensaje =
-                formulario.querySelector(
-                    "#nuevo-pedido-mensaje"
-                );
-
-
-            const formData =
-                new FormData(
-                    formulario
-                );
-
-
-            const clienteId =
-                formData.get(
-                    "cliente_id"
-                );
-
-
-            const modeloId =
-                formData.get(
-                    "modelo_id"
-                );
-
-
-            if (!clienteId) {
-
-                alert(
-                    "Seleccioná un cliente."
-                );
-
-                return;
-
             }
-
-
-            if (!modeloId) {
-
-                alert(
-                    "Seleccioná un modelo."
-                );
-
-                return;
-
-            }
-
-
-            const precioValor =
-                Number(
-                    formData.get(
-                        "precio"
-                    ) || 0
-                );
-
-
-            const senaValor =
-                Number(
-                    formData.get(
-                        "sena"
-                    ) || 0
-                );
-
-
-            if (
-                precioValor < 0 ||
-                senaValor < 0
-            ) {
-
-                alert(
-                    "El precio y la seña no pueden ser negativos."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                senaValor >
-                precioValor
-            ) {
-
-                alert(
-                    "La seña no puede ser mayor que el precio."
-                );
-
-                return;
-
-            }
-
-
-            const cliente =
-                clientesEmpresa.find(
-                    item =>
-                        String(
-                            item.cliente_id
-                        ) ===
-                        String(
-                            clienteId
-                        )
-                );
-
-
-            const modelo =
-                modelosEmpresa.find(
-                    item =>
-                        String(
-                            item.modelo_id
-                        ) ===
-                        String(
-                            modeloId
-                        )
-                );
-
-
-            const data = {
-
-                empresa_id:
-                    Number(
-                        empresaActual.empresa_id
-                    ),
-
-                fecha:
-                    new Date()
-                        .toISOString()
-                        .split("T")[0],
-
-                cliente_id:
-                    Number(
-                        clienteId
-                    ),
-
-                cliente_nombre:
-                    cliente
-                        ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                        : "",
-
-                telefono:
-                    cliente
-                        ? String(
-                            cliente.telefono || ""
-                        ).trim()
-                        : "",
-
-                instagram:
-                    cliente
-                        ? String(
-                            cliente.instagram || ""
-                        ).trim()
-                        : "",
-
-                canal_venta:
-                    String(
-                        formData.get(
-                            "canal_venta"
-                        ) || ""
-                    ).trim(),
-
-                modelo_id:
-                    Number(
-                        modeloId
-                    ),
-
-                codigo:
-                    modelo
-                        ? String(
-                            modelo.codigo || ""
-                        ).trim()
-                        : "",
-
-                modelo:
-                    modelo
-                        ? String(
-                            modelo.nombre || ""
-                        ).trim()
-                        : "",
-
-                /*
-                 * IMPORTANTE:
-                 * Guardamos el MATERIAL que quedó
-                 * en el pedido, no necesariamente
-                 * el material_base del modelo.
-                 */
-
-                material:
-                    String(
-                        formData.get(
-                            "material"
-                        ) || ""
-                    ).trim(),
-
-                color_cuero:
-                    String(
-                        formData.get(
-                            "color_cuero"
-                        ) || ""
-                    ).trim(),
-
-                color_hilo:
-                    String(
-                        formData.get(
-                            "color_hilo"
-                        ) || ""
-                    ).trim(),
-
-                talle:
-                    String(
-                        formData.get(
-                            "talle"
-                        ) || ""
-                    ).trim(),
-
-                a_medida:
-                    formulario.querySelector(
-                        "#pedido-a-medida"
-                    ).checked,
-
-                cuello:
-                    formData.get(
-                        "cuello"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "cuello"
-                            )
-                        ),
-
-                busto:
-                    formData.get(
-                        "busto"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "busto"
-                            )
-                        ),
-
-                cintura:
-                    formData.get(
-                        "cintura"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "cintura"
-                            )
-                        ),
-
-                alto:
-                    formData.get(
-                        "alto"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "alto"
-                            )
-                        ),
-
-                /*
-                 * El precio guardado es el que quedó
-                 * finalmente en el pedido.
-                 */
-
-                precio:
-                    precioValor,
-
-                sena:
-                    senaValor,
-
-                saldo:
-                    precioValor -
-                    senaValor,
-
-                metodo_pago:
-                    String(
-                        formData.get(
-                            "metodo_pago"
-                        ) || ""
-                    ).trim(),
-
-                tipo_entrega:
-                    String(
-                        formData.get(
-                            "tipo_entrega"
-                        ) || ""
-                    ).trim(),
-
-                estado:
-                    String(
-                        formData.get(
-                            "estado"
-                        ) || ""
-                    ).trim(),
-
-                fecha_entrega:
-                    String(
-                        formData.get(
-                            "fecha_entrega"
-                        ) || ""
-                    ).trim(),
-
-                observaciones:
-                    String(
-                        formData.get(
-                            "observaciones"
-                        ) || ""
-                    ).trim()
-
-            };
-
-
-            boton.disabled =
-                true;
-
-            boton.textContent =
-                "CREANDO...";
-
 
             mensaje.textContent =
-                "Guardando pedido...";
+                "Pedido creado correctamente.";
 
             mensaje.className =
-                "pedido-nuevo-mensaje";
+                "pedido-nuevo-mensaje exito";
 
+            setTimeout(async function() {
+                modal.remove();
 
-            try {
-
-                const response =
-                    await fetch(
-                        API_URL,
-                        {
-                            method:
-                                "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-                            },
-
-                            body:
-                                JSON.stringify({
-
-                                    action:
-                                        "insert",
-
-                                    resource:
-                                        "pedidos",
-
-                                    data:
-                                        data
-
-                                })
-
-                        }
+                try {
+                    await iniciarPedidos();
+                } catch (error) {
+                    console.error(
+                        "Error actualizando pedidos:",
+                        error
                     );
-
-
-                const resultado =
-                    await response.json();
-
-
-                if (!resultado.success) {
-
-                    throw new Error(
-                        resultado.error ||
-                        "No se pudo crear el pedido."
-                    );
-
                 }
 
+                try {
+                    await iniciarDashboard();
+                } catch (error) {
+                    console.error(
+                        "Error actualizando Dashboard:",
+                        error
+                    );
+                }
+            }, 700);
+        } catch (error) {
+            console.error(
+                "Error creando pedido:",
+                error
+            );
 
-                mensaje.textContent =
-                    "Pedido creado correctamente.";
+            mensaje.textContent =
+                "No se pudo crear el pedido.";
 
-                mensaje.className =
-                    "pedido-nuevo-mensaje exito";
+            mensaje.className =
+                "pedido-nuevo-mensaje error";
 
+            boton.disabled = false;
+            boton.textContent =
+                "CREAR PEDIDO";
 
-                setTimeout(
-                    async function() {
-
-                        modal.remove();
-
-
-                        try {
-
-                            await iniciarPedidos();
-
-                        } catch (error) {
-
-                            console.error(
-                                "Error actualizando pedidos:",
-                                error
-                            );
-
-                        }
-
-                    },
-                    700
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Error creando pedido:",
-                    error
-                );
-
-
-                mensaje.textContent =
-                    "No se pudo crear el pedido.";
-
-                mensaje.className =
-                    "pedido-nuevo-mensaje error";
-
-
-                boton.disabled =
-                    false;
-
-                boton.textContent =
-                    "CREAR PEDIDO";
-
-
-                alert(
-                    "No se pudo crear el pedido.\n\n" +
-                    error.message
-                );
-
-            }
-
+            alert(
+                "No se pudo crear el pedido.\n\n" +
+                error.message
+            );
         }
-    );
+    });
 }
 
 /* =========================================================
