@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* =========================
    ESTILOS GENERALES
 ========================= */
@@ -1381,3 +1382,1388 @@ h2 {
         gap: 15px;
     }
 }
+=======
+/* =========================
+   ESTILOS GENERALES
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5f3;
+    color: #222;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 70px;
+
+   /* Usamos un verde oliva oscuro y elegante */
+    background: #5d6657; 
+    color: #ffffff;
+   
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    gap: 12px;
+/* Agregamos una pequeña sombra para despegarlo del resto */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px; /* Un poco menos de espacio queda más moderno */
+    font-weight: 600;    /* Un poquito más de peso para que se lea mejor */
+}
+
+.header span {
+    opacity: 0.8; /* Un poco más legible que 0.7 */
+    font-weight: 300;
+}
+
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+.main {
+    padding: 40px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+
+/* =========================
+   CONTENEDOR DE MODELOS
+========================= */
+
+#modelos-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(220px, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================
+   TARJETA DE MODELO
+========================= */
+
+.modelo-card {
+    background: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+/* Sombra un poquito más suave y refinada */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+/* Añadimos una transición suave para cuando el mouse pase por encima */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Un borde muy fino con un tono neutro cálido */
+    border: 1px solid #eae5df;
+   
+}
+/* Efecto cuando pasas el mouse por la tarjeta (le da vida a la app) */
+.modelo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(196, 116, 86, 0.15); /* La sombra toma un reflejo terracota muy sutil */
+    border-color: #C47456; /* El borde se pinta del terracota de Craft Flow al seleccionarlo */
+}
+
+/* =========================
+   IMAGEN DEL MODELO
+========================= */
+
+.modelo-imagen {
+    width: 100%;
+    height: 200px;
+
+  /* Un fondo cálido muy suave en lugar de un gris frío */
+    background: #f4f0ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.modelo-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.modelo-imagen.sin-imagen {
+ /* Color de texto más cálido y elegante */
+    color: #9c8e83;
+    font-size: 13px;
+    font-style: italic;
+}
+
+
+/* =========================
+   CONTENIDO DE LA TARJETA
+========================= */
+.modelo-contenido {
+    padding: 18px;
+}
+
+
+/* =========================
+   PARTE SUPERIOR
+========================= */
+
+.modelo-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.modelo-codigo {
+  font-size: 12px;
+    color: #8c827a;
+    font-weight: 500;
+}
+
+.modelo-tipo {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    /* Usamos un fondo con el verde oliva suave y texto blanco o verde oscuro */
+    background: #e4e8e1;
+    color: #4a5345;
+}
+
+
+/* =========================
+   NOMBRE
+========================= */
+
+.modelo-nombre {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 8px 0;
+    color: #2c2622; /* Un tono más cálido que el negro puro */
+}
+
+
+/* =========================
+   MATERIAL
+========================= */
+
+.modelo-material {
+    font-size: 13px;
+    color: #7a6e65;
+    margin: 0;
+    min-height: 18px;
+}
+
+
+/* =========================
+   PRECIO
+========================= */
+
+.modelo-precio {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #C47456;
+}
+
+
+/* =========================
+   CONTROLES DE MODELOS
+========================= */
+
+#modelos-controles {
+    margin-bottom: 30px;
+}
+
+
+.modelos-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+.modelos-busqueda {
+    flex: 1;
+    min-width: 220px;
+}
+
+.modelos-busqueda input,
+.modelos-filtro select {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #d8d3cf;
+    border-radius: 8px;
+    background: white;
+    padding: 0 14px;
+    font-size: 14px;
+    outline: none;
+/* Transición suave para cuando cambie de color al hacer clic */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.modelos-busqueda input:focus,
+.modelos-filtro select:focus {
+    border-color: #C47456;
+   box-shadow: 0 0 0 3px rgba(196, 116, 86, 0.15); /* Un halo muy sutil y elegante */
+}
+
+
+.modelos-filtro {
+    width: 190px;
+}
+
+
+/* =========================
+   BOTÓN NUEVO MODELO
+========================= */
+
+.btn-nuevo-modelo {
+    height: 44px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+   /* Usamos el Terracota principal de Craft Flow */
+    background: #C47456;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+/* Transición suave y elegante para el hover */
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+
+.btn-nuevo-modelo:hover {
+    /* Un terracota un poco más oscuro al pasar el mouse */
+    background: #b06447; 
+}
+
+
+/* =========================
+   BOTONES DE TARJETA
+========================= */
+
+.modelo-botones {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+
+.modelo-botones button {
+    flex: 1;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.btn-ver {
+    /* El botón principal de la tarjeta usa el Verde Oliva Suave/Profundo */
+    background: #5d6657; 
+    color: white;
+    border: 1px solid #5d6657;
+}
+
+
+.btn-editar {
+   /* El botón secundario se queda limpio con fondo blanco y bordes cálidos */
+    background: white;
+    color: #5d6657;
+    border: 1px solid #5d6657;
+}
+
+
+.btn-ver:hover {
+    background: #4a5345;
+    border-color: #4a5345;
+    opacity: 1;
+}
+.btn-editar:hover {
+    /* Al pasar el mouse por editar, se pinta suavemente de verde oliva */
+    background: #f0f3ee;
+    opacity: 1;
+}
+
+
+/* =========================
+   SIN RESULTADOS
+========================= */
+
+.sin-resultados {
+    grid-column: 1 / -1;
+    padding: 50px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+/* Color de texto cálido acorde al diseño */
+    color: #8c827a; 
+    border: 1px dashed #d8d3cf;
+}
+
+
+/* =========================
+   MENSAJE DE ERROR
+========================= */
+
+.error {
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    /* Un tono terracota oscuro/rojizo para errores, manteniendo la paleta */
+    color: #a64d37; 
+    text-align: center;
+    border: 1px solid #f2dcd5;
+}
+
+
+/* =========================
+   RESPONSIVE - TABLET
+========================= */
+
+@media (max-width: 800px) {
+    .main {
+        padding: 25px;
+    }
+    #modelos-container {
+        grid-template-columns:
+            repeat(auto-fill, minmax(200px, 1fr));
+    }
+    .modelo-imagen {
+        height: 190px;
+    }
+}
+
+/* =========================
+   RESPONSIVE - CELULAR
+========================= */
+
+@media (max-width: 550px) {
+    .header {
+        height: 60px;
+        padding: 0 20px;
+    }
+    .header h1 {
+        font-size: 20px;
+    }
+    .main {
+        padding: 20px;
+    }
+    #modelos-container {
+        grid-template-columns: 1fr;
+    }
+    .modelo-imagen {
+        height: 220px;
+    }
+    .modelos-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .modelos-filtro {
+        width: 100%;
+    }
+    .btn-nuevo-modelo {
+        width: 100%;
+    }
+}
+
+/* =========================
+   MODAL - DETALLE MODELO
+========================= */
+.modelo-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+
+.modelo-modal-overlay {
+    position: absolute;
+    inset: 0;
+    /* Fondo oscuro con un leve tinte cálido */
+    background: rgba(44, 38, 34, 0.65);
+    backdrop-filter: blur(3px);
+}
+
+
+.modelo-modal-contenido {
+    position: relative;
+    z-index: 2;
+    width: min(1000px, 95vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #f7f5f3;
+    border-radius: 16px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3);
+   /* Borde sutil para darle definición al modal */
+    border: 1px solid #e4dfda;
+}
+
+
+/* =========================
+   BOTÓN CERRAR
+========================= */
+
+.modelo-modal-cerrar {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    z-index: 5;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    color: #1d1a1a;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.15);
+   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.modelo-modal-cerrar:hover {
+    background: #f7f5f3;
+    color: #C47456;
+}
+
+/* =========================
+   DETALLE
+========================= */
+
+.modelo-detalle {
+    display: grid;
+    grid-template-columns:
+        1fr 1fr;
+    gap: 40px;
+    padding: 40px;
+}
+
+/* =========================
+   IMÁGENES
+========================= */
+
+.modelo-detalle-imagenes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.modelo-detalle-imagen-principal,
+.modelo-detalle-imagen-secundaria {
+
+    width: 100%;
+    background: #f7f5f3;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e0dc;
+}
+
+.modelo-detalle-imagen-principal {
+    height: 420px;
+}
+
+.modelo-detalle-imagen-secundaria {
+    height: 180px;
+}
+
+.modelo-detalle-imagen-principal img,
+.modelo-detalle-imagen-secundaria img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* =========================
+   INFORMACIÓN
+========================= */
+
+.modelo-detalle-info {
+    padding: 15px 20px 20px 0;
+}
+
+.modelo-detalle-codigo {
+    display: inline-block;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.modelo-detalle-tipo {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #f1efed;
+    color: #555;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.modelo-detalle-info h2 {
+    margin: 10px 0 5px;
+    font-size: 34px;
+    letter-spacing: 1px;
+    color: #1d1a1a;
+}
+
+.modelo-detalle-material {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.modelo-detalle-precio {
+    font-size: 25px;
+    font-weight: bold;
+    color: #C47456;
+    margin-bottom: 30px;
+}
+
+/* =========================
+   SECCIONES
+========================= */
+
+.modelo-detalle-seccion {
+    border-top: 1px solid #ddd7d2;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.modelo-detalle-seccion h3 {
+    margin: 0 0 10px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #555;
+}
+
+.modelo-detalle-seccion p {
+
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+}
+
+.modelo-medidas {
+    line-height: 1.9 !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 750px) {
+    .modelo-modal {
+        padding: 15px;
+    }
+    .modelo-modal-contenido {
+        max-height: 95vh;
+    }
+    .modelo-detalle {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 25px;
+    }
+
+
+    .modelo-detalle-imagen-principal {
+
+        height: 320px;
+    }
+    .modelo-detalle-imagen-secundaria {
+        height: 180px;
+    }
+    .modelo-detalle-info {
+        padding: 0;
+    }
+    .modelo-detalle-info h2 {
+        font-size: 28px;
+    }
+}
+/* =========================
+   MATERIALES DEL MODELO
+========================= */
+
+.modelo-materiales {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e0dc;
+}
+
+.modelo-materiales h3 {
+    margin: 0 0 18px 0;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.material-modelo-item {
+    background: #f7f5f3;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+}
+
+.material-modelo-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.material-modelo-info strong {
+    font-size: 14px;
+}
+
+.material-modelo-info span {
+    font-size: 13px;
+    color: #666;
+}
+
+.materiales-cargando,
+.materiales-vacio,
+.materiales-error {
+    padding: 15px;
+    background: #f7f5f3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #777;
+}
+
+.btn-agregar-material {
+    margin-top: 12px;
+    padding: 10px 15px;
+    border: 1px solid #C47456;
+    border-radius: 7px;
+    background: white;
+    color: #C47456;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-agregar-material:hover {
+    background: #C47456;
+    color: white;
+}
+
+/* =========================
+   MODAL MATERIAL
+========================= */
+
+.material-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.material-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.material-modal-contenido {
+    position: relative;
+    z-index: 1;
+    width: min(420px, calc(100% - 30px));
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.material-modal-contenido h2 {
+    margin: 0 0 25px 0;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.material-modal-cerrar {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    font-size: 26px;
+    cursor: pointer;
+    color: #1d1a1a;
+}
+
+.material-modal-cerrar:hover {
+    color: #C47456;
+}
+
+.material-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.material-form label {
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #555;
+}
+
+.material-form select,
+.material-form input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d8d3cf;
+    border-radius: 7px;
+    background: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.material-form input:focus,
+.material-form select:focus {
+    border-color: #C47456;
+}
+
+.material-form input[readonly] {
+    background: #f7f5f3;
+}
+
+.material-form-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.material-btn-cancelar,
+.material-btn-guardar {
+    flex: 1;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+}
+
+.material-btn-cancelar {
+    background: white;
+    color: #1d1a1a;
+    border: 1px solid #d8d3cf;
+}
+
+.material-btn-guardar {
+    background: #C47456;
+    color: white;
+    border: 1px solid #C47456;
+}
+
+.material-btn-cancelar:hover {
+    border-color: #1d1a1a;
+}
+
+.material-btn-guardar:hover {
+    opacity: 0.9;
+}
+
+.material-btn-guardar:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+/* =========================
+   SELECTOR DE EMPRESA
+========================= */
+
+.empresa-selector {
+    margin-left: auto;
+}
+.empresa-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.empresa-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: white;
+    padding: 4px;
+}
+.empresa-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.empresa-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    opacity: 0.55;
+}
+
+#empresa-select {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    padding: 2px 22px 2px 0;
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            white 50%
+        ),
+        linear-gradient(
+            135deg,
+            white 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 8px) 50%,
+        calc(100% - 3px) 50%;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+}
+
+#empresa-select option {
+    color: #222;
+    background: white;
+}
+
+/* =========================================================
+   CRAFT FLOW — DASHBOARD
+   ========================================================= */
+
+/* =========================
+   HEADER
+========================= */
+
+.header-marca {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+/* =========================
+   VISTA GENERAL
+========================= */
+.dashboard-view {
+    width: 100%;
+}
+.dashboard-encabezado {
+    margin-bottom: 30px;
+}
+
+.dashboard-saludo {
+    margin: 0 0 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #888;
+}
+
+.dashboard-encabezado h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.dashboard-descripcion {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 14px;
+}
+
+/* =========================
+   ACCIONES PRINCIPALES
+========================= */
+
+.dashboard-acciones {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-accion {
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border:
+        1px solid #ddd8d4;
+    border-radius: 12px;
+    background: white;
+    color: #1d1a1a;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.dashboard-accion:hover {
+    transform: translateY(-2px);
+    border-color: #C47456;
+    box-shadow: 0 8px 25px rgba(196, 116, 86, .12);
+}
+
+.dashboard-accion-principal {
+    background: #C47456;
+    color: white;
+    border-color: #C47456;
+}
+
+.dashboard-accion-principal:hover {
+    background: #b26549;
+    border-color: #b26549;
+}
+
+.dashboard-accion-icono {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:
+        1px solid currentColor;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.dashboard-accion strong {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .4px;
+}
+
+.dashboard-accion small {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    opacity: .75;
+}
+
+/* =========================
+   TARJETAS RESUMEN
+========================= */
+
+.dashboard-resumen {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-card {
+    background: white;
+    border:
+        1px solid #ddd8d4;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.dashboard-card-destacada {
+    background: #f7f5f3;
+    border-color: #e5e0dc;
+}
+
+.dashboard-card-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.6px;
+    color: #888;
+}
+
+.dashboard-card-numero {
+    margin-top: 10px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.dashboard-card-dinero {
+    font-size: 25px;
+    color: #C47456;
+}
+
+.dashboard-card-detalle {
+    margin-top: 9px;
+    font-size: 11px;
+    color: #888;
+}
+
+/* =========================
+   GRID DE PANELES
+========================= */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns:
+        1.5fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-panel {
+    background: white;
+    border:
+        1px solid #ddd8d4;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.dashboard-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.dashboard-panel-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.6px;
+    color: #888;
+}
+
+.dashboard-panel h3 {
+    margin: 6px 0 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+
+.dashboard-panel-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:
+        1px solid #ddd8d4;
+    border-radius: 50%;
+    color: #C47456;
+    font-size: 15px;
+}
+
+/* =========================
+   ESTADOS DE PEDIDOS
+========================= */
+.dashboard-estados {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dashboard-estado {
+    display: grid;
+    grid-template-columns:
+        120px 1fr 35px;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-estado-nombre {
+    font-size: 12px;
+    color: #555;
+}
+
+.dashboard-estado-barra {
+    height: 7px;
+    overflow: hidden;
+    background: #ebe8e5;
+    border-radius: 20px;
+}
+
+.dashboard-estado-progreso {
+    height: 100%;
+    background: #C47456;
+    border-radius: 20px;
+    transition:
+        width .4s ease;
+}
+
+.dashboard-estado-cantidad {
+    text-align: right;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1d1a1a;
+}
+
+.dashboard-cargando {
+    padding: 15px 0;
+    font-size: 12px;
+    color: #999;
+}
+
+/* =========================
+   FINANZAS DEL DASHBOARD
+========================= */
+
+.dashboard-finanza {
+    padding: 15px 0 25px;
+    border-bottom:
+        1px solid #eee;
+}
+
+.dashboard-finanza-label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+}
+
+.dashboard-finanza-valor {
+    display: block;
+    margin-top: 8px;
+    font-size: 30px;
+    color: #C47456;
+    font-weight: 600;
+}
+
+.dashboard-finanza-linea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 18px;
+    font-size: 12px;
+    color: #777;
+}
+
+.dashboard-finanza-linea strong {
+    color: #1d1a1a;
+}
+
+/* =========================
+   ACCESOS
+========================= */
+
+.dashboard-accesos {
+    margin-bottom: 30px;
+}
+
+.dashboard-accesos-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 10px;
+}
+
+.dashboard-accesos-grid button {
+    min-height: 85px;
+    padding: 16px;
+    background: #f8f7f6;
+    border:
+        1px solid #e1ddda;
+    border-radius: 9px;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.dashboard-accesos-grid button:hover {
+    background: white;
+    border-color: #C47456;
+}
+
+.dashboard-accesos-grid span {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #1d1a1a;
+}
+
+.dashboard-accesos-grid small {
+    display: block;
+    margin-top: 8px;
+    font-size: 10px;
+    color: #888;
+}
+
+/* =========================
+   VISTAS DE MÓDULOS
+========================= */
+.modulo-view {
+    width: 100%;
+}
+
+.modulo-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.modulo-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.modulo-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.btn-volver-dashboard {
+    height: 40px;
+    padding: 0 15px;
+    background: white;
+    border: 1px solid #d8d3cf;
+    border-radius: 8px;
+    color: #1d1a1a;
+    font-size: 12px;
+    cursor: pointer;
+   transition: border-color .2s ease, color .2s ease;
+}
+
+.btn-volver-dashboard:hover {
+    border-color: #C47456;
+    color: #C47456;
+}
+
+/* =========================
+   RESPONSIVE TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-acciones {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-resumen {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .dashboard-accesos-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+/* =========================
+   RESPONSIVE CELULAR
+========================= */
+
+@media (max-width: 550px) {
+    .header-marca {
+        display: block;
+    }
+
+    .header-marca span {
+        display: none;
+    }
+    .dashboard-acciones {
+        grid-template-columns:
+            1fr;
+    }
+    .dashboard-resumen {
+        grid-template-columns:
+            1fr 1fr;
+    }
+    .dashboard-card {
+        padding: 17px;
+    }
+    .dashboard-card-numero {
+        font-size: 25px;
+    }
+    .dashboard-card-dinero {
+        font-size: 19px;
+    }
+    .dashboard-panel {
+        padding: 18px;
+    }
+    .dashboard-estado {
+        grid-template-columns:
+            90px 1fr 25px;
+    }
+    .dashboard-accesos-grid {
+        grid-template-columns:
+            1fr;
+    }
+    .modulo-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+>>>>>>> bd4a4b005de93e652ffaba4b8f967a1481e54e50
