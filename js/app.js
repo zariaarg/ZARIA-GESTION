@@ -5695,6 +5695,325 @@ async function mostrarNuevoPedido() {
 }
 
 /* =========================================================
+   GUARDAR NUEVO PEDIDO
+   ========================================================= */
+
+async function guardarNuevoPedido(
+    formulario,
+    modal,
+    clientesEmpresa,
+    modelosEmpresa
+) {
+    const boton =
+        formulario.querySelector(
+            ".btn-guardar-pedido"
+        );
+
+    const mensaje =
+        formulario.querySelector(
+            "#nuevo-pedido-mensaje"
+        );
+
+    const formData =
+        new FormData(formulario);
+
+    const clienteId =
+        String(
+            formData.get("cliente_id") || ""
+        ).trim();
+
+    const modeloId =
+        String(
+            formData.get("modelo_id") || ""
+        ).trim();
+
+    if (!clienteId) {
+        alert("Seleccioná un cliente.");
+        return;
+    }
+
+    if (!modeloId) {
+        alert("Seleccioná un modelo.");
+        return;
+    }
+
+    if (!empresaActual) {
+        alert("No hay una empresa seleccionada.");
+        return;
+    }
+
+    const cliente =
+        clientesEmpresa.find(
+            item =>
+                String(item.cliente_id) ===
+                String(clienteId)
+        );
+
+    if (!cliente) {
+        alert("No se encontró el cliente seleccionado.");
+        return;
+    }
+
+    const modelo =
+        modelosEmpresa.find(
+            item =>
+                String(item.modelo_id) ===
+                String(modeloId)
+        );
+
+    if (!modelo) {
+        alert("No se encontró el modelo seleccionado.");
+        return;
+    }
+
+    const precio =
+        Number(
+            formData.get("precio") || 0
+        );
+
+    const sena =
+        Number(
+            formData.get("sena") || 0
+        );
+
+    const saldo =
+        precio - sena;
+
+    if (precio < 0) {
+        alert("El precio no puede ser negativo.");
+        return;
+    }
+
+    if (sena < 0) {
+        alert("La seña no puede ser negativa.");
+        return;
+    }
+
+    if (sena > precio) {
+        alert("La seña no puede ser mayor que el precio.");
+        return;
+    }
+
+    const convertirMedida =
+        nombreCampo => {
+            const valor =
+                formData.get(nombreCampo);
+
+            return valor === ""
+                ? ""
+                : Number(valor);
+        };
+
+    const data = {
+
+        empresa_id:
+            Number(
+                empresaActual.empresa_id
+            ),
+
+        fecha:
+            formData.get("fecha") ||
+            new Date().toISOString().split("T")[0],
+
+        cliente_id:
+            Number(cliente.cliente_id),
+
+        cliente_nombre:
+            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim(),
+
+        telefono:
+            String(
+                cliente.telefono || ""
+            ).trim(),
+
+        instagram:
+            String(
+                cliente.instagram || ""
+            ).trim(),
+
+        canal_venta:
+            String(
+                formData.get("canal_venta") || ""
+            ).trim(),
+
+        modelo_id:
+            Number(modelo.modelo_id),
+
+        modelo:
+            String(
+                modelo.nombre || ""
+            ).trim(),
+
+        codigo:
+            String(
+                modelo.codigo || ""
+            ).trim(),
+
+        material:
+            String(
+                formData.get("material") ||
+                modelo.material ||
+                ""
+            ).trim(),
+
+        color_cuero:
+            String(
+                formData.get("color_cuero") || ""
+            ).trim(),
+
+        color_hilo:
+            String(
+                formData.get("color_hilo") || ""
+            ).trim(),
+
+        talle:
+            String(
+                formData.get("talle") || ""
+            ).trim(),
+
+        a_medida:
+            formulario.elements["a_medida"] &&
+            formulario.elements["a_medida"].checked
+                ? true
+                : false,
+
+        cuello:
+            convertirMedida("cuello"),
+
+        busto:
+            convertirMedida("busto"),
+
+        cintura:
+            convertirMedida("cintura"),
+
+        alto:
+            convertirMedida("alto"),
+
+        precio:
+            precio,
+
+        sena:
+            sena,
+
+        saldo:
+            saldo,
+
+        metodo_pago:
+            String(
+                formData.get("metodo_pago") || ""
+            ).trim(),
+
+        tipo_entrega:
+            String(
+                formData.get("tipo_entrega") || ""
+            ).trim(),
+
+        estado:
+            String(
+                formData.get("estado") || ""
+            ).trim(),
+
+        fecha_entrega:
+            formData.get("fecha_entrega") || "",
+
+        observaciones:
+            String(
+                formData.get("observaciones") || ""
+            ).trim()
+
+    };
+
+    boton.disabled = true;
+    boton.textContent = "CREANDO...";
+
+    mensaje.textContent =
+        "Guardando pedido...";
+
+    mensaje.className =
+        "pedido-nuevo-mensaje";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "insert",
+
+                            resource:
+                                "pedidos",
+
+                            data:
+                                data
+
+                        })
+                }
+            );
+
+        const resultado =
+            await response.json();
+
+        if (!resultado.success) {
+            throw new Error(
+                resultado.error ||
+                "No se pudo crear el pedido."
+            );
+        }
+
+        mensaje.textContent =
+            "Pedido creado correctamente.";
+
+        mensaje.className =
+            "pedido-nuevo-mensaje exito";
+
+        setTimeout(
+            async function() {
+
+                modal.remove();
+
+                await iniciarPedidos();
+
+            },
+            700
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error creando pedido:",
+            error
+        );
+
+        mensaje.textContent =
+            "No se pudo crear el pedido.";
+
+        mensaje.className =
+            "pedido-nuevo-mensaje error";
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "CREAR PEDIDO";
+
+        alert(
+            "No se pudo crear el pedido.\n\n" +
+            error.message
+        );
+    }
+}
+
+/* =========================================================
    CARGAR CONFIGURACIÓN PEDIDO
    ========================================================= */
 
