@@ -5249,37 +5249,58 @@ async function mostrarNuevoPedido() {
                         CLIENTE
                     </div>
 
-                    <div class="pedido-campo">
-
-                        <label>
-                            CLIENTE
-                        </label>
-
-                        <div
-                            class="pedido-cliente-selector"
-                        >
-
-                            <select
-                                name="cliente_id"
-                                id="pedido-cliente"
-                            >
-                                <option value="">
-                                    Cargando clientes...
-                                </option>
-                            </select>
-
-                            <button
-                                type="button"
-                                class="btn-nuevo-cliente-pedido"
-                                id="btn-nuevo-cliente-pedido"
-                            >
-                                + NUEVO CLIENTE
-                            </button>
-
-                        </div>
-
-                    </div>
-
+                     <div class="pedido-campo">
+                     
+                         <label>
+                             CLIENTE
+                         </label>
+                     
+                         <div class="pedido-cliente-buscador">
+                     
+                             <input
+                                 type="text"
+                                 id="pedido-cliente-busqueda"
+                                 class="pedido-cliente-busqueda"
+                                 placeholder="Buscar por nombre, apellido, Instagram o teléfono..."
+                                 autocomplete="off"
+                             >
+                     
+                             <div
+                                 id="pedido-cliente-resultados"
+                                 class="pedido-cliente-resultados"
+                             ></div>
+                     
+                         </div>
+                     
+                         <!--
+                              Este select queda oculto y sigue siendo
+                              el campo que utiliza el guardado del pedido.
+                         -->
+                     
+                         <select
+                             name="cliente_id"
+                             id="pedido-cliente"
+                             style="display: none;"
+                         >
+                             <option value="">
+                                 Seleccionar cliente...
+                             </option>
+                         </select>
+                     
+                         <div
+                             id="pedido-cliente-seleccionado"
+                             class="pedido-cliente-seleccionado"
+                         ></div>
+                     
+                         <button
+                             type="button"
+                             class="btn-nuevo-cliente-pedido"
+                             id="btn-nuevo-cliente-pedido"
+                         >
+                             + NUEVO CLIENTE
+                         </button>
+                     
+                     </div>
                     <div class="pedido-campo">
 
                         <label>
