@@ -4576,45 +4576,36 @@ function escaparHTML(texto) {
 }
 
 /* =========================================================
-   DASHBOARD
+   INICIAR DASHBOARD
    ========================================================= */
 
 async function iniciarDashboard() {
-
     try {
+        if (!empresaActual) {
+            console.warn("No hay una empresa seleccionada para actualizar el Dashboard.");
+            return;
+        }
+
+        const empresaId = empresaActual.empresa_id;
 
         const [
             pedidos,
             clientes,
             modelosDashboard
         ] = await Promise.all([
-
-            llamarAPI("pedidos"),
-
-            llamarAPI("clientes"),
-
-            llamarAPI("modelos")
-
+            llamarAPI("pedidos", empresaId),
+            llamarAPI("clientes", empresaId),
+            llamarAPI("modelos", empresaId)
         ]);
 
-
         const pedidosEmpresa =
-            filtrarPorEmpresa(
-                pedidos
-            );
-
+            filtrarPorEmpresa(pedidos);
 
         const clientesEmpresa =
-            filtrarPorEmpresa(
-                clientes
-            );
-
+            filtrarPorEmpresa(clientes);
 
         const modelosEmpresa =
-            filtrarPorEmpresa(
-                modelosDashboard
-            );
-
+            filtrarPorEmpresa(modelosDashboard);
 
         mostrarResumenDashboard(
             pedidosEmpresa,
@@ -4622,21 +4613,24 @@ async function iniciarDashboard() {
             modelosEmpresa
         );
 
-
         mostrarEstadosDashboard(
             pedidosEmpresa
         );
 
-
+        console.log(
+            "Dashboard actualizado correctamente.",
+            {
+                pedidos: pedidosEmpresa.length,
+                clientes: clientesEmpresa.length,
+                modelos: modelosEmpresa.length
+            }
+        );
     } catch (error) {
-
         console.error(
             "Error cargando dashboard:",
             error
         );
-
     }
-
 }
 
 
