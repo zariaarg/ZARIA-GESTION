@@ -8452,232 +8452,643 @@ function mostrarFichaPedido(id, pedidos) {
             mostrarNuevoPedido();
         });
 }
+
 /* =========================================================
    ESTILOS FICHA DE PEDIDO
    ========================================================= */
 
 function agregarEstilosFichaPedido() {
-    if (document.getElementById("zaria-ficha-pedido-styles")) {
-        return;
+
+    /*
+     * Eliminamos estilos anteriores para que
+     * siempre se aplique la versión actual.
+     */
+
+    const estilosAnteriores =
+        document.getElementById(
+            "zaria-ficha-pedido-styles"
+        );
+
+    if (estilosAnteriores) {
+        estilosAnteriores.remove();
     }
 
-    const style = document.createElement("style");
-    style.id = "zaria-ficha-pedido-styles";
+
+    const style =
+        document.createElement("style");
+
+    style.id =
+        "zaria-ficha-pedido-styles";
+
 
     style.textContent = `
+
+        /* =================================================
+           VENTANA
+           ================================================= */
+
         .pedido-ficha-modal {
+
             position: fixed;
+
             inset: 0;
+
             z-index: 9999;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
-            padding: 20px;
+
+            padding: 24px;
+
+            box-sizing: border-box;
+
         }
+
+
+        /* =================================================
+           FONDO
+           ================================================= */
 
         .pedido-ficha-overlay {
+
             position: absolute;
+
             inset: 0;
-            background: rgba(0,0,0,.55);
+
+            background:
+                rgba(0, 0, 0, .55);
+
         }
+
+
+        /* =================================================
+           CONTENIDO
+           ================================================= */
 
         .pedido-ficha-contenido {
+
             position: relative;
+
             z-index: 1;
+
             width: 100%;
-            max-width: 760px;
-            max-height: 90vh;
+
+            max-width: 900px;
+
+            max-height: 92vh;
+
             overflow-y: auto;
-            padding: 32px;
+
+            padding: 42px 46px;
+
+            box-sizing: border-box;
+
             background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, .22);
+
         }
+
+
+        /* =================================================
+           BOTÓN CERRAR
+           ================================================= */
 
         .pedido-ficha-cerrar {
+
             position: absolute;
-            top: 14px;
-            right: 16px;
-            width: 34px;
-            height: 34px;
+
+            top: 18px;
+
+            right: 20px;
+
+            width: 38px;
+
+            height: 38px;
+
             border: none;
+
             background: transparent;
-            font-size: 26px;
+
+            font-size: 28px;
+
+            line-height: 1;
+
             color: #555;
+
             cursor: pointer;
+
         }
+
+
+        .pedido-ficha-cerrar:hover {
+
+            color: #111;
+
+        }
+
+
+        /* =================================================
+           ENCABEZADO
+           ================================================= */
 
         .pedido-ficha-header {
-            padding-right: 40px;
-            margin-bottom: 28px;
+
+            padding-right: 50px;
+
+            margin-bottom: 34px;
+
         }
+
 
         .pedido-ficha-header span {
+
             display: block;
-            margin-bottom: 6px;
-            font-size: 9px;
+
+            margin-bottom: 8px;
+
+            font-size: 10px;
+
             font-weight: bold;
-            letter-spacing: 1.5px;
+
+            letter-spacing: 2px;
+
             color: #888;
+
         }
+
 
         .pedido-ficha-header h2 {
-            margin: 0 0 5px;
-            font-size: 24px;
+
+            margin: 0 0 7px;
+
+            font-size: 30px;
+
+            line-height: 1.15;
+
             color: #222;
+
         }
+
 
         .pedido-ficha-header p {
+
             margin: 0;
-            font-size: 13px;
+
+            font-size: 14px;
+
             color: #777;
+
         }
+
+
+        /* =================================================
+           SECCIONES
+           ================================================= */
 
         .pedido-ficha-seccion {
-            margin-bottom: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #e7e7e7;
+
+            margin-bottom: 34px;
+
+            padding-top: 28px;
+
+            border-top:
+                1px solid #e5e5e5;
+
         }
+
+
+        .pedido-ficha-seccion:first-of-type {
+
+            padding-top: 0;
+
+            border-top: none;
+
+        }
+
 
         .pedido-ficha-seccion-titulo {
-            margin-bottom: 16px;
-            font-size: 9px;
+
+            margin-bottom: 20px;
+
+            font-size: 10px;
+
             font-weight: bold;
-            letter-spacing: 1.4px;
-            color: #888;
+
+            letter-spacing: 2px;
+
+            color: #777;
+
         }
+
+
+        /* =================================================
+           ESTADO
+           ================================================= */
+
+        .pedido-ficha-estado {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            min-height: 38px;
+
+            padding: 0 18px;
+
+            box-sizing: border-box;
+
+            border:
+                1px solid #d8d8d8;
+
+            border-radius: 20px;
+
+            background: #f7f7f7;
+
+            color: #333;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        /* =================================================
+           GRILLA DE DATOS
+           ================================================= */
 
         .pedido-ficha-grid {
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            column-gap: 30px;
+
+            row-gap: 24px;
+
         }
+
+
+        /* =================================================
+           DATO
+           ================================================= */
+
+        .pedido-ficha-dato {
+
+            min-width: 0;
+
+        }
+
 
         .pedido-ficha-dato span {
+
             display: block;
-            margin-bottom: 5px;
-            font-size: 8px;
+
+            margin-bottom: 7px;
+
+            font-size: 9px;
+
             font-weight: bold;
-            letter-spacing: 1px;
+
+            letter-spacing: 1.3px;
+
             color: #999;
+
         }
+
 
         .pedido-ficha-dato strong {
+
             display: block;
-            font-size: 13px;
+
+            font-size: 14px;
+
+            line-height: 1.4;
+
             font-weight: 500;
+
             color: #333;
+
             word-break: break-word;
+
         }
 
-        .pedido-ficha-finanzas {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
 
-        .pedido-ficha-finanza {
-            padding: 15px;
+        /* =================================================
+           MEDIDAS
+           ================================================= */
+
+        .pedido-ficha-subseccion {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+            margin-top: 24px;
+
+            padding: 18px;
+
             background: #f7f7f7;
-            border-radius: 9px;
+
+            border-radius: 10px;
+
         }
 
-        .pedido-ficha-finanza span {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 8px;
+
+        .pedido-ficha-subseccion span {
+
+            font-size: 9px;
+
             font-weight: bold;
-            letter-spacing: 1px;
-            color: #888;
+
+            letter-spacing: 1.3px;
+
+            color: #999;
+
         }
 
-        .pedido-ficha-finanza strong {
-            font-size: 17px;
-            color: #222;
+
+        .pedido-ficha-subseccion strong {
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            font-weight: 500;
+
+            color: #444;
+
         }
+
+
+        /* =================================================
+           VALORES
+           ================================================= */
+
+        .pedido-ficha-seccion:nth-of-type(4)
+        .pedido-ficha-grid {
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+        }
+
+
+        .pedido-ficha-seccion:nth-of-type(4)
+        .pedido-ficha-dato {
+
+            padding: 18px;
+
+            background: #f7f7f7;
+
+            border-radius: 10px;
+
+        }
+
+
+        .pedido-ficha-seccion:nth-of-type(4)
+        .pedido-ficha-dato strong {
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            color: #222;
+
+        }
+
+
+        /* =================================================
+           OBSERVACIONES
+           ================================================= */
 
         .pedido-ficha-observaciones {
-            padding: 14px 16px;
+
+            padding: 18px;
+
             background: #f7f7f7;
-            border-radius: 9px;
+
+            border-radius: 10px;
+
             font-size: 13px;
-            line-height: 1.5;
+
+            line-height: 1.6;
+
             color: #555;
+
             white-space: pre-wrap;
+
         }
+
+
+        /* =================================================
+           BOTONES
+           ================================================= */
 
         .pedido-ficha-botones {
+
             display: flex;
+
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: 1px solid #e7e7e7;
+
+            gap: 12px;
+
+            margin-top: 34px;
+
+            padding-top: 24px;
+
+            border-top:
+                1px solid #e5e5e5;
+
         }
+
 
         .pedido-ficha-botones button {
-            height: 40px;
-            padding: 0 18px;
-            border-radius: 8px;
+
+            height: 46px;
+
+            padding:
+                0 24px;
+
+            border-radius: 9px;
+
             font-size: 10px;
+
             font-weight: bold;
-            letter-spacing: .6px;
+
+            letter-spacing: 1px;
+
             cursor: pointer;
+
         }
 
-        .btn-ficha-pedido-cerrar {
-            border: 1px solid #ddd;
+
+        /* =================================================
+           CERRAR
+           ================================================= */
+
+        .btn-pedido-ficha-cerrar {
+
+            border:
+                1px solid #d8d8d8;
+
             background: #fff;
+
             color: #333;
+
         }
 
-        .btn-ficha-pedido-editar {
-            border: 1px solid #1d1a1a;
+
+        .btn-pedido-ficha-cerrar:hover {
+
+            background: #f5f5f5;
+
+        }
+
+
+        /* =================================================
+           NUEVO PEDIDO
+           ================================================= */
+
+        .btn-pedido-ficha-nuevo {
+
+            border:
+                1px solid #1d1a1a;
+
             background: #1d1a1a;
+
             color: #fff;
+
         }
 
-        @media (max-width: 700px) {
+
+        .btn-pedido-ficha-nuevo:hover {
+
+            background: #333;
+
+        }
+
+
+        /* =================================================
+           TABLET
+           ================================================= */
+
+        @media (max-width: 800px) {
+
             .pedido-ficha-modal {
-                padding: 10px;
+
+                padding: 12px;
+
             }
+
 
             .pedido-ficha-contenido {
+
                 max-height: 94vh;
-                padding: 24px 18px;
-                border-radius: 12px;
+
+                padding:
+                    32px 28px;
+
             }
+
 
             .pedido-ficha-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+
+                column-gap: 20px;
+
             }
 
-            .pedido-ficha-finanzas {
-                grid-template-columns: 1fr;
+
+            .pedido-ficha-seccion:nth-of-type(4)
+            .pedido-ficha-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+
             }
+
         }
 
-        @media (max-width: 450px) {
-            .pedido-ficha-grid {
-                grid-template-columns: 1fr;
+
+        /* =================================================
+           CELULAR
+           ================================================= */
+
+        @media (max-width: 600px) {
+
+            .pedido-ficha-contenido {
+
+                padding:
+                    28px 20px;
+
+                border-radius: 12px;
+
             }
+
 
             .pedido-ficha-header h2 {
-                font-size: 20px;
+
+                font-size: 24px;
+
             }
+
+
+            .pedido-ficha-grid {
+
+                grid-template-columns: 1fr;
+
+                row-gap: 20px;
+
+            }
+
+
+            .pedido-ficha-seccion:nth-of-type(4)
+            .pedido-ficha-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
 
             .pedido-ficha-botones {
+
                 flex-direction: column;
+
             }
+
 
             .pedido-ficha-botones button {
+
                 width: 100%;
+
             }
+
         }
+
     `;
 
+
     document.head.appendChild(style);
+
 }
+
 /* =========================================================
    INICIAR PEDIDOS
    ========================================================= */
