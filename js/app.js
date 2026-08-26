@@ -7797,6 +7797,9 @@ function agregarEstilosNuevoPedido() {
 
             height: 44px;
 
+            margin-top: 4px;
+            margin-bottom: 6px;
+
             padding:
                 0 20px;
 
