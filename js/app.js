@@ -7494,7 +7494,7 @@ function agregarEstilosNuevoPedido() {
     style.textContent = `
 
         /* =================================================
-           MODAL GENERAL
+           VENTANA PRINCIPAL
            ================================================= */
 
         .pedido-nuevo-modal {
@@ -7508,51 +7508,56 @@ function agregarEstilosNuevoPedido() {
             align-items: center;
             justify-content: center;
 
-            padding: 14px;
+            padding: 24px;
+
+            box-sizing: border-box;
 
         }
 
+
+        /* =================================================
+           FONDO OSCURO
+           ================================================= */
 
         .pedido-nuevo-overlay {
 
             position: absolute;
             inset: 0;
 
-            background:
-                rgba(0, 0, 0, 0.58);
+            background: rgba(0, 0, 0, 0.55);
 
         }
 
 
         /* =================================================
-           CONTENIDO
+           CONTENIDO DEL MODAL
            ================================================= */
 
         .pedido-nuevo-contenido {
 
             position: relative;
+
             z-index: 1;
 
             width: 100%;
-            max-width: 980px;
 
-            height: min(
-                94vh,
-                900px
-            );
+            max-width: 1050px;
 
-            display: flex;
-            flex-direction: column;
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            box-sizing: border-box;
+
+            padding: 38px 42px 42px;
 
             background: #ffffff;
 
-            border-radius: 18px;
+            border-radius: 16px;
 
             box-shadow:
-                0 24px 70px
-                rgba(0, 0, 0, 0.24);
-
-            overflow: hidden;
+                0 25px 70px
+                rgba(0, 0, 0, 0.25);
 
         }
 
@@ -7565,20 +7570,17 @@ function agregarEstilosNuevoPedido() {
 
             position: absolute;
 
-            top: 20px;
-            right: 24px;
+            top: 18px;
+            right: 20px;
 
-            z-index: 10;
-
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
 
             border: none;
 
             background: transparent;
 
-            font-size: 25px;
-            font-weight: 500;
+            font-size: 28px;
 
             line-height: 1;
 
@@ -7588,37 +7590,25 @@ function agregarEstilosNuevoPedido() {
 
             border-radius: 50%;
 
-            transition:
-                background .2s ease,
-                color .2s ease;
-
         }
 
 
         .pedido-nuevo-cerrar:hover {
 
-            background: #f2f2f2;
-            color: #111;
+            background: #f3f3f3;
 
         }
 
 
         /* =================================================
-           HEADER
+           ENCABEZADO
            ================================================= */
 
         .pedido-nuevo-header {
 
-            flex-shrink: 0;
+            padding-right: 45px;
 
-            padding:
-                36px
-                64px
-                28px
-                40px;
-
-            border-bottom:
-                1px solid #e5e5e5;
+            margin-bottom: 36px;
 
         }
 
@@ -7627,7 +7617,7 @@ function agregarEstilosNuevoPedido() {
 
             display: block;
 
-            margin-bottom: 7px;
+            margin-bottom: 8px;
 
             font-size: 10px;
 
@@ -7635,22 +7625,20 @@ function agregarEstilosNuevoPedido() {
 
             letter-spacing: 2px;
 
-            color: #777;
+            color: #888;
 
         }
 
 
         .pedido-nuevo-header h2 {
 
-            margin: 0 0 6px;
+            margin: 0 0 8px;
 
             font-size: 30px;
 
             line-height: 1.15;
 
-            font-weight: 600;
-
-            color: #171717;
+            color: #1d1d1d;
 
         }
 
@@ -7666,102 +7654,58 @@ function agregarEstilosNuevoPedido() {
         }
 
 
-        .pedido-nuevo-header strong {
-
-            color: #222;
-
-        }
-
-
-        /* =================================================
-           ÁREA SCROLLABLE
-           ================================================= */
-
-        .pedido-nuevo-contenido > form {
-
-            flex: 1;
-
-            min-height: 0;
-
-            overflow-y: auto;
-
-            padding:
-                0
-                40px
-                32px;
-
-        }
-
-
-        /* Scroll */
-
-        .pedido-nuevo-contenido > form::-webkit-scrollbar {
-
-            width: 9px;
-
-        }
-
-
-        .pedido-nuevo-contenido > form::-webkit-scrollbar-track {
-
-            background: #f5f5f5;
-
-        }
-
-
-        .pedido-nuevo-contenido > form::-webkit-scrollbar-thumb {
-
-            background: #bdbdbd;
-
-            border-radius: 10px;
-
-        }
-
-
         /* =================================================
            SECCIONES
            ================================================= */
 
         .pedido-seccion {
 
-            margin: 0;
+            margin-bottom: 34px;
 
-            padding:
-                28px
-                0
-                30px;
+            padding-top: 28px;
 
-            border-bottom:
-                1px solid #e5e5e5;
+            border-top:
+                1px solid #e4e4e4;
 
         }
 
 
-        .pedido-seccion:first-child {
+        .pedido-seccion:first-of-type {
 
             padding-top: 28px;
 
         }
 
 
-        .pedido-seccion:last-of-type {
-
-            border-bottom: none;
-
-        }
-
-
         .pedido-seccion-titulo {
 
-            margin-bottom: 18px;
+            margin-bottom: 22px;
 
-            font-size: 11px;
+            font-size: 10px;
 
             font-weight: 700;
 
             letter-spacing: 2px;
 
             color: #777;
+
+        }
+
+
+        /* =================================================
+           GRILLAS
+           ================================================= */
+
+        .pedido-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            column-gap: 28px;
+
+            row-gap: 24px;
 
         }
 
@@ -7776,7 +7720,9 @@ function agregarEstilosNuevoPedido() {
 
             flex-direction: column;
 
-            gap: 7px;
+            gap: 9px;
+
+            min-width: 0;
 
         }
 
@@ -7787,12 +7733,16 @@ function agregarEstilosNuevoPedido() {
 
             font-weight: 700;
 
-            letter-spacing: 1.4px;
+            letter-spacing: 1.3px;
 
             color: #666;
 
         }
 
+
+        /* =================================================
+           INPUTS / SELECTS / TEXTAREA
+           ================================================= */
 
         .pedido-campo input,
         .pedido-campo select,
@@ -7800,13 +7750,12 @@ function agregarEstilosNuevoPedido() {
 
             width: 100%;
 
+            min-height: 52px;
+
             box-sizing: border-box;
 
-            min-height: 50px;
-
             padding:
-                12px
-                15px;
+                13px 15px;
 
             border:
                 1px solid #d7d7d7;
@@ -7819,19 +7768,13 @@ function agregarEstilosNuevoPedido() {
 
             font-size: 14px;
 
+            line-height: 1.4;
+
             outline: none;
 
             transition:
                 border-color .2s ease,
                 box-shadow .2s ease;
-
-        }
-
-
-        .pedido-campo input::placeholder,
-        .pedido-campo textarea::placeholder {
-
-            color: #999;
 
         }
 
@@ -7851,7 +7794,7 @@ function agregarEstilosNuevoPedido() {
 
         .pedido-campo input[readonly] {
 
-            background: #f7f7f7;
+            background: #f6f6f6;
 
             color: #777;
 
@@ -7863,24 +7806,6 @@ function agregarEstilosNuevoPedido() {
             min-height: 110px;
 
             resize: vertical;
-
-        }
-
-
-        /* =================================================
-           GRID
-           ================================================= */
-
-        .pedido-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            column-gap: 22px;
-
-            row-gap: 22px;
 
         }
 
@@ -7900,38 +7825,31 @@ function agregarEstilosNuevoPedido() {
         }
 
 
-        /*
-         * El buscador ocupa todo el ancho.
-         */
-
         .pedido-cliente-selector
-        .pedido-cliente-buscador {
+        > select {
 
             width: 100%;
 
         }
 
 
-        /*
-         * Botón NUEVO CLIENTE
-         */
+        /* =================================================
+           NUEVO CLIENTE
+           ================================================= */
 
         .btn-nuevo-cliente-pedido {
 
-            align-self: flex-start;
+            width: fit-content;
 
-            width: auto;
+            min-width: 190px;
 
-            min-width: 170px;
-
-            height: 44px;
+            height: 46px;
 
             padding:
-                0
-                18px;
+                0 22px;
 
             border:
-                1px solid #cfcfcf;
+                1px solid #d0d0d0;
 
             border-radius: 9px;
 
@@ -7943,7 +7861,7 @@ function agregarEstilosNuevoPedido() {
 
             font-weight: 700;
 
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
 
             cursor: pointer;
 
@@ -7956,41 +7874,9 @@ function agregarEstilosNuevoPedido() {
 
         .btn-nuevo-cliente-pedido:hover {
 
-            background: #f7f7f7;
+            background: #f5f5f5;
 
-            border-color: #999;
-
-        }
-
-
-        /* =================================================
-           CLIENTE SELECCIONADO
-           ================================================= */
-
-        .pedido-cliente-seleccionado {
-
-            min-height: 56px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding:
-                10px
-                14px;
-
-            box-sizing: border-box;
-
-            border:
-                1px solid #ddd;
-
-            border-radius: 10px;
-
-            background: #fafafa;
+            border-color: #aaa;
 
         }
 
@@ -8001,24 +7887,22 @@ function agregarEstilosNuevoPedido() {
 
         .pedido-a-medida {
 
-            margin-top: 24px;
+            margin-top: 22px;
+
+            padding-top: 4px;
 
         }
 
 
         .pedido-a-medida label {
 
-            display: inline-flex;
+            display: flex;
 
             align-items: center;
 
-            gap: 9px;
+            gap: 10px;
 
             font-size: 13px;
-
-            font-weight: 500;
-
-            letter-spacing: 0;
 
             color: #444;
 
@@ -8030,9 +7914,12 @@ function agregarEstilosNuevoPedido() {
         .pedido-a-medida input {
 
             width: 17px;
+
             height: 17px;
 
             margin: 0;
+
+            cursor: pointer;
 
         }
 
@@ -8048,16 +7935,15 @@ function agregarEstilosNuevoPedido() {
             grid-template-columns:
                 repeat(4, minmax(0, 1fr));
 
-            gap: 18px;
+            column-gap: 20px;
 
-            margin-top: 16px;
+            row-gap: 20px;
 
-            padding: 20px;
+            margin-top: 20px;
+
+            padding: 22px;
 
             background: #f7f7f7;
-
-            border:
-                1px solid #e5e5e5;
 
             border-radius: 11px;
 
@@ -8077,9 +7963,9 @@ function agregarEstilosNuevoPedido() {
 
         .pedido-nuevo-mensaje {
 
-            min-height: 20px;
+            min-height: 22px;
 
-            margin-top: 20px;
+            margin-top: 8px;
 
             font-size: 12px;
 
@@ -8087,12 +7973,10 @@ function agregarEstilosNuevoPedido() {
 
 
         /* =================================================
-           FOOTER DE BOTONES
+           BOTONES FINALES
            ================================================= */
 
         .pedido-nuevo-botones {
-
-            flex-shrink: 0;
 
             display: flex;
 
@@ -8100,33 +7984,26 @@ function agregarEstilosNuevoPedido() {
 
             align-items: center;
 
-            gap: 12px;
+            gap: 14px;
 
-            margin: 0;
+            margin-top: 34px;
 
-            padding:
-                18px
-                40px;
+            padding-top: 24px;
 
             border-top:
-                1px solid #e5e5e5;
-
-            background: #fff;
-
-            box-shadow:
-                0 -5px 15px
-                rgba(0, 0, 0, 0.03);
+                1px solid #e4e4e4;
 
         }
 
 
         .pedido-nuevo-botones button {
 
+            min-width: 145px;
+
             height: 46px;
 
             padding:
-                0
-                24px;
+                0 24px;
 
             border-radius: 9px;
 
@@ -8138,18 +8015,13 @@ function agregarEstilosNuevoPedido() {
 
             cursor: pointer;
 
-            transition:
-                background .2s ease,
-                border-color .2s ease,
-                transform .15s ease;
-
         }
 
 
         .btn-cancelar-pedido {
 
             border:
-                1px solid #d2d2d2;
+                1px solid #d5d5d5;
 
             background: #fff;
 
@@ -8160,14 +8032,12 @@ function agregarEstilosNuevoPedido() {
 
         .btn-cancelar-pedido:hover {
 
-            background: #f6f6f6;
+            background: #f5f5f5;
 
         }
 
 
         .btn-guardar-pedido {
-
-            min-width: 175px;
 
             border:
                 1px solid #1d1a1a;
@@ -8181,57 +8051,77 @@ function agregarEstilosNuevoPedido() {
 
         .btn-guardar-pedido:hover {
 
-            background: #000;
+            background: #333;
 
         }
 
 
         /* =================================================
-           RESPONSIVE
+           SCROLL
+           ================================================= */
+
+        .pedido-nuevo-contenido {
+
+            scrollbar-width: thin;
+
+            scrollbar-color:
+                #bcbcbc
+                transparent;
+
+        }
+
+
+        .pedido-nuevo-contenido::-webkit-scrollbar {
+
+            width: 8px;
+
+        }
+
+
+        .pedido-nuevo-contenido::-webkit-scrollbar-track {
+
+            background: transparent;
+
+        }
+
+
+        .pedido-nuevo-contenido::-webkit-scrollbar-thumb {
+
+            background: #bcbcbc;
+
+            border-radius: 10px;
+
+        }
+
+
+        /* =================================================
+           TABLET
            ================================================= */
 
         @media (max-width: 800px) {
 
+            .pedido-nuevo-modal {
+
+                padding: 12px;
+
+            }
+
+
             .pedido-nuevo-contenido {
 
-                height: 96vh;
-
-                border-radius: 14px;
-
-            }
-
-
-            .pedido-nuevo-header {
+                max-height: 94vh;
 
                 padding:
-                    28px
-                    50px
-                    22px
-                    24px;
-
-            }
-
-
-            .pedido-nuevo-header h2 {
-
-                font-size: 25px;
-
-            }
-
-
-            .pedido-nuevo-contenido > form {
-
-                padding:
-                    0
-                    24px
-                    24px;
+                    30px 26px 32px;
 
             }
 
 
             .pedido-grid {
 
-                grid-template-columns: 1fr;
+                column-gap: 20px;
+
+                row-gap: 20px;
 
             }
 
@@ -8243,64 +8133,37 @@ function agregarEstilosNuevoPedido() {
 
             }
 
-
-            .pedido-nuevo-botones {
-
-                padding:
-                    16px
-                    24px;
-
-            }
-
         }
 
 
-        @media (max-width: 500px) {
+        /* =================================================
+           CELULAR
+           ================================================= */
 
-            .pedido-nuevo-modal {
-
-                padding: 0;
-
-            }
-
+        @media (max-width: 600px) {
 
             .pedido-nuevo-contenido {
 
-                width: 100%;
-
-                height: 100vh;
-
-                max-width: none;
-
-                border-radius: 0;
-
-            }
-
-
-            .pedido-nuevo-header {
-
                 padding:
-                    24px
-                    45px
-                    20px
-                    20px;
+                    26px 20px 28px;
+
+                border-radius: 12px;
 
             }
 
 
             .pedido-nuevo-header h2 {
 
-                font-size: 22px;
+                font-size: 24px;
 
             }
 
 
-            .pedido-nuevo-contenido > form {
+            .pedido-grid {
 
-                padding:
-                    0
-                    20px
-                    20px;
+                grid-template-columns: 1fr;
+
+                row-gap: 20px;
 
             }
 
@@ -8312,13 +8175,18 @@ function agregarEstilosNuevoPedido() {
             }
 
 
+            .btn-nuevo-cliente-pedido {
+
+                width: 100%;
+
+            }
+
+
             .pedido-nuevo-botones {
 
-                flex-direction: column-reverse;
+                flex-direction: column;
 
-                padding:
-                    14px
-                    20px;
+                align-items: stretch;
 
             }
 
@@ -8337,9 +8205,9 @@ function agregarEstilosNuevoPedido() {
     document.head.appendChild(style);
 
 
-    /*
-     * CHECKBOX A MEDIDA
-     */
+    /* =====================================================
+       CHECKBOX A MEDIDA
+       ===================================================== */
 
     const checkbox =
         document.getElementById(
@@ -8372,7 +8240,6 @@ function agregarEstilosNuevoPedido() {
     }
 
 }
-
 
 /* =========================================================
    VISTA PEDIDOS
