@@ -8449,7 +8449,7 @@ function mostrarFichaPedido(id, pedidos) {
         .querySelector(".btn-pedido-ficha-nuevo")
         .addEventListener("click", function() {
             cerrarModal();
-            abrirNuevoPedido();
+            mostrarNuevoPedido();
         });
 }
 /* =========================================================
@@ -8880,7 +8880,7 @@ async function iniciarPedidos() {
 
         if (botonNuevo) {
             botonNuevo.addEventListener("click", function() {
-                abrirNuevoPedido();
+                mostrarNuevoPedido();
             });
         }
 
