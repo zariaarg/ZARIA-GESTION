@@ -5236,10 +5236,6 @@ async function mostrarNuevoPedido() {
 
                      <div class="pedido-campo">
                      
-                         <label>
-                             CLIENTE
-                         </label>
-                     
                          <div class="pedido-cliente-buscador">
                      
                              <input
@@ -7497,25 +7493,22 @@ function agregarEstilosNuevoPedido() {
 
     style.textContent = `
 
-        /* =====================================================
-           MODAL
-           ===================================================== */
+        /* =================================================
+           MODAL GENERAL
+           ================================================= */
 
         .pedido-nuevo-modal {
 
             position: fixed;
-
             inset: 0;
 
             z-index: 9999;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
-            padding: 20px;
+            padding: 14px;
 
         }
 
@@ -7523,73 +7516,69 @@ function agregarEstilosNuevoPedido() {
         .pedido-nuevo-overlay {
 
             position: absolute;
-
             inset: 0;
 
             background:
-                rgba(0, 0, 0, .55);
+                rgba(0, 0, 0, 0.58);
 
         }
 
 
-        /* =====================================================
-           CONTENEDOR PRINCIPAL
-           ===================================================== */
+        /* =================================================
+           CONTENIDO
+           ================================================= */
 
         .pedido-nuevo-contenido {
 
             position: relative;
-
             z-index: 1;
 
             width: 100%;
+            max-width: 980px;
 
-            max-width: 900px;
-
-            height: calc(100vh - 40px);
-
-            max-height: 900px;
+            height: min(
+                94vh,
+                900px
+            );
 
             display: flex;
-
             flex-direction: column;
 
-            background: #fff;
+            background: #ffffff;
 
-            border-radius: 14px;
+            border-radius: 18px;
 
             box-shadow:
-                0 20px 60px
-                rgba(0, 0, 0, .20);
+                0 24px 70px
+                rgba(0, 0, 0, 0.24);
 
             overflow: hidden;
 
         }
 
 
-        /* =====================================================
+        /* =================================================
            BOTÓN CERRAR
-           ===================================================== */
+           ================================================= */
 
         .pedido-nuevo-cerrar {
 
             position: absolute;
 
-            top: 18px;
+            top: 20px;
+            right: 24px;
 
-            right: 20px;
+            z-index: 10;
 
-            z-index: 5;
-
-            width: 34px;
-
-            height: 34px;
+            width: 36px;
+            height: 36px;
 
             border: none;
 
             background: transparent;
 
             font-size: 25px;
+            font-weight: 500;
 
             line-height: 1;
 
@@ -7609,27 +7598,27 @@ function agregarEstilosNuevoPedido() {
         .pedido-nuevo-cerrar:hover {
 
             background: #f2f2f2;
-
             color: #111;
 
         }
 
 
-        /* =====================================================
-           ENCABEZADO
-           ===================================================== */
+        /* =================================================
+           HEADER
+           ================================================= */
 
         .pedido-nuevo-header {
 
             flex-shrink: 0;
 
             padding:
-                32px 40px 22px;
+                36px
+                64px
+                28px
+                40px;
 
             border-bottom:
-                1px solid #e7e7e7;
-
-            background: #fff;
+                1px solid #e5e5e5;
 
         }
 
@@ -7638,28 +7627,30 @@ function agregarEstilosNuevoPedido() {
 
             display: block;
 
-            margin-bottom: 6px;
+            margin-bottom: 7px;
 
-            font-size: 9px;
+            font-size: 10px;
 
-            font-weight: bold;
+            font-weight: 700;
 
-            letter-spacing: 1.7px;
+            letter-spacing: 2px;
 
-            color: #888;
+            color: #777;
 
         }
 
 
         .pedido-nuevo-header h2 {
 
-            margin: 0 0 5px;
+            margin: 0 0 6px;
 
-            font-size: 26px;
+            font-size: 30px;
 
             line-height: 1.15;
 
-            color: #222;
+            font-weight: 600;
+
+            color: #171717;
 
         }
 
@@ -7668,7 +7659,7 @@ function agregarEstilosNuevoPedido() {
 
             margin: 0;
 
-            font-size: 13px;
+            font-size: 14px;
 
             color: #777;
 
@@ -7677,16 +7668,16 @@ function agregarEstilosNuevoPedido() {
 
         .pedido-nuevo-header strong {
 
-            color: #333;
+            color: #222;
 
         }
 
 
-        /* =====================================================
-           FORMULARIO
-           ===================================================== */
+        /* =================================================
+           ÁREA SCROLLABLE
+           ================================================= */
 
-        #form-nuevo-pedido {
+        .pedido-nuevo-contenido > form {
 
             flex: 1;
 
@@ -7695,105 +7686,89 @@ function agregarEstilosNuevoPedido() {
             overflow-y: auto;
 
             padding:
-                0 40px 24px;
-
-            scrollbar-width: thin;
-
-            scrollbar-color:
-                #aaa transparent;
+                0
+                40px
+                32px;
 
         }
 
 
-        #form-nuevo-pedido::-webkit-scrollbar {
+        /* Scroll */
 
-            width: 7px;
+        .pedido-nuevo-contenido > form::-webkit-scrollbar {
 
-        }
-
-
-        #form-nuevo-pedido::-webkit-scrollbar-track {
-
-            background: transparent;
+            width: 9px;
 
         }
 
 
-        #form-nuevo-pedido::-webkit-scrollbar-thumb {
+        .pedido-nuevo-contenido > form::-webkit-scrollbar-track {
 
-            background: #aaa;
+            background: #f5f5f5;
+
+        }
+
+
+        .pedido-nuevo-contenido > form::-webkit-scrollbar-thumb {
+
+            background: #bdbdbd;
 
             border-radius: 10px;
 
         }
 
 
-        #form-nuevo-pedido::-webkit-scrollbar-thumb:hover {
-
-            background: #888;
-
-        }
-
-
-        /* =====================================================
+        /* =================================================
            SECCIONES
-           ===================================================== */
+           ================================================= */
 
         .pedido-seccion {
 
-            margin-bottom: 20px;
+            margin: 0;
 
-            padding-top: 19px;
+            padding:
+                28px
+                0
+                30px;
 
-            border-top:
-                1px solid #e7e7e7;
+            border-bottom:
+                1px solid #e5e5e5;
 
         }
 
 
         .pedido-seccion:first-child {
 
-            border-top: none;
+            padding-top: 28px;
 
-            padding-top: 20px;
+        }
+
+
+        .pedido-seccion:last-of-type {
+
+            border-bottom: none;
 
         }
 
 
         .pedido-seccion-titulo {
 
-            margin-bottom: 13px;
+            margin-bottom: 18px;
 
-            font-size: 9px;
+            font-size: 11px;
 
-            font-weight: bold;
+            font-weight: 700;
 
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
 
-            color: #888;
-
-        }
-
-
-        /* =====================================================
-           GRID
-           ===================================================== */
-
-        .pedido-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 14px 18px;
+            color: #777;
 
         }
 
 
-        /* =====================================================
+        /* =================================================
            CAMPOS
-           ===================================================== */
+           ================================================= */
 
         .pedido-campo {
 
@@ -7801,22 +7776,20 @@ function agregarEstilosNuevoPedido() {
 
             flex-direction: column;
 
-            gap: 5px;
-
-            min-width: 0;
+            gap: 7px;
 
         }
 
 
         .pedido-campo label {
 
-            font-size: 9px;
+            font-size: 10px;
 
-            font-weight: bold;
+            font-weight: 700;
 
-            letter-spacing: 1px;
+            letter-spacing: 1.4px;
 
-            color: #777;
+            color: #666;
 
         }
 
@@ -7829,27 +7802,36 @@ function agregarEstilosNuevoPedido() {
 
             box-sizing: border-box;
 
-            min-height: 42px;
+            min-height: 50px;
 
             padding:
-                10px 12px;
+                12px
+                15px;
 
             border:
-                1px solid #d8d8d8;
+                1px solid #d7d7d7;
 
-            border-radius: 8px;
+            border-radius: 10px;
 
             background: #fff;
 
             color: #222;
 
-            font-size: 13px;
+            font-size: 14px;
 
             outline: none;
 
             transition:
                 border-color .2s ease,
                 box-shadow .2s ease;
+
+        }
+
+
+        .pedido-campo input::placeholder,
+        .pedido-campo textarea::placeholder {
+
+            color: #999;
 
         }
 
@@ -7861,306 +7843,51 @@ function agregarEstilosNuevoPedido() {
             border-color: #999;
 
             box-shadow:
-                0 0 0 2px
-                rgba(0, 0, 0, .04);
-
-        }
-
-
-        .pedido-campo textarea {
-
-            resize: vertical;
-
-            min-height: 85px;
+                0 0 0 3px
+                rgba(0, 0, 0, 0.04);
 
         }
 
 
         .pedido-campo input[readonly] {
 
-            background: #f6f6f6;
+            background: #f7f7f7;
 
             color: #777;
 
         }
 
 
-        /* =====================================================
-           BUSCADOR DE CLIENTE
-           ===================================================== */
+        .pedido-campo textarea {
 
-        #pedido-cliente-busqueda {
+            min-height: 110px;
 
-            width: 100%;
-
-            min-height: 46px;
-
-            box-sizing: border-box;
-
-            padding:
-                11px 14px;
-
-            border:
-                1px solid #bdbdbd;
-
-            border-radius: 9px;
-
-            background: #fff;
-
-            color: #222;
-
-            font-size: 13px;
-
-            outline: none;
-
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
+            resize: vertical;
 
         }
 
 
-        #pedido-cliente-busqueda::placeholder {
+        /* =================================================
+           GRID
+           ================================================= */
 
-            color: #999;
+        .pedido-grid {
 
-        }
+            display: grid;
 
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
 
-        #pedido-cliente-busqueda:focus {
+            column-gap: 22px;
 
-            border-color: #888;
-
-            box-shadow:
-                0 0 0 2px
-                rgba(0, 0, 0, .05);
-
-        }
-
-
-        /* =====================================================
-           RESULTADOS DEL BUSCADOR
-           ===================================================== */
-
-        #pedido-cliente-resultados {
-
-            margin-top: 6px;
-
-            border-radius: 8px;
-
-            overflow: hidden;
+            row-gap: 22px;
 
         }
 
 
-        .pedido-cliente-resultado {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            width: 100%;
-
-            padding:
-                10px 12px;
-
-            border: none;
-
-            border-bottom:
-                1px solid #eeeeee;
-
-            background: #fafafa;
-
-            text-align: left;
-
-            cursor: pointer;
-
-            transition:
-                background .15s ease;
-
-        }
-
-
-        .pedido-cliente-resultado:hover {
-
-            background: #f0f0f0;
-
-        }
-
-
-        .pedido-cliente-resultado-nombre {
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            color: #222;
-
-        }
-
-
-        .pedido-cliente-resultado-instagram,
-        .pedido-cliente-resultado-telefono {
-
-            font-size: 11px;
-
-            color: #888;
-
-        }
-
-
-        .pedido-cliente-sin-resultados {
-
-            padding:
-                11px 12px;
-
-            font-size: 12px;
-
-            color: #888;
-
-            background: #f8f8f8;
-
-            border-radius: 8px;
-
-        }
-
-
-        /* =====================================================
-           CLIENTE SELECCIONADO
-           ===================================================== */
-
-        #pedido-cliente-seleccionado {
-
-            margin-top: 8px;
-
-        }
-
-
-        .pedido-cliente-seleccionado-contenido {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            padding:
-                10px 12px;
-
-            border:
-                1px solid #dedede;
-
-            border-radius: 9px;
-
-            background: #fafafa;
-
-        }
-
-
-        .pedido-cliente-check {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            width: 23px;
-
-            height: 23px;
-
-            flex-shrink: 0;
-
-            border-radius: 50%;
-
-            background: #1d1a1a;
-
-            color: #fff;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-        }
-
-
-        .pedido-cliente-seleccionado-contenido > div {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 2px;
-
-            flex: 1;
-
-            min-width: 0;
-
-        }
-
-
-        .pedido-cliente-seleccionado-contenido strong {
-
-            font-size: 13px;
-
-            color: #222;
-
-        }
-
-
-        .pedido-cliente-seleccionado-contenido small {
-
-            font-size: 11px;
-
-            color: #888;
-
-        }
-
-
-        .pedido-cliente-quitar {
-
-            width: 25px;
-
-            height: 25px;
-
-            flex-shrink: 0;
-
-            border:
-                1px solid #d5d5d5;
-
-            border-radius: 6px;
-
-            background: #fff;
-
-            color: #666;
-
-            font-size: 15px;
-
-            line-height: 1;
-
-            cursor: pointer;
-
-            transition:
-                background .15s ease,
-                color .15s ease;
-
-        }
-
-
-        .pedido-cliente-quitar:hover {
-
-            background: #eeeeee;
-
-            color: #111;
-
-        }
-
-
-        /* =====================================================
-           BOTÓN NUEVO CLIENTE
-           ===================================================== */
+        /* =================================================
+           CLIENTE
+           ================================================= */
 
         .pedido-cliente-selector {
 
@@ -8168,10 +7895,26 @@ function agregarEstilosNuevoPedido() {
 
             flex-direction: column;
 
-            gap: 8px;
+            gap: 14px;
 
         }
 
+
+        /*
+         * El buscador ocupa todo el ancho.
+         */
+
+        .pedido-cliente-selector
+        .pedido-cliente-buscador {
+
+            width: 100%;
+
+        }
+
+
+        /*
+         * Botón NUEVO CLIENTE
+         */
 
         .btn-nuevo-cliente-pedido {
 
@@ -8179,69 +7922,103 @@ function agregarEstilosNuevoPedido() {
 
             width: auto;
 
-            min-width: 150px;
+            min-width: 170px;
 
-            height: 34px;
+            height: 44px;
 
             padding:
-                0 15px;
+                0
+                18px;
 
             border:
-                1px solid #d0d0d0;
+                1px solid #cfcfcf;
 
-            border-radius: 7px;
+            border-radius: 9px;
 
             background: #fff;
 
             color: #333;
 
-            font-size: 9px;
+            font-size: 10px;
 
-            font-weight: bold;
+            font-weight: 700;
 
-            letter-spacing: .7px;
+            letter-spacing: 1.2px;
 
             cursor: pointer;
 
             transition:
                 background .2s ease,
-                border-color .2s ease,
-                color .2s ease;
+                border-color .2s ease;
 
         }
 
 
         .btn-nuevo-cliente-pedido:hover {
 
-            background: #f3f3f3;
+            background: #f7f7f7;
 
-            border-color: #aaa;
-
-            color: #111;
+            border-color: #999;
 
         }
 
 
-        /* =====================================================
+        /* =================================================
+           CLIENTE SELECCIONADO
+           ================================================= */
+
+        .pedido-cliente-seleccionado {
+
+            min-height: 56px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding:
+                10px
+                14px;
+
+            box-sizing: border-box;
+
+            border:
+                1px solid #ddd;
+
+            border-radius: 10px;
+
+            background: #fafafa;
+
+        }
+
+
+        /* =================================================
            A MEDIDA
-           ===================================================== */
+           ================================================= */
 
         .pedido-a-medida {
 
-            margin-top: 13px;
+            margin-top: 24px;
 
         }
 
 
         .pedido-a-medida label {
 
-            display: flex;
+            display: inline-flex;
 
             align-items: center;
 
-            gap: 8px;
+            gap: 9px;
 
-            font-size: 12px;
+            font-size: 13px;
+
+            font-weight: 500;
+
+            letter-spacing: 0;
 
             color: #444;
 
@@ -8252,18 +8029,17 @@ function agregarEstilosNuevoPedido() {
 
         .pedido-a-medida input {
 
-            width: 16px;
-
-            height: 16px;
+            width: 17px;
+            height: 17px;
 
             margin: 0;
 
         }
 
 
-        /* =====================================================
+        /* =================================================
            MEDIDAS
-           ===================================================== */
+           ================================================= */
 
         .pedido-medidas {
 
@@ -8272,15 +8048,18 @@ function agregarEstilosNuevoPedido() {
             grid-template-columns:
                 repeat(4, minmax(0, 1fr));
 
-            gap: 12px;
+            gap: 18px;
 
-            margin-top: 13px;
+            margin-top: 16px;
 
-            padding: 14px;
+            padding: 20px;
 
             background: #f7f7f7;
 
-            border-radius: 9px;
+            border:
+                1px solid #e5e5e5;
+
+            border-radius: 11px;
 
         }
 
@@ -8292,88 +8071,77 @@ function agregarEstilosNuevoPedido() {
         }
 
 
-        /* =====================================================
+        /* =================================================
            MENSAJE
-           ===================================================== */
+           ================================================= */
 
         .pedido-nuevo-mensaje {
 
             min-height: 20px;
 
-            margin-top: 8px;
+            margin-top: 20px;
 
             font-size: 12px;
 
         }
 
 
-        /* =====================================================
-           BOTONES INFERIORES
-           ===================================================== */
+        /* =================================================
+           FOOTER DE BOTONES
+           ================================================= */
 
         .pedido-nuevo-botones {
 
-            position: sticky;
-
-            bottom: 0;
-
-            z-index: 10;
+            flex-shrink: 0;
 
             display: flex;
 
             justify-content: flex-end;
 
-            gap: 10px;
+            align-items: center;
 
-            margin:
-                20px -40px -24px;
+            gap: 12px;
+
+            margin: 0;
 
             padding:
-                14px 40px;
+                18px
+                40px;
 
             border-top:
-                1px solid #e7e7e7;
+                1px solid #e5e5e5;
 
-            background:
-                rgba(255, 255, 255, .97);
+            background: #fff;
 
             box-shadow:
-                0 -6px 14px
-                rgba(0, 0, 0, .04);
-
-            backdrop-filter:
-                blur(4px);
+                0 -5px 15px
+                rgba(0, 0, 0, 0.03);
 
         }
 
 
         .pedido-nuevo-botones button {
 
-            height: 40px;
+            height: 46px;
 
             padding:
-                0 20px;
+                0
+                24px;
 
-            border-radius: 8px;
+            border-radius: 9px;
 
             font-size: 10px;
 
-            font-weight: bold;
+            font-weight: 700;
 
-            letter-spacing: .6px;
+            letter-spacing: 1px;
 
             cursor: pointer;
 
             transition:
-                opacity .2s ease,
-                background .2s ease;
-
-        }
-
-
-        .pedido-nuevo-botones button:hover {
-
-            opacity: .82;
+                background .2s ease,
+                border-color .2s ease,
+                transform .15s ease;
 
         }
 
@@ -8381,7 +8149,7 @@ function agregarEstilosNuevoPedido() {
         .btn-cancelar-pedido {
 
             border:
-                1px solid #d7d7d7;
+                1px solid #d2d2d2;
 
             background: #fff;
 
@@ -8390,7 +8158,16 @@ function agregarEstilosNuevoPedido() {
         }
 
 
+        .btn-cancelar-pedido:hover {
+
+            background: #f6f6f6;
+
+        }
+
+
         .btn-guardar-pedido {
+
+            min-width: 175px;
 
             border:
                 1px solid #1d1a1a;
@@ -8402,28 +8179,24 @@ function agregarEstilosNuevoPedido() {
         }
 
 
-        /* =====================================================
-           TABLET
-           ===================================================== */
+        .btn-guardar-pedido:hover {
 
-        @media (max-width: 700px) {
+            background: #000;
 
-            .pedido-nuevo-modal {
+        }
 
-                padding: 10px;
 
-            }
+        /* =================================================
+           RESPONSIVE
+           ================================================= */
 
+        @media (max-width: 800px) {
 
             .pedido-nuevo-contenido {
 
-                height:
-                    calc(100vh - 20px);
+                height: 96vh;
 
-                max-height:
-                    calc(100vh - 20px);
-
-                border-radius: 12px;
+                border-radius: 14px;
 
             }
 
@@ -8431,15 +8204,27 @@ function agregarEstilosNuevoPedido() {
             .pedido-nuevo-header {
 
                 padding:
-                    24px 20px 18px;
+                    28px
+                    50px
+                    22px
+                    24px;
 
             }
 
 
-            #form-nuevo-pedido {
+            .pedido-nuevo-header h2 {
+
+                font-size: 25px;
+
+            }
+
+
+            .pedido-nuevo-contenido > form {
 
                 padding:
-                    0 20px 20px;
+                    0
+                    24px
+                    24px;
 
             }
 
@@ -8454,33 +8239,68 @@ function agregarEstilosNuevoPedido() {
             .pedido-medidas {
 
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(2, minmax(0, 1fr));
 
             }
 
 
             .pedido-nuevo-botones {
 
-                margin:
-                    20px -20px -20px;
-
                 padding:
-                    13px 20px;
+                    16px
+                    24px;
 
             }
 
         }
 
 
-        /* =====================================================
-           CELULAR
-           ===================================================== */
+        @media (max-width: 500px) {
 
-        @media (max-width: 450px) {
+            .pedido-nuevo-modal {
+
+                padding: 0;
+
+            }
+
+
+            .pedido-nuevo-contenido {
+
+                width: 100%;
+
+                height: 100vh;
+
+                max-width: none;
+
+                border-radius: 0;
+
+            }
+
+
+            .pedido-nuevo-header {
+
+                padding:
+                    24px
+                    45px
+                    20px
+                    20px;
+
+            }
+
 
             .pedido-nuevo-header h2 {
 
-                font-size: 21px;
+                font-size: 22px;
+
+            }
+
+
+            .pedido-nuevo-contenido > form {
+
+                padding:
+                    0
+                    20px
+                    20px;
 
             }
 
@@ -8494,7 +8314,11 @@ function agregarEstilosNuevoPedido() {
 
             .pedido-nuevo-botones {
 
-                flex-direction: column;
+                flex-direction: column-reverse;
+
+                padding:
+                    14px
+                    20px;
 
             }
 
@@ -8505,32 +8329,22 @@ function agregarEstilosNuevoPedido() {
 
             }
 
-
-            .btn-nuevo-cliente-pedido {
-
-                width: auto;
-
-            }
-
         }
 
     `;
 
 
-    document.head.appendChild(
-        style
-    );
+    document.head.appendChild(style);
 
 
-    /* =====================================================
-       A MEDIDA
-       ===================================================== */
+    /*
+     * CHECKBOX A MEDIDA
+     */
 
     const checkbox =
         document.getElementById(
             "pedido-a-medida"
         );
-
 
     const medidas =
         document.getElementById(
