@@ -7467,25 +7467,29 @@ async function cargarConfiguracionPedido(modal) {
 
     }
 }
-
 /* =========================================================
    ESTILOS NUEVO PEDIDO
    ========================================================= */
 
 function agregarEstilosNuevoPedido() {
 
-    if (
+    /*
+     * Eliminamos los estilos anteriores
+     * para aplicar siempre la versión actual.
+     */
+
+    const estilosAnteriores =
         document.getElementById(
             "zaria-nuevo-pedido-styles"
-        )
-    ) {
-        return;
+        );
+
+    if (estilosAnteriores) {
+        estilosAnteriores.remove();
     }
 
 
     const style =
         document.createElement("style");
-
 
     style.id =
         "zaria-nuevo-pedido-styles";
@@ -7498,10 +7502,8 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-nuevo-modal {
-
             position: fixed;
             inset: 0;
-
             z-index: 9999;
 
             display: flex;
@@ -7511,7 +7513,6 @@ function agregarEstilosNuevoPedido() {
             padding: 24px;
 
             box-sizing: border-box;
-
         }
 
 
@@ -7520,45 +7521,38 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-nuevo-overlay {
-
             position: absolute;
             inset: 0;
 
-            background: rgba(0, 0, 0, 0.55);
-
+            background: rgba(0, 0, 0, .55);
         }
 
 
         /* =================================================
-           CONTENIDO DEL MODAL
+           CONTENIDO
            ================================================= */
 
         .pedido-nuevo-contenido {
-
             position: relative;
-
             z-index: 1;
 
             width: 100%;
-
-            max-width: 1050px;
+            max-width: 1000px;
 
             max-height: 92vh;
 
             overflow-y: auto;
 
+            padding: 42px 46px;
+
             box-sizing: border-box;
 
-            padding: 38px 42px 42px;
-
-            background: #ffffff;
+            background: #fff;
 
             border-radius: 16px;
 
             box-shadow:
-                0 25px 70px
-                rgba(0, 0, 0, 0.25);
-
+                0 20px 60px rgba(0,0,0,.22);
         }
 
 
@@ -7567,7 +7561,6 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-nuevo-cerrar {
-
             position: absolute;
 
             top: 18px;
@@ -7587,16 +7580,6 @@ function agregarEstilosNuevoPedido() {
             color: #555;
 
             cursor: pointer;
-
-            border-radius: 50%;
-
-        }
-
-
-        .pedido-nuevo-cerrar:hover {
-
-            background: #f3f3f3;
-
         }
 
 
@@ -7605,52 +7588,44 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-nuevo-header {
+            padding-right: 50px;
 
-            padding-right: 45px;
-
-            margin-bottom: 36px;
-
+            margin-bottom: 34px;
         }
 
 
         .pedido-nuevo-header > span {
-
             display: block;
 
             margin-bottom: 8px;
 
             font-size: 10px;
 
-            font-weight: 700;
+            font-weight: bold;
 
             letter-spacing: 2px;
 
             color: #888;
-
         }
 
 
         .pedido-nuevo-header h2 {
-
-            margin: 0 0 8px;
+            margin: 0 0 7px;
 
             font-size: 30px;
 
             line-height: 1.15;
 
-            color: #1d1d1d;
-
+            color: #222;
         }
 
 
         .pedido-nuevo-header p {
-
             margin: 0;
 
             font-size: 14px;
 
             color: #777;
-
         }
 
 
@@ -7659,36 +7634,32 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-seccion {
-
             margin-bottom: 34px;
 
             padding-top: 28px;
 
             border-top:
-                1px solid #e4e4e4;
-
+                1px solid #e5e5e5;
         }
 
 
         .pedido-seccion:first-of-type {
+            padding-top: 0;
 
-            padding-top: 28px;
-
+            border-top: none;
         }
 
 
         .pedido-seccion-titulo {
-
-            margin-bottom: 22px;
+            margin-bottom: 20px;
 
             font-size: 10px;
 
-            font-weight: 700;
+            font-weight: bold;
 
             letter-spacing: 2px;
 
             color: #777;
-
         }
 
 
@@ -7697,7 +7668,6 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-grid {
-
             display: grid;
 
             grid-template-columns:
@@ -7706,7 +7676,6 @@ function agregarEstilosNuevoPedido() {
             column-gap: 28px;
 
             row-gap: 24px;
-
         }
 
 
@@ -7715,34 +7684,24 @@ function agregarEstilosNuevoPedido() {
            ================================================= */
 
         .pedido-campo {
-
             display: flex;
 
             flex-direction: column;
 
-            gap: 9px;
-
-            min-width: 0;
-
+            gap: 8px;
         }
 
 
         .pedido-campo label {
-
             font-size: 10px;
 
-            font-weight: 700;
+            font-weight: bold;
 
-            letter-spacing: 1.3px;
+            letter-spacing: 1.4px;
 
-            color: #666;
-
+            color: #777;
         }
 
-
-        /* =================================================
-           INPUTS / SELECTS / TEXTAREA
-           ================================================= */
 
         .pedido-campo input,
         .pedido-campo select,
@@ -7750,17 +7709,17 @@ function agregarEstilosNuevoPedido() {
 
             width: 100%;
 
-            min-height: 52px;
+            min-height: 48px;
 
             box-sizing: border-box;
 
             padding:
-                13px 15px;
+                12px 14px;
 
             border:
-                1px solid #d7d7d7;
+                1px solid #d8d8d8;
 
-            border-radius: 10px;
+            border-radius: 9px;
 
             background: #fff;
 
@@ -7768,14 +7727,11 @@ function agregarEstilosNuevoPedido() {
 
             font-size: 14px;
 
-            line-height: 1.4;
-
             outline: none;
 
             transition:
                 border-color .2s ease,
                 box-shadow .2s ease;
-
         }
 
 
@@ -7786,9 +7742,8 @@ function agregarEstilosNuevoPedido() {
             border-color: #999;
 
             box-shadow:
-                0 0 0 3px
-                rgba(0, 0, 0, 0.04);
-
+                0 0 0 2px
+                rgba(0,0,0,.04);
         }
 
 
@@ -7797,7 +7752,6 @@ function agregarEstilosNuevoPedido() {
             background: #f6f6f6;
 
             color: #777;
-
         }
 
 
@@ -7806,12 +7760,11 @@ function agregarEstilosNuevoPedido() {
             min-height: 110px;
 
             resize: vertical;
-
         }
 
 
         /* =================================================
-           CLIENTE
+           SELECTOR DE CLIENTE
            ================================================= */
 
         .pedido-cliente-selector {
@@ -7821,35 +7774,34 @@ function agregarEstilosNuevoPedido() {
             flex-direction: column;
 
             gap: 14px;
-
         }
 
 
-        .pedido-cliente-selector
-        > select {
+        /*
+         * El buscador ocupa todo el ancho.
+         */
+
+        .pedido-cliente-selector input {
 
             width: 100%;
-
         }
 
 
         /* =================================================
-           NUEVO CLIENTE
+           BOTÓN NUEVO CLIENTE
            ================================================= */
 
         .btn-nuevo-cliente-pedido {
 
-            width: fit-content;
+            align-self: flex-start;
 
-            min-width: 190px;
-
-            height: 46px;
+            height: 44px;
 
             padding:
-                0 22px;
+                0 20px;
 
             border:
-                1px solid #d0d0d0;
+                1px solid #ccc;
 
             border-radius: 9px;
 
@@ -7859,7 +7811,7 @@ function agregarEstilosNuevoPedido() {
 
             font-size: 10px;
 
-            font-weight: 700;
+            font-weight: bold;
 
             letter-spacing: 1px;
 
@@ -7868,7 +7820,6 @@ function agregarEstilosNuevoPedido() {
             transition:
                 background .2s ease,
                 border-color .2s ease;
-
         }
 
 
@@ -7877,7 +7828,36 @@ function agregarEstilosNuevoPedido() {
             background: #f5f5f5;
 
             border-color: #aaa;
+        }
 
+
+        /* =================================================
+           CLIENTE SELECCIONADO
+           ================================================= */
+
+        .pedido-cliente-seleccionado {
+
+            min-height: 58px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding:
+                12px 16px;
+
+            box-sizing: border-box;
+
+            border:
+                1px solid #ddd;
+
+            border-radius: 10px;
+
+            background: #fafafa;
         }
 
 
@@ -7888,9 +7868,6 @@ function agregarEstilosNuevoPedido() {
         .pedido-a-medida {
 
             margin-top: 22px;
-
-            padding-top: 4px;
-
         }
 
 
@@ -7900,14 +7877,13 @@ function agregarEstilosNuevoPedido() {
 
             align-items: center;
 
-            gap: 10px;
+            gap: 9px;
 
             font-size: 13px;
 
             color: #444;
 
             cursor: pointer;
-
         }
 
 
@@ -7916,11 +7892,6 @@ function agregarEstilosNuevoPedido() {
             width: 17px;
 
             height: 17px;
-
-            margin: 0;
-
-            cursor: pointer;
-
         }
 
 
@@ -7935,25 +7906,21 @@ function agregarEstilosNuevoPedido() {
             grid-template-columns:
                 repeat(4, minmax(0, 1fr));
 
-            column-gap: 20px;
-
-            row-gap: 20px;
+            gap: 18px;
 
             margin-top: 20px;
 
-            padding: 22px;
+            padding: 20px;
 
             background: #f7f7f7;
 
-            border-radius: 11px;
-
+            border-radius: 10px;
         }
 
 
         .pedido-medidas.visible {
 
             display: grid;
-
         }
 
 
@@ -7965,10 +7932,9 @@ function agregarEstilosNuevoPedido() {
 
             min-height: 22px;
 
-            margin-top: 8px;
+            margin-top: 12px;
 
             font-size: 12px;
-
         }
 
 
@@ -7982,23 +7948,18 @@ function agregarEstilosNuevoPedido() {
 
             justify-content: flex-end;
 
-            align-items: center;
-
-            gap: 14px;
+            gap: 12px;
 
             margin-top: 34px;
 
             padding-top: 24px;
 
             border-top:
-                1px solid #e4e4e4;
-
+                1px solid #e5e5e5;
         }
 
 
         .pedido-nuevo-botones button {
-
-            min-width: 145px;
 
             height: 46px;
 
@@ -8009,31 +7970,22 @@ function agregarEstilosNuevoPedido() {
 
             font-size: 10px;
 
-            font-weight: 700;
+            font-weight: bold;
 
             letter-spacing: 1px;
 
             cursor: pointer;
-
         }
 
 
         .btn-cancelar-pedido {
 
             border:
-                1px solid #d5d5d5;
+                1px solid #d8d8d8;
 
             background: #fff;
 
             color: #333;
-
-        }
-
-
-        .btn-cancelar-pedido:hover {
-
-            background: #f5f5f5;
-
         }
 
 
@@ -8045,52 +7997,6 @@ function agregarEstilosNuevoPedido() {
             background: #1d1a1a;
 
             color: #fff;
-
-        }
-
-
-        .btn-guardar-pedido:hover {
-
-            background: #333;
-
-        }
-
-
-        /* =================================================
-           SCROLL
-           ================================================= */
-
-        .pedido-nuevo-contenido {
-
-            scrollbar-width: thin;
-
-            scrollbar-color:
-                #bcbcbc
-                transparent;
-
-        }
-
-
-        .pedido-nuevo-contenido::-webkit-scrollbar {
-
-            width: 8px;
-
-        }
-
-
-        .pedido-nuevo-contenido::-webkit-scrollbar-track {
-
-            background: transparent;
-
-        }
-
-
-        .pedido-nuevo-contenido::-webkit-scrollbar-thumb {
-
-            background: #bcbcbc;
-
-            border-radius: 10px;
-
         }
 
 
@@ -8103,7 +8009,6 @@ function agregarEstilosNuevoPedido() {
             .pedido-nuevo-modal {
 
                 padding: 12px;
-
             }
 
 
@@ -8112,27 +8017,21 @@ function agregarEstilosNuevoPedido() {
                 max-height: 94vh;
 
                 padding:
-                    30px 26px 32px;
-
+                    32px 28px;
             }
 
 
             .pedido-grid {
 
                 column-gap: 20px;
-
-                row-gap: 20px;
-
             }
 
 
             .pedido-medidas {
 
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
+                    repeat(2, 1fr);
             }
-
         }
 
 
@@ -8145,17 +8044,15 @@ function agregarEstilosNuevoPedido() {
             .pedido-nuevo-contenido {
 
                 padding:
-                    26px 20px 28px;
+                    28px 20px;
 
                 border-radius: 12px;
-
             }
 
 
             .pedido-nuevo-header h2 {
 
                 font-size: 24px;
-
             }
 
 
@@ -8164,39 +8061,25 @@ function agregarEstilosNuevoPedido() {
                 grid-template-columns: 1fr;
 
                 row-gap: 20px;
-
             }
 
 
             .pedido-medidas {
 
                 grid-template-columns: 1fr;
-
-            }
-
-
-            .btn-nuevo-cliente-pedido {
-
-                width: 100%;
-
             }
 
 
             .pedido-nuevo-botones {
 
                 flex-direction: column;
-
-                align-items: stretch;
-
             }
 
 
             .pedido-nuevo-botones button {
 
                 width: 100%;
-
             }
-
         }
 
     `;
@@ -8205,9 +8088,9 @@ function agregarEstilosNuevoPedido() {
     document.head.appendChild(style);
 
 
-    /* =====================================================
-       CHECKBOX A MEDIDA
-       ===================================================== */
+    /*
+     * Checkbox A MEDIDA
+     */
 
     const checkbox =
         document.getElementById(
@@ -8220,10 +8103,7 @@ function agregarEstilosNuevoPedido() {
         );
 
 
-    if (
-        checkbox &&
-        medidas
-    ) {
+    if (checkbox && medidas) {
 
         checkbox.addEventListener(
             "change",
