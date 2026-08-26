@@ -5780,172 +5780,509 @@ async function mostrarNuevoPedido() {
             "click",
             cerrarModal
         );
-/* =====================================================
-   CARGAR CLIENTES
-   ===================================================== */
 
-let clientesEmpresa = [];
+        /* =====================================================
+        CARGAR CLIENTES
+        ===================================================== */
+
+        let clientesEmpresa = [];
 
 
-async function cargarClientesPedido(
-    clienteSeleccionadoId = ""
-) {
+        /* =====================================================
+        ELEMENTOS DEL BUSCADOR
+        ===================================================== */
 
-    try {
+        const inputBusquedaCliente =
+            modal.querySelector(
+                "#pedido-cliente-busqueda"
+            );
 
-        const clientes =
-            await llamarAPI(
-                "clientes",
-                empresaActual.empresa_id
+        const resultadosClientes =
+            modal.querySelector(
+                "#pedido-cliente-resultados"
+            );
+
+        const clienteSeleccionado =
+            modal.querySelector(
+                "#pedido-cliente-seleccionado"
             );
 
 
-        clientesEmpresa =
-            filtrarPorEmpresa(
-                clientes
-            );
+        /* =====================================================
+        CARGAR CLIENTES
+        ===================================================== */
+
+        async function cargarClientesPedido(
+            clienteSeleccionadoId = ""
+        ) {
+
+            try {
+
+                const clientes =
+                    await llamarAPI(
+                        "clientes",
+                        empresaActual.empresa_id
+                    );
 
 
-        if (!clientesEmpresa.length) {
+                clientesEmpresa =
+                    filtrarPorEmpresa(
+                        clientes
+                    );
 
-            selectCliente.innerHTML = `
-                <option value="">
-                    No hay clientes registrados
-                </option>
-            `;
 
-        } else {
+                /*
+                * Limpiamos el cliente seleccionado.
+                */
 
-            selectCliente.innerHTML = `
-                <option value="">
-                    Seleccionar cliente...
-                </option>
+                clienteSeleccionado.innerHTML =
+                    "";
 
-                ${clientesEmpresa
-                    .map(
-                        cliente => `
-                            <option
-                                value="${escaparHTML(
-                                    cliente.cliente_id
-                                )}"
-                            >
-                                ${escaparHTML(
-                                    `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                                )}
-                            </option>
-                        `
-                    )
-                    .join("")}
+                resultadosClientes.innerHTML =
+                    "";
 
-            `;
 
-            /*
-             * Si recibimos un cliente específico,
-             * lo seleccionamos automáticamente.
-             */
+                /*
+                * Si no hay clientes.
+                */
 
-            if (clienteSeleccionadoId) {
+                if (!clientesEmpresa.length) {
 
-                selectCliente.value =
-                    String(
+                    resultadosClientes.innerHTML = `
+                        <div class="pedido-cliente-sin-resultados">
+                            No hay clientes registrados.
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                /*
+                * Si recibimos un cliente específico,
+                * lo seleccionamos automáticamente.
+                */
+
+                if (clienteSeleccionadoId) {
+
+                    seleccionarClientePedido(
                         clienteSeleccionadoId
                     );
 
-                cargarMedidasCliente(
-                    clienteSeleccionadoId
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Error cargando clientes para pedido:",
+                    error
+                );
+
+                resultadosClientes.innerHTML = `
+                    <div class="pedido-cliente-sin-resultados">
+                        No se pudieron cargar los clientes.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =====================================================
+        MOSTRAR RESULTADOS DE CLIENTES
+        ===================================================== */
+
+        function mostrarResultadosClientes(
+            textoBusqueda
+        ) {
+
+            const texto =
+                String(
+                    textoBusqueda || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            /*
+            * Si no escribió nada,
+            * ocultamos los resultados.
+            */
+
+            if (!texto) {
+
+                resultadosClientes.innerHTML =
+                    "";
+
+                return;
+
+            }
+
+
+            /*
+            * Buscamos por:
+            *
+            * - nombre
+            * - apellido
+            * - nombre completo
+            * - Instagram
+            * - teléfono
+            */
+
+            const resultados =
+                clientesEmpresa.filter(
+                    cliente => {
+
+                        const nombre =
+                            String(
+                                cliente.nombre || ""
+                            )
+                            .toLowerCase();
+
+                        const apellido =
+                            String(
+                                cliente.apellido || ""
+                            )
+                            .toLowerCase();
+
+                        const nombreCompleto =
+                            `${nombre} ${apellido}`;
+
+                        const instagram =
+                            String(
+                                cliente.instagram || ""
+                            )
+                            .toLowerCase();
+
+                        const telefono =
+                            String(
+                                cliente.telefono || ""
+                            )
+                            .toLowerCase();
+
+
+                        return (
+                            nombre.includes(texto) ||
+                            apellido.includes(texto) ||
+                            nombreCompleto.includes(texto) ||
+                            instagram.includes(texto) ||
+                            telefono.includes(texto)
+                        );
+
+                    }
+                );
+
+
+            /*
+            * No encontramos clientes.
+            */
+
+            if (!resultados.length) {
+
+                resultadosClientes.innerHTML = `
+                    <div class="pedido-cliente-sin-resultados">
+                        No se encontró ningún cliente.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            /*
+            * Mostramos los resultados.
+            */
+
+            resultadosClientes.innerHTML =
+                resultados
+                    .map(
+                        cliente => {
+
+                            const nombre =
+                                `${cliente.nombre || ""} ${cliente.apellido || ""}`
+                                .trim();
+
+                            const instagram =
+                                String(
+                                    cliente.instagram || ""
+                                ).trim();
+
+                            const telefono =
+                                String(
+                                    cliente.telefono || ""
+                                ).trim();
+
+
+                            return `
+                                <button
+                                    type="button"
+                                    class="pedido-cliente-resultado"
+                                    data-cliente-id="${escaparHTML(
+                                        cliente.cliente_id
+                                    )}"
+                                >
+
+                                    <span
+                                        class="pedido-cliente-resultado-nombre"
+                                    >
+                                        ${escaparHTML(
+                                            nombre
+                                        )}
+                                    </span>
+
+                                    ${
+                                        instagram
+                                            ? `
+                                                <span
+                                                    class="pedido-cliente-resultado-instagram"
+                                                >
+                                                    ${escaparHTML(
+                                                        instagram
+                                                    )}
+                                                </span>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        telefono
+                                            ? `
+                                                <span
+                                                    class="pedido-cliente-resultado-telefono"
+                                                >
+                                                    ${escaparHTML(
+                                                        telefono
+                                                    )}
+                                                </span>
+                                            `
+                                            : ""
+                                    }
+
+                                </button>
+                            `;
+
+                        }
+                    )
+                    .join("");
+
+
+            /*
+            * Activamos cada resultado.
+            */
+
+            resultadosClientes
+                .querySelectorAll(
+                    ".pedido-cliente-resultado"
+                )
+                .forEach(
+                    boton => {
+
+                        boton.addEventListener(
+                            "click",
+                            function() {
+
+                                const clienteId =
+                                    this.dataset.clienteId;
+
+
+                                seleccionarClientePedido(
+                                    clienteId
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+        SELECCIONAR CLIENTE
+        ===================================================== */
+
+        function seleccionarClientePedido(
+            clienteId
+        ) {
+
+            const cliente =
+                clientesEmpresa.find(
+                    item =>
+                        String(
+                            item.cliente_id
+                        ) ===
+                        String(
+                            clienteId
+                        )
+                );
+
+
+            if (!cliente) {
+                return;
+            }
+
+
+            /*
+            * Guardamos el ID en el select oculto.
+            */
+
+            selectCliente.innerHTML = `
+                <option
+                    value="${escaparHTML(
+                        cliente.cliente_id
+                    )}"
+                    selected
+                >
+                    ${escaparHTML(
+                        `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                    )}
+                </option>
+            `;
+
+
+            selectCliente.value =
+                String(
+                    cliente.cliente_id
+                );
+
+
+            /*
+            * Mostramos el cliente seleccionado.
+            */
+
+            const nombre =
+                `${cliente.nombre || ""} ${cliente.apellido || ""}`
+                .trim();
+
+            const instagram =
+                String(
+                    cliente.instagram || ""
+                ).trim();
+
+
+            clienteSeleccionado.innerHTML = `
+                <div class="pedido-cliente-seleccionado-contenido">
+
+                    <span class="pedido-cliente-check">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            ${escaparHTML(
+                                nombre
+                            )}
+                        </strong>
+
+                        ${
+                            instagram
+                                ? `
+                                    <small>
+                                        ${escaparHTML(
+                                            instagram
+                                        )}
+                                    </small>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="pedido-cliente-quitar"
+                        title="Cambiar cliente"
+                    >
+                        ×
+                    </button>
+
+                </div>
+            `;
+
+
+            /*
+            * Limpiamos la búsqueda.
+            */
+
+            inputBusquedaCliente.value =
+                "";
+
+            resultadosClientes.innerHTML =
+                "";
+
+
+            /*
+            * Cargamos automáticamente
+            * las medidas del cliente.
+            */
+
+            cargarMedidasCliente(
+                cliente.cliente_id
+            );
+
+
+            /*
+            * Botón para cambiar de cliente.
+            */
+
+            const botonQuitar =
+                clienteSeleccionado.querySelector(
+                    ".pedido-cliente-quitar"
+                );
+
+
+            if (botonQuitar) {
+
+                botonQuitar.addEventListener(
+                    "click",
+                    function() {
+
+                        limpiarClientePedido();
+
+                    }
                 );
 
             }
 
         }
 
-    } catch (error) {
 
-        console.error(
-            "Error cargando clientes para pedido:",
-            error
-        );
+        /* =====================================================
+        LIMPIAR CLIENTE SELECCIONADO
+        ===================================================== */
 
-        selectCliente.innerHTML = `
-            <option value="">
-                No se pudieron cargar los clientes
-            </option>
-        `;
+        function limpiarClientePedido() {
 
-    }
+            selectCliente.innerHTML = `
+                <option value="">
+                    Seleccionar cliente...
+                </option>
+            `;
 
-}
-
-
-/* =====================================================
-   CARGAR MEDIDAS DEL CLIENTE
-   ===================================================== */
-
-function cargarMedidasCliente(
-    clienteId
-) {
-
-    const cliente =
-        clientesEmpresa.find(
-            item =>
-                String(
-                    item.cliente_id
-                ) ===
-                String(
-                    clienteId
-                )
-        );
+            selectCliente.value =
+                "";
 
 
-    if (!cliente) {
-        return;
-    }
+            clienteSeleccionado.innerHTML =
+                "";
 
 
-    formulario.elements[
-        "cuello"
-    ].value =
-        cliente.medidas_cuello || "";
+            resultadosClientes.innerHTML =
+                "";
 
 
-    formulario.elements[
-        "busto"
-    ].value =
-        cliente.medidas_busto || "";
+            inputBusquedaCliente.value =
+                "";
 
-
-    formulario.elements[
-        "cintura"
-    ].value =
-        cliente.medidas_cintura || "";
-
-
-    formulario.elements[
-        "alto"
-    ].value =
-        cliente.medidas_alto || "";
-
-}
-
-
-/* =====================================================
-   SELECCIONAR CLIENTE
-   ===================================================== */
-
-selectCliente.addEventListener(
-    "change",
-    function() {
-
-        const clienteId =
-            this.value;
-
-
-        if (!clienteId) {
 
             /*
-             * Si se deselecciona el cliente,
-             * limpiamos las medidas.
-             */
+            * Limpiamos las medidas.
+            */
 
             formulario.elements[
                 "cuello"
@@ -5963,78 +6300,124 @@ selectCliente.addEventListener(
                 "alto"
             ].value = "";
 
-            return;
+        }
+
+
+        /* =====================================================
+        CARGAR MEDIDAS DEL CLIENTE
+        ===================================================== */
+
+        function cargarMedidasCliente(
+            clienteId
+        ) {
+
+            const cliente =
+                clientesEmpresa.find(
+                    item =>
+                        String(
+                            item.cliente_id
+                        ) ===
+                        String(
+                            clienteId
+                        )
+                );
+
+
+            if (!cliente) {
+                return;
+            }
+
+
+            formulario.elements[
+                "cuello"
+            ].value =
+                cliente.medidas_cuello || "";
+
+
+            formulario.elements[
+                "busto"
+            ].value =
+                cliente.medidas_busto || "";
+
+
+            formulario.elements[
+                "cintura"
+            ].value =
+                cliente.medidas_cintura || "";
+
+
+            formulario.elements[
+                "alto"
+            ].value =
+                cliente.medidas_alto || "";
 
         }
 
 
-        cargarMedidasCliente(
-            clienteId
+        /* =====================================================
+        BUSCAR CLIENTES MIENTRAS ESCRIBIMOS
+        ===================================================== */
+
+        inputBusquedaCliente.addEventListener(
+            "input",
+            function() {
+
+                mostrarResultadosClientes(
+                    this.value
+                );
+
+            }
         );
 
-    }
-);
+
+        /* =====================================================
+        CARGAR CLIENTES INICIALES
+        ===================================================== */
+
+        await cargarClientesPedido();
 
 
-/* =====================================================
-   CARGAR CLIENTES INICIALES
-   ===================================================== */
+        /* =====================================================
+        NUEVO CLIENTE DESDE PEDIDO
+        ===================================================== */
 
-await cargarClientesPedido();
+        if (botonNuevoCliente) {
 
+            botonNuevoCliente.addEventListener(
+                "click",
+                function() {
 
-/* =====================================================
-   NUEVO CLIENTE DESDE PEDIDO
-   ===================================================== */
+                    abrirNuevoCliente(
+                        async function(
+                            clienteCreado
+                        ) {
 
-if (botonNuevoCliente) {
+                            /*
+                            * Recargamos los clientes
+                            * porque ahora existe uno nuevo.
+                            */
 
-    botonNuevoCliente.addEventListener(
-        "click",
-        function() {
-
-            abrirNuevoCliente(
-                async function(
-                    clienteCreado
-                ) {
-
-                    /*
-                     * Volvemos a cargar la lista
-                     * de clientes porque ahora
-                     * existe uno nuevo.
-                     */
-
-                    await cargarClientesPedido(
-                        clienteCreado.cliente_id
-                    );
+                            await cargarClientesPedido(
+                                clienteCreado.cliente_id
+                            );
 
 
-                    /*
-                     * Lo dejamos seleccionado
-                     * automáticamente.
-                     */
+                            /*
+                            * Lo seleccionamos automáticamente.
+                            */
 
-                    selectCliente.value =
-                        String(
-                            clienteCreado.cliente_id
-                        );
+                            seleccionarClientePedido(
+                                clienteCreado.cliente_id
+                            );
 
-
-                    /*
-                     * Cargamos sus medidas.
-                     */
-
-                    cargarMedidasCliente(
-                        clienteCreado.cliente_id
+                        }
                     );
 
                 }
             );
 
         }
-    );
 
-}
 
     /* =====================================================
        SALDO AUTOMÁTICO
