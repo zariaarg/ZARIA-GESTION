@@ -3037,43 +3037,29 @@ h2 {
     color: #fff;
 }
 
-
 /* =========================================================
    BOTÓN EDITAR PEDIDO
+   MISMO ESTILO QUE EDITAR CLIENTE
    ========================================================= */
 
 .btn-editar-pedido {
-    height: 36px;
-
-    padding: 0 15px;
-
-    border:
-        1px solid #1d1a1a;
-
-    border-radius: 7px;
-
-    background: #fff;
-
-    color: #1d1a1a;
-
-    font-size: 10px;
-
+    height: 42px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 12px;
     font-weight: bold;
-
     letter-spacing: .5px;
-
     cursor: pointer;
 
-    transition:
-        background .2s ease,
-        color .2s ease;
+    background: rgb(240, 240, 240);
+    color: #000;
+
+    border: 1.6px outset;
 }
 
 .btn-editar-pedido:hover {
-    background: #1d1a1a;
-    color: #fff;
+    background: rgb(240, 240, 240);
 }
-
 
 
 /* =========================================================
