@@ -5178,7 +5178,9 @@ function configurarDashboard() {
         document.getElementById(
             "btn-dashboard-nuevo-pedido"
         );
-
+    const btnVolverMateriales =
+        document.getElementById(
+            "btn-volver-dashboard-materiales");
 
     /* =====================================================
        MODELOS
@@ -5356,7 +5358,18 @@ function configurarDashboard() {
             };
 
     }
+    if (btnVolverMateriales) {
 
+        btnVolverMateriales.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarDashboard();
+
+            };
+
+    }
 }
 
 /* =========================================================
@@ -11831,6 +11844,80 @@ function mostrarFichaCliente(id, clientes) {
                 "La carga de pedidos la hacemos en el siguiente paso."
             );
         });
+}
+
+/* =========================================================
+   MOSTRAR VISTA MATERIALES
+   ========================================================= */
+
+async function mostrarVistaMateriales() {
+
+    const dashboard =
+        document.getElementById(
+            "dashboard-view"
+        );
+
+    const materialesView =
+        document.getElementById(
+            "materiales-view"
+        );
+
+
+    /*
+     * Cambiamos la vista actual.
+     */
+
+    vistaActual =
+        "materiales";
+
+
+    /*
+     * OCULTAR DASHBOARD
+     */
+
+    if (dashboard) {
+
+        dashboard.style.display =
+            "none";
+
+        dashboard.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    /*
+     * MOSTRAR MATERIALES
+     */
+
+    if (materialesView) {
+
+        materialesView.style.display =
+            "";
+
+        materialesView.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+    }
+
+
+    /*
+     * CARGAR MATERIALES
+     */
+
+    if (
+        typeof iniciarMateriales ===
+        "function"
+    ) {
+
+        await iniciarMateriales();
+
+    }
+
 }
 
 /* =========================================================
