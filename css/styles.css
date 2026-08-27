@@ -3039,6 +3039,44 @@ h2 {
 
 
 /* =========================================================
+   BOTÓN EDITAR PEDIDO
+   ========================================================= */
+
+.btn-editar-pedido {
+    height: 36px;
+
+    padding: 0 15px;
+
+    border:
+        1px solid #1d1a1a;
+
+    border-radius: 7px;
+
+    background: #fff;
+
+    color: #1d1a1a;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: .5px;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.btn-editar-pedido:hover {
+    background: #1d1a1a;
+    color: #fff;
+}
+
+
+
+/* =========================================================
    ESTADO
    ========================================================= */
 
