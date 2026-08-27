@@ -2772,7 +2772,7 @@ h2 {
 
 .pedidos-toolbar {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: space-between;
     gap: 20px;
     margin-bottom: 22px;
@@ -2795,15 +2795,21 @@ h2 {
 }
 
 .btn-nuevo-pedido {
-    min-height: 46px;
-    padding: 0 22px;
+    height: 40px;
+    padding: 0 20px;
+    margin-top: 8px;
+
+    box-sizing: border-box;
+
     border: 1px solid #1d1a1a;
     border-radius: 9px;
+
     background: #1d1a1a;
     color: #fff;
+
     font-size: 10px;
     font-weight: bold;
     letter-spacing: 1px;
+
     cursor: pointer;
-    box-sizing: border-box;
 }
