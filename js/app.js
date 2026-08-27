@@ -5203,7 +5203,6 @@ function configurarDashboard() {
     };
 }
 }
-
 /* =========================================================
    NUEVO PEDIDO
    ========================================================= */
@@ -5264,54 +5263,50 @@ async function mostrarNuevoPedido() {
                         CLIENTE
                     </div>
 
-                     <div class="pedido-campo">
-                     
-                         <div class="pedido-cliente-buscador">
-                     
-                             <input
-                                 type="text"
-                                 id="pedido-cliente-busqueda"
-                                 class="pedido-cliente-busqueda"
-                                 placeholder="Buscar por nombre, apellido, Instagram o teléfono..."
-                                 autocomplete="off"
-                             >
-                     
-                             <div
-                                 id="pedido-cliente-resultados"
-                                 class="pedido-cliente-resultados"
-                             ></div>
-                     
-                         </div>
-                     
-                         <!--
-                              Este select queda oculto y sigue siendo
-                              el campo que utiliza el guardado del pedido.
-                         -->
-                     
-                         <select
-                             name="cliente_id"
-                             id="pedido-cliente"
-                             style="display: none;"
-                         >
-                             <option value="">
-                                 Seleccionar cliente...
-                             </option>
-                         </select>
-                     
-                         <div
-                             id="pedido-cliente-seleccionado"
-                             class="pedido-cliente-seleccionado"
-                         ></div>
-                     
-                         <button
-                             type="button"
-                             class="btn-nuevo-cliente-pedido"
-                             id="btn-nuevo-cliente-pedido"
-                         >
-                             + NUEVO CLIENTE
-                         </button>
-                     
-                     </div>
+                    <div class="pedido-campo">
+
+                        <div class="pedido-cliente-buscador">
+
+                            <input
+                                type="text"
+                                id="pedido-cliente-busqueda"
+                                class="pedido-cliente-busqueda"
+                                placeholder="Buscar por nombre, apellido, Instagram o teléfono..."
+                                autocomplete="off"
+                            >
+
+                            <div
+                                id="pedido-cliente-resultados"
+                                class="pedido-cliente-resultados"
+                            ></div>
+
+                        </div>
+
+                        <select
+                            name="cliente_id"
+                            id="pedido-cliente"
+                            style="display: none;"
+                        >
+                            <option value="">
+                                Seleccionar cliente...
+                            </option>
+                        </select>
+
+                        <div
+                            id="pedido-cliente-seleccionado"
+                            class="pedido-cliente-seleccionado"
+                        ></div>
+
+                        <button
+                            type="button"
+                            class="btn-nuevo-cliente-pedido"
+                            id="btn-nuevo-cliente-pedido"
+                        >
+                            + NUEVO CLIENTE
+                        </button>
+
+                    </div>
+
                     <div class="pedido-campo">
 
                         <label>
@@ -5735,7 +5730,14 @@ async function mostrarNuevoPedido() {
 
     agregarEstilosNuevoPedido();
 
-    cargarConfiguracionPedido(modal);
+    /*
+     * IMPORTANTE:
+     * Esperamos la configuración porque
+     * necesitamos que los selects estén
+     * cargados antes de continuar.
+     */
+
+    await cargarConfiguracionPedido(modal);
 
 
     const formulario =
@@ -5807,633 +5809,276 @@ async function mostrarNuevoPedido() {
             cerrarModal
         );
 
-        /* =====================================================
-        CARGAR CLIENTES
-        ===================================================== */
 
-        let clientesEmpresa = [];
+    /* =====================================================
+       CARGAR CLIENTES
+       ===================================================== */
 
-
-        /* =====================================================
-        ELEMENTOS DEL BUSCADOR
-        ===================================================== */
-
-        const inputBusquedaCliente =
-            modal.querySelector(
-                "#pedido-cliente-busqueda"
-            );
-
-        const resultadosClientes =
-            modal.querySelector(
-                "#pedido-cliente-resultados"
-            );
-
-        const clienteSeleccionado =
-            modal.querySelector(
-                "#pedido-cliente-seleccionado"
-            );
+    let clientesEmpresa = [];
 
 
-        /* =====================================================
-        CARGAR CLIENTES
-        ===================================================== */
+    /* =====================================================
+       ELEMENTOS DEL BUSCADOR
+       ===================================================== */
 
-        async function cargarClientesPedido(
-            clienteSeleccionadoId = ""
-        ) {
+    const inputBusquedaCliente =
+        modal.querySelector(
+            "#pedido-cliente-busqueda"
+        );
 
-            try {
+    const resultadosClientes =
+        modal.querySelector(
+            "#pedido-cliente-resultados"
+        );
 
-                const clientes =
-                    await llamarAPI(
-                        "clientes",
-                        empresaActual.empresa_id
-                    );
-
-
-                clientesEmpresa =
-                    filtrarPorEmpresa(
-                        clientes
-                    );
+    const clienteSeleccionado =
+        modal.querySelector(
+            "#pedido-cliente-seleccionado"
+        );
 
 
-                /*
-                * Limpiamos el cliente seleccionado.
-                */
+    /* =====================================================
+       CARGAR CLIENTES
+       ===================================================== */
 
-                clienteSeleccionado.innerHTML =
-                    "";
+    async function cargarClientesPedido(
+        clienteSeleccionadoId = ""
+    ) {
 
-                resultadosClientes.innerHTML =
-                    "";
+        try {
 
-
-                /*
-                * Si no hay clientes.
-                */
-
-                if (!clientesEmpresa.length) {
-
-                    resultadosClientes.innerHTML = `
-                        <div class="pedido-cliente-sin-resultados">
-                            No hay clientes registrados.
-                        </div>
-                    `;
-
-                    return;
-
-                }
-
-
-                /*
-                * Si recibimos un cliente específico,
-                * lo seleccionamos automáticamente.
-                */
-
-                if (clienteSeleccionadoId) {
-
-                    seleccionarClientePedido(
-                        clienteSeleccionadoId
-                    );
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Error cargando clientes para pedido:",
-                    error
-                );
-
-                resultadosClientes.innerHTML = `
-                    <div class="pedido-cliente-sin-resultados">
-                        No se pudieron cargar los clientes.
-                    </div>
-                `;
-
-            }
-
-        }
-
-
-        /* =====================================================
-        MOSTRAR RESULTADOS DE CLIENTES
-        ===================================================== */
-
-        function mostrarResultadosClientes(
-            textoBusqueda
-        ) {
-
-            const texto =
-                String(
-                    textoBusqueda || ""
-                )
-                .trim()
-                .toLowerCase();
-
-
-            /*
-            * Si no escribió nada,
-            * ocultamos los resultados.
-            */
-
-            if (!texto) {
-
-                resultadosClientes.innerHTML =
-                    "";
-
-                return;
-
-            }
-
-
-            /*
-            * Buscamos por:
-            *
-            * - nombre
-            * - apellido
-            * - nombre completo
-            * - Instagram
-            * - teléfono
-            */
-
-            const resultados =
-                clientesEmpresa.filter(
-                    cliente => {
-
-                        const nombre =
-                            String(
-                                cliente.nombre || ""
-                            )
-                            .toLowerCase();
-
-                        const apellido =
-                            String(
-                                cliente.apellido || ""
-                            )
-                            .toLowerCase();
-
-                        const nombreCompleto =
-                            `${nombre} ${apellido}`;
-
-                        const instagram =
-                            String(
-                                cliente.instagram || ""
-                            )
-                            .toLowerCase();
-
-                        const telefono =
-                            String(
-                                cliente.telefono || ""
-                            )
-                            .toLowerCase();
-
-
-                        return (
-                            nombre.includes(texto) ||
-                            apellido.includes(texto) ||
-                            nombreCompleto.includes(texto) ||
-                            instagram.includes(texto) ||
-                            telefono.includes(texto)
-                        );
-
-                    }
+            const clientes =
+                await llamarAPI(
+                    "clientes",
+                    empresaActual.empresa_id
                 );
 
 
-            /*
-            * No encontramos clientes.
-            */
-
-            if (!resultados.length) {
-
-                resultadosClientes.innerHTML = `
-                    <div class="pedido-cliente-sin-resultados">
-                        No se encontró ningún cliente.
-                    </div>
-                `;
-
-                return;
-
-            }
-
-
-            /*
-            * Mostramos los resultados.
-            */
-
-            resultadosClientes.innerHTML =
-                resultados
-                    .map(
-                        cliente => {
-
-                            const nombre =
-                                `${cliente.nombre || ""} ${cliente.apellido || ""}`
-                                .trim();
-
-                            const instagram =
-                                String(
-                                    cliente.instagram || ""
-                                ).trim();
-
-                            const telefono =
-                                String(
-                                    cliente.telefono || ""
-                                ).trim();
-
-
-                            return `
-                                <button
-                                    type="button"
-                                    class="pedido-cliente-resultado"
-                                    data-cliente-id="${escaparHTML(
-                                        cliente.cliente_id
-                                    )}"
-                                >
-
-                                    <span
-                                        class="pedido-cliente-resultado-nombre"
-                                    >
-                                        ${escaparHTML(
-                                            nombre
-                                        )}
-                                    </span>
-
-                                    ${
-                                        instagram
-                                            ? `
-                                                <span
-                                                    class="pedido-cliente-resultado-instagram"
-                                                >
-                                                    ${escaparHTML(
-                                                        instagram
-                                                    )}
-                                                </span>
-                                            `
-                                            : ""
-                                    }
-
-                                    ${
-                                        telefono
-                                            ? `
-                                                <span
-                                                    class="pedido-cliente-resultado-telefono"
-                                                >
-                                                    ${escaparHTML(
-                                                        telefono
-                                                    )}
-                                                </span>
-                                            `
-                                            : ""
-                                    }
-
-                                </button>
-                            `;
-
-                        }
-                    )
-                    .join("");
-
-
-            /*
-            * Activamos cada resultado.
-            */
-
-            resultadosClientes
-                .querySelectorAll(
-                    ".pedido-cliente-resultado"
-                )
-                .forEach(
-                    boton => {
-
-                        boton.addEventListener(
-                            "click",
-                            function() {
-
-                                const clienteId =
-                                    this.dataset.clienteId;
-
-
-                                seleccionarClientePedido(
-                                    clienteId
-                                );
-
-                            }
-                        );
-
-                    }
+            clientesEmpresa =
+                filtrarPorEmpresa(
+                    clientes
                 );
-
-        }
-
-
-        /* =====================================================
-        SELECCIONAR CLIENTE
-        ===================================================== */
-
-        function seleccionarClientePedido(
-            clienteId
-        ) {
-
-            const cliente =
-                clientesEmpresa.find(
-                    item =>
-                        String(
-                            item.cliente_id
-                        ) ===
-                        String(
-                            clienteId
-                        )
-                );
-
-
-            if (!cliente) {
-                return;
-            }
-
-
-            /*
-            * Guardamos el ID en el select oculto.
-            */
-
-            selectCliente.innerHTML = `
-                <option
-                    value="${escaparHTML(
-                        cliente.cliente_id
-                    )}"
-                    selected
-                >
-                    ${escaparHTML(
-                        `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                    )}
-                </option>
-            `;
-
-
-            selectCliente.value =
-                String(
-                    cliente.cliente_id
-                );
-
-
-            /*
-            * Mostramos el cliente seleccionado.
-            */
-
-            const nombre =
-                `${cliente.nombre || ""} ${cliente.apellido || ""}`
-                .trim();
-
-            const instagram =
-                String(
-                    cliente.instagram || ""
-                ).trim();
-
-
-            clienteSeleccionado.innerHTML = `
-                <div class="pedido-cliente-seleccionado-contenido">
-
-                    <span class="pedido-cliente-check">
-                        ✓
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            ${escaparHTML(
-                                nombre
-                            )}
-                        </strong>
-
-                        ${
-                            instagram
-                                ? `
-                                    <small>
-                                        ${escaparHTML(
-                                            instagram
-                                        )}
-                                    </small>
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-                    <button
-                        type="button"
-                        class="pedido-cliente-quitar"
-                        title="Cambiar cliente"
-                    >
-                        ×
-                    </button>
-
-                </div>
-            `;
-
-
-            /*
-            * Limpiamos la búsqueda.
-            */
-
-            inputBusquedaCliente.value =
-                "";
-
-            resultadosClientes.innerHTML =
-                "";
-
-
-            /*
-            * Cargamos automáticamente
-            * las medidas del cliente.
-            */
-
-            cargarMedidasCliente(
-                cliente.cliente_id
-            );
-
-
-            /*
-            * Botón para cambiar de cliente.
-            */
-
-            const botonQuitar =
-                clienteSeleccionado.querySelector(
-                    ".pedido-cliente-quitar"
-                );
-
-
-            if (botonQuitar) {
-
-                botonQuitar.addEventListener(
-                    "click",
-                    function() {
-
-                        limpiarClientePedido();
-
-                    }
-                );
-
-            }
-
-        }
-
-
-        /* =====================================================
-        LIMPIAR CLIENTE SELECCIONADO
-        ===================================================== */
-
-        function limpiarClientePedido() {
-
-            selectCliente.innerHTML = `
-                <option value="">
-                    Seleccionar cliente...
-                </option>
-            `;
-
-            selectCliente.value =
-                "";
 
 
             clienteSeleccionado.innerHTML =
                 "";
 
-
             resultadosClientes.innerHTML =
                 "";
 
 
-            inputBusquedaCliente.value =
+            if (!clientesEmpresa.length) {
+
+                resultadosClientes.innerHTML = `
+                    <div class="pedido-cliente-sin-resultados">
+                        No hay clientes registrados.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            if (clienteSeleccionadoId) {
+
+                seleccionarClientePedido(
+                    clienteSeleccionadoId
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error cargando clientes para pedido:",
+                error
+            );
+
+            resultadosClientes.innerHTML = `
+                <div class="pedido-cliente-sin-resultados">
+                    No se pudieron cargar los clientes.
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MOSTRAR RESULTADOS DE CLIENTES
+       ===================================================== */
+
+    function mostrarResultadosClientes(
+        textoBusqueda
+    ) {
+
+        const texto =
+            String(
+                textoBusqueda || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (!texto) {
+
+            resultadosClientes.innerHTML =
                 "";
 
-
-            /*
-            * Limpiamos las medidas.
-            */
-
-            formulario.elements[
-                "cuello"
-            ].value = "";
-
-            formulario.elements[
-                "busto"
-            ].value = "";
-
-            formulario.elements[
-                "cintura"
-            ].value = "";
-
-            formulario.elements[
-                "alto"
-            ].value = "";
+            return;
 
         }
 
 
-        /* =====================================================
-        CARGAR MEDIDAS DEL CLIENTE
-        ===================================================== */
+        const resultados =
+            clientesEmpresa.filter(
+                cliente => {
 
-        function cargarMedidasCliente(
-            clienteId
-        ) {
-
-            const cliente =
-                clientesEmpresa.find(
-                    item =>
+                    const nombre =
                         String(
-                            item.cliente_id
-                        ) ===
-                        String(
-                            clienteId
+                            cliente.nombre || ""
                         )
-                );
+                        .toLowerCase();
+
+                    const apellido =
+                        String(
+                            cliente.apellido || ""
+                        )
+                        .toLowerCase();
+
+                    const nombreCompleto =
+                        `${nombre} ${apellido}`;
+
+                    const instagram =
+                        String(
+                            cliente.instagram || ""
+                        )
+                        .toLowerCase();
+
+                    const telefono =
+                        String(
+                            cliente.telefono || ""
+                        )
+                        .toLowerCase();
 
 
-            if (!cliente) {
-                return;
-            }
+                    return (
+                        nombre.includes(texto) ||
+                        apellido.includes(texto) ||
+                        nombreCompleto.includes(texto) ||
+                        instagram.includes(texto) ||
+                        telefono.includes(texto)
+                    );
+
+                }
+            );
 
 
-            formulario.elements[
-                "cuello"
-            ].value =
-                cliente.medidas_cuello || "";
+        if (!resultados.length) {
 
+            resultadosClientes.innerHTML = `
+                <div class="pedido-cliente-sin-resultados">
+                    No se encontró ningún cliente.
+                </div>
+            `;
 
-            formulario.elements[
-                "busto"
-            ].value =
-                cliente.medidas_busto || "";
-
-
-            formulario.elements[
-                "cintura"
-            ].value =
-                cliente.medidas_cintura || "";
-
-
-            formulario.elements[
-                "alto"
-            ].value =
-                cliente.medidas_alto || "";
+            return;
 
         }
 
 
-        /* =====================================================
-        BUSCAR CLIENTES MIENTRAS ESCRIBIMOS
-        ===================================================== */
+        resultadosClientes.innerHTML =
+            resultados
+                .map(
+                    cliente => {
 
-        inputBusquedaCliente.addEventListener(
-            "input",
-            function() {
+                        const nombre =
+                            `${cliente.nombre || ""} ${cliente.apellido || ""}`
+                            .trim();
 
-                mostrarResultadosClientes(
-                    this.value
-                );
+                        const instagram =
+                            String(
+                                cliente.instagram || ""
+                            ).trim();
 
-            }
-        );
-
-
-        /* =====================================================
-        CARGAR CLIENTES INICIALES
-        ===================================================== */
-
-        await cargarClientesPedido();
+                        const telefono =
+                            String(
+                                cliente.telefono || ""
+                            ).trim();
 
 
-        /* =====================================================
-        NUEVO CLIENTE DESDE PEDIDO
-        ===================================================== */
+                        return `
+                            <button
+                                type="button"
+                                class="pedido-cliente-resultado"
+                                data-cliente-id="${escaparHTML(
+                                    cliente.cliente_id
+                                )}"
+                            >
 
-        if (botonNuevoCliente) {
+                                <span
+                                    class="pedido-cliente-resultado-nombre"
+                                >
+                                    ${escaparHTML(
+                                        nombre
+                                    )}
+                                </span>
 
-            botonNuevoCliente.addEventListener(
-                "click",
-                function() {
+                                ${
+                                    instagram
+                                        ? `
+                                            <span
+                                                class="pedido-cliente-resultado-instagram"
+                                            >
+                                                ${escaparHTML(
+                                                    instagram
+                                                )}
+                                            </span>
+                                        `
+                                        : ""
+                                }
 
-                    abrirNuevoCliente(
-                        async function(
-                            clienteCreado
-                        ) {
+                                ${
+                                    telefono
+                                        ? `
+                                            <span
+                                                class="pedido-cliente-resultado-telefono"
+                                            >
+                                                ${escaparHTML(
+                                                    telefono
+                                                )}
+                                            </span>
+                                        `
+                                        : ""
+                                }
 
-                            /*
-                            * Recargamos los clientes
-                            * porque ahora existe uno nuevo.
-                            */
+                            </button>
+                        `;
 
-                            await cargarClientesPedido(
-                                clienteCreado.cliente_id
-                            );
+                    }
+                )
+                .join("");
 
 
-                            /*
-                            * Lo seleccionamos automáticamente.
-                            */
+        resultadosClientes
+            .querySelectorAll(
+                ".pedido-cliente-resultado"
+            )
+            .forEach(
+                boton => {
+
+                    boton.addEventListener(
+                        "click",
+                        function() {
+
+                            const clienteId =
+                                this.dataset.clienteId;
+
 
                             seleccionarClientePedido(
-                                clienteCreado.cliente_id
+                                clienteId
                             );
 
                         }
@@ -6442,7 +6087,286 @@ async function mostrarNuevoPedido() {
                 }
             );
 
+    }
+
+
+    /* =====================================================
+       SELECCIONAR CLIENTE
+       ===================================================== */
+
+    function seleccionarClientePedido(
+        clienteId
+    ) {
+
+        const cliente =
+            clientesEmpresa.find(
+                item =>
+                    String(
+                        item.cliente_id
+                    ) ===
+                    String(
+                        clienteId
+                    )
+            );
+
+
+        if (!cliente) {
+            return;
         }
+
+
+        selectCliente.innerHTML = `
+            <option
+                value="${escaparHTML(
+                    cliente.cliente_id
+                )}"
+                selected
+            >
+                ${escaparHTML(
+                    `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                )}
+            </option>
+        `;
+
+
+        selectCliente.value =
+            String(
+                cliente.cliente_id
+            );
+
+
+        const nombre =
+            `${cliente.nombre || ""} ${cliente.apellido || ""}`
+            .trim();
+
+        const instagram =
+            String(
+                cliente.instagram || ""
+            ).trim();
+
+
+        clienteSeleccionado.innerHTML = `
+            <div class="pedido-cliente-seleccionado-contenido">
+
+                <span class="pedido-cliente-check">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        ${escaparHTML(
+                            nombre
+                        )}
+                    </strong>
+
+                    ${
+                        instagram
+                            ? `
+                                <small>
+                                    ${escaparHTML(
+                                        instagram
+                                    )}
+                                </small>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+                <button
+                    type="button"
+                    class="pedido-cliente-quitar"
+                    title="Cambiar cliente"
+                >
+                    ×
+                </button>
+
+            </div>
+        `;
+
+
+        inputBusquedaCliente.value =
+            "";
+
+        resultadosClientes.innerHTML =
+            "";
+
+
+        cargarMedidasCliente(
+            cliente.cliente_id
+        );
+
+
+        const botonQuitar =
+            clienteSeleccionado.querySelector(
+                ".pedido-cliente-quitar"
+            );
+
+
+        if (botonQuitar) {
+
+            botonQuitar.addEventListener(
+                "click",
+                function() {
+
+                    limpiarClientePedido();
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LIMPIAR CLIENTE SELECCIONADO
+       ===================================================== */
+
+    function limpiarClientePedido() {
+
+        selectCliente.innerHTML = `
+            <option value="">
+                Seleccionar cliente...
+            </option>
+        `;
+
+        selectCliente.value =
+            "";
+
+
+        clienteSeleccionado.innerHTML =
+            "";
+
+        resultadosClientes.innerHTML =
+            "";
+
+        inputBusquedaCliente.value =
+            "";
+
+
+        formulario.elements[
+            "cuello"
+        ].value = "";
+
+        formulario.elements[
+            "busto"
+        ].value = "";
+
+        formulario.elements[
+            "cintura"
+        ].value = "";
+
+        formulario.elements[
+            "alto"
+        ].value = "";
+
+    }
+
+
+    /* =====================================================
+       CARGAR MEDIDAS DEL CLIENTE
+       ===================================================== */
+
+    function cargarMedidasCliente(
+        clienteId
+    ) {
+
+        const cliente =
+            clientesEmpresa.find(
+                item =>
+                    String(
+                        item.cliente_id
+                    ) ===
+                    String(
+                        clienteId
+                    )
+            );
+
+
+        if (!cliente) {
+            return;
+        }
+
+
+        formulario.elements[
+            "cuello"
+        ].value =
+            cliente.medidas_cuello || "";
+
+        formulario.elements[
+            "busto"
+        ].value =
+            cliente.medidas_busto || "";
+
+        formulario.elements[
+            "cintura"
+        ].value =
+            cliente.medidas_cintura || "";
+
+        formulario.elements[
+            "alto"
+        ].value =
+            cliente.medidas_alto || "";
+
+    }
+
+
+    /* =====================================================
+       BUSCAR CLIENTES MIENTRAS ESCRIBIMOS
+       ===================================================== */
+
+    inputBusquedaCliente.addEventListener(
+        "input",
+        function() {
+
+            mostrarResultadosClientes(
+                this.value
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       CARGAR CLIENTES INICIALES
+       ===================================================== */
+
+    await cargarClientesPedido();
+
+
+    /* =====================================================
+       NUEVO CLIENTE DESDE PEDIDO
+       ===================================================== */
+
+    if (botonNuevoCliente) {
+
+        botonNuevoCliente.addEventListener(
+            "click",
+            function() {
+
+                abrirNuevoCliente(
+                    async function(
+                        clienteCreado
+                    ) {
+
+                        await cargarClientesPedido(
+                            clienteCreado.cliente_id
+                        );
+
+
+                        seleccionarClientePedido(
+                            clienteCreado.cliente_id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
@@ -6600,14 +6524,11 @@ async function mostrarNuevoPedido() {
                 inputCodigo.value =
                     modelo.codigo || "";
 
-
                 inputMaterial.value =
                     modelo.material_base || "";
 
-
                 inputPrecio.value =
                     modelo.precio_venta || "";
-
 
                 actualizarSaldo();
 
@@ -6652,6 +6573,7 @@ async function mostrarNuevoPedido() {
                     "#nuevo-pedido-mensaje"
                 );
 
+
             const formData =
                 new FormData(
                     formulario
@@ -6662,7 +6584,6 @@ async function mostrarNuevoPedido() {
                 formData.get(
                     "cliente_id"
                 );
-
 
             const modeloId =
                 formData.get(
@@ -6698,7 +6619,6 @@ async function mostrarNuevoPedido() {
                         "precio"
                     ) || 0
                 );
-
 
             const senaValor =
                 Number(
