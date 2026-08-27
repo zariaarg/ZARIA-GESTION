@@ -2805,4 +2805,5 @@ h2 {
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
+    box-sizing: border-box;
 }
