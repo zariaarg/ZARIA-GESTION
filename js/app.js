@@ -5203,24 +5203,41 @@ function configurarDashboard() {
     };
 }
 }
+
 /* =========================================================
-   NUEVO PEDIDO
+   NUEVO / EDITAR PEDIDO
    ========================================================= */
 
-async function mostrarNuevoPedido() {
+async function mostrarNuevoPedido(
+    pedidoEdicion = null,
+    pedidosEmpresa = []
+) {
 
     if (!empresaActual) {
-        alert("No hay una empresa seleccionada.");
+
+        alert(
+            "No hay una empresa seleccionada."
+        );
+
         return;
+
     }
 
+
     cerrarModalesAbiertos();
+
+
+    const esEdicion =
+        !!pedidoEdicion;
+
 
     const modal =
         document.createElement("div");
 
+
     modal.className =
         "pedido-nuevo-modal";
+
 
     modal.innerHTML = `
         <div class="pedido-nuevo-overlay"></div>
@@ -5236,10 +5253,18 @@ async function mostrarNuevoPedido() {
 
             <div class="pedido-nuevo-header">
 
-                <span>NUEVO PEDIDO</span>
+                <span>
+                    ${esEdicion
+                        ? "EDITAR PEDIDO"
+                        : "NUEVO PEDIDO"
+                    }
+                </span>
 
                 <h2>
-                    Registrar pedido
+                    ${esEdicion
+                        ? "Modificar pedido"
+                        : "Registrar pedido"
+                    }
                 </h2>
 
                 <p>
@@ -5252,6 +5277,22 @@ async function mostrarNuevoPedido() {
                         )}
                     </strong>
                 </p>
+
+                ${
+                    esEdicion
+                        ? `
+                            <p>
+                                Pedido:
+                                <strong>
+                                    #${escaparHTML(
+                                        pedidoEdicion.id_pedido ||
+                                        "-"
+                                    )}
+                                </strong>
+                            </p>
+                        `
+                        : ""
+                }
 
             </div>
 
@@ -5715,7 +5756,10 @@ async function mostrarNuevoPedido() {
                         type="submit"
                         class="btn-guardar-pedido"
                     >
-                        CREAR PEDIDO
+                        ${esEdicion
+                            ? "GUARDAR CAMBIOS"
+                            : "CREAR PEDIDO"
+                        }
                     </button>
 
                 </div>
@@ -5726,18 +5770,24 @@ async function mostrarNuevoPedido() {
     `;
 
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
+
 
     agregarEstilosNuevoPedido();
 
+
     /*
      * IMPORTANTE:
-     * Esperamos la configuración porque
-     * necesitamos que los selects estén
-     * cargados antes de continuar.
+     * Esperamos a que termine de cargar
+     * la configuración antes de
+     * precargar los valores de edición.
      */
 
-    await cargarConfiguracionPedido(modal);
+    await cargarConfiguracionPedido(
+        modal
+    );
 
 
     const formulario =
@@ -5745,34 +5795,58 @@ async function mostrarNuevoPedido() {
             "#form-nuevo-pedido"
         );
 
+
     const selectCliente =
         modal.querySelector(
             "#pedido-cliente"
         );
+
 
     const selectModelo =
         modal.querySelector(
             "#pedido-modelo"
         );
 
+
     const botonNuevoCliente =
         modal.querySelector(
             "#btn-nuevo-cliente-pedido"
         );
+
 
     const inputCodigo =
         modal.querySelector(
             "#pedido-codigo"
         );
 
+
     const inputMaterial =
         modal.querySelector(
             "#pedido-material"
         );
 
+
     const inputPrecio =
         modal.querySelector(
             "#pedido-precio"
+        );
+
+
+    const inputBusquedaCliente =
+        modal.querySelector(
+            "#pedido-cliente-busqueda"
+        );
+
+
+    const resultadosClientes =
+        modal.querySelector(
+            "#pedido-cliente-resultados"
+        );
+
+
+    const clienteSeleccionado =
+        modal.querySelector(
+            "#pedido-cliente-seleccionado"
         );
 
 
@@ -5811,35 +5885,11 @@ async function mostrarNuevoPedido() {
 
 
     /* =====================================================
-       CARGAR CLIENTES
+       CLIENTES
        ===================================================== */
 
     let clientesEmpresa = [];
 
-
-    /* =====================================================
-       ELEMENTOS DEL BUSCADOR
-       ===================================================== */
-
-    const inputBusquedaCliente =
-        modal.querySelector(
-            "#pedido-cliente-busqueda"
-        );
-
-    const resultadosClientes =
-        modal.querySelector(
-            "#pedido-cliente-resultados"
-        );
-
-    const clienteSeleccionado =
-        modal.querySelector(
-            "#pedido-cliente-seleccionado"
-        );
-
-
-    /* =====================================================
-       CARGAR CLIENTES
-       ===================================================== */
 
     async function cargarClientesPedido(
         clienteSeleccionadoId = ""
@@ -5863,6 +5913,7 @@ async function mostrarNuevoPedido() {
             clienteSeleccionado.innerHTML =
                 "";
 
+
             resultadosClientes.innerHTML =
                 "";
 
@@ -5880,7 +5931,9 @@ async function mostrarNuevoPedido() {
             }
 
 
-            if (clienteSeleccionadoId) {
+            if (
+                clienteSeleccionadoId
+            ) {
 
                 seleccionarClientePedido(
                     clienteSeleccionadoId
@@ -5895,6 +5948,7 @@ async function mostrarNuevoPedido() {
                 error
             );
 
+
             resultadosClientes.innerHTML = `
                 <div class="pedido-cliente-sin-resultados">
                     No se pudieron cargar los clientes.
@@ -5907,7 +5961,7 @@ async function mostrarNuevoPedido() {
 
 
     /* =====================================================
-       MOSTRAR RESULTADOS DE CLIENTES
+       MOSTRAR RESULTADOS CLIENTES
        ===================================================== */
 
     function mostrarResultadosClientes(
@@ -5951,11 +6005,13 @@ async function mostrarNuevoPedido() {
                     const nombreCompleto =
                         `${nombre} ${apellido}`;
 
+
                     const instagram =
                         String(
                             cliente.instagram || ""
                         )
                         .toLowerCase();
+
 
                     const telefono =
                         String(
@@ -5998,10 +6054,12 @@ async function mostrarNuevoPedido() {
                             `${cliente.nombre || ""} ${cliente.apellido || ""}`
                             .trim();
 
+
                         const instagram =
                             String(
                                 cliente.instagram || ""
                             ).trim();
+
 
                         const telefono =
                             String(
@@ -6073,12 +6131,8 @@ async function mostrarNuevoPedido() {
                         "click",
                         function() {
 
-                            const clienteId =
-                                this.dataset.clienteId;
-
-
                             seleccionarClientePedido(
-                                clienteId
+                                this.dataset.clienteId
                             );
 
                         }
@@ -6139,6 +6193,7 @@ async function mostrarNuevoPedido() {
             `${cliente.nombre || ""} ${cliente.apellido || ""}`
             .trim();
 
+
         const instagram =
             String(
                 cliente.instagram || ""
@@ -6189,6 +6244,7 @@ async function mostrarNuevoPedido() {
         inputBusquedaCliente.value =
             "";
 
+
         resultadosClientes.innerHTML =
             "";
 
@@ -6221,7 +6277,7 @@ async function mostrarNuevoPedido() {
 
 
     /* =====================================================
-       LIMPIAR CLIENTE SELECCIONADO
+       LIMPIAR CLIENTE
        ===================================================== */
 
     function limpiarClientePedido() {
@@ -6232,6 +6288,7 @@ async function mostrarNuevoPedido() {
             </option>
         `;
 
+
         selectCliente.value =
             "";
 
@@ -6239,8 +6296,10 @@ async function mostrarNuevoPedido() {
         clienteSeleccionado.innerHTML =
             "";
 
+
         resultadosClientes.innerHTML =
             "";
+
 
         inputBusquedaCliente.value =
             "";
@@ -6250,13 +6309,16 @@ async function mostrarNuevoPedido() {
             "cuello"
         ].value = "";
 
+
         formulario.elements[
             "busto"
         ].value = "";
 
+
         formulario.elements[
             "cintura"
         ].value = "";
+
 
         formulario.elements[
             "alto"
@@ -6266,7 +6328,7 @@ async function mostrarNuevoPedido() {
 
 
     /* =====================================================
-       CARGAR MEDIDAS DEL CLIENTE
+       CARGAR MEDIDAS CLIENTE
        ===================================================== */
 
     function cargarMedidasCliente(
@@ -6290,32 +6352,45 @@ async function mostrarNuevoPedido() {
         }
 
 
-        formulario.elements[
-            "cuello"
-        ].value =
-            cliente.medidas_cuello || "";
+        /*
+         * Solamente cargamos las medidas
+         * automáticamente si estamos
+         * creando un pedido.
+         *
+         * En edición primero queremos
+         * mostrar las medidas guardadas
+         * en el pedido.
+         */
 
-        formulario.elements[
-            "busto"
-        ].value =
-            cliente.medidas_busto || "";
+        if (!esEdicion) {
 
-        formulario.elements[
-            "cintura"
-        ].value =
-            cliente.medidas_cintura || "";
+            formulario.elements[
+                "cuello"
+            ].value =
+                cliente.medidas_cuello || "";
 
-        formulario.elements[
-            "alto"
-        ].value =
-            cliente.medidas_alto || "";
+
+            formulario.elements[
+                "busto"
+            ].value =
+                cliente.medidas_busto || "";
+
+
+            formulario.elements[
+                "cintura"
+            ].value =
+                cliente.medidas_cintura || "";
+
+
+            formulario.elements[
+                "alto"
+            ].value =
+                cliente.medidas_alto || "";
+
+        }
 
     }
 
-
-    /* =====================================================
-       BUSCAR CLIENTES MIENTRAS ESCRIBIMOS
-       ===================================================== */
 
     inputBusquedaCliente.addEventListener(
         "input",
@@ -6329,11 +6404,11 @@ async function mostrarNuevoPedido() {
     );
 
 
-    /* =====================================================
-       CARGAR CLIENTES INICIALES
-       ===================================================== */
-
-    await cargarClientesPedido();
+    await cargarClientesPedido(
+        esEdicion
+            ? pedidoEdicion.cliente_id
+            : ""
+    );
 
 
     /* =====================================================
@@ -6378,10 +6453,12 @@ async function mostrarNuevoPedido() {
             "#pedido-precio"
         );
 
+
     const sena =
         formulario.querySelector(
             "#pedido-sena"
         );
+
 
     const saldo =
         formulario.querySelector(
@@ -6395,6 +6472,7 @@ async function mostrarNuevoPedido() {
             Number(
                 precio.value || 0
             );
+
 
         const senaValor =
             Number(
@@ -6413,6 +6491,7 @@ async function mostrarNuevoPedido() {
         "input",
         actualizarSaldo
     );
+
 
     sena.addEventListener(
         "input",
@@ -6491,13 +6570,26 @@ async function mostrarNuevoPedido() {
                     inputCodigo.value =
                         "";
 
+
                     inputMaterial.value =
                         "";
 
-                    inputPrecio.value =
-                        "";
 
-                    actualizarSaldo();
+                    /*
+                     * En edición no queremos
+                     * borrar el precio si
+                     * accidentalmente se
+                     * selecciona vacío.
+                     */
+
+                    if (!esEdicion) {
+
+                        inputPrecio.value =
+                            "";
+
+                        actualizarSaldo();
+
+                    }
 
                     return;
 
@@ -6524,11 +6616,41 @@ async function mostrarNuevoPedido() {
                 inputCodigo.value =
                     modelo.codigo || "";
 
-                inputMaterial.value =
-                    modelo.material_base || "";
 
-                inputPrecio.value =
-                    modelo.precio_venta || "";
+                /*
+                 * Solo usamos material del modelo
+                 * automáticamente si el campo
+                 * está vacío.
+                 */
+
+                if (
+                    !inputMaterial.value.trim()
+                ) {
+
+                    inputMaterial.value =
+                        modelo.material_base || "";
+
+                }
+
+
+                /*
+                 * Al crear un pedido,
+                 * el precio viene del modelo.
+                 *
+                 * Al editar, conservamos
+                 * el precio actual del pedido.
+                 */
+
+                if (
+                    !esEdicion &&
+                    !inputPrecio.value
+                ) {
+
+                    inputPrecio.value =
+                        modelo.precio_venta || "";
+
+                }
+
 
                 actualizarSaldo();
 
@@ -6543,11 +6665,237 @@ async function mostrarNuevoPedido() {
             error
         );
 
+
         selectModelo.innerHTML = `
             <option value="">
                 No se pudieron cargar los modelos
             </option>
         `;
+
+    }
+
+
+    /* =====================================================
+       PRE-CARGAR DATOS DEL PEDIDO EN EDICIÓN
+       ===================================================== */
+
+    if (esEdicion) {
+
+        /*
+         * CLIENTE
+         */
+
+        seleccionarClientePedido(
+            pedidoEdicion.cliente_id
+        );
+
+
+        /*
+         * CANAL DE VENTA
+         */
+
+        formulario.elements[
+            "canal_venta"
+        ].value =
+            pedidoEdicion.canal_venta || "";
+
+
+        /*
+         * MODELO
+         */
+
+        selectModelo.value =
+            String(
+                pedidoEdicion.modelo_id || ""
+            );
+
+
+        /*
+         * Si el modelo existe,
+         * completamos código.
+         */
+
+        const modeloEdicion =
+            modelosEmpresa.find(
+                item =>
+                    String(
+                        item.modelo_id
+                    ) ===
+                    String(
+                        pedidoEdicion.modelo_id
+                    )
+            );
+
+
+        if (modeloEdicion) {
+
+            inputCodigo.value =
+                pedidoEdicion.codigo ||
+                modeloEdicion.codigo ||
+                "";
+
+        } else {
+
+            inputCodigo.value =
+                pedidoEdicion.codigo || "";
+
+        }
+
+
+        /*
+         * PERSONALIZACIÓN
+         */
+
+        inputMaterial.value =
+            pedidoEdicion.material || "";
+
+
+        formulario.elements[
+            "color_cuero"
+        ].value =
+            pedidoEdicion.color_cuero || "";
+
+
+        formulario.elements[
+            "color_hilo"
+        ].value =
+            pedidoEdicion.color_hilo || "";
+
+
+        formulario.elements[
+            "talle"
+        ].value =
+            pedidoEdicion.talle || "";
+
+
+        /*
+         * A MEDIDA
+         */
+
+        formulario.querySelector(
+            "#pedido-a-medida"
+        ).checked =
+            pedidoEdicion.a_medida === true ||
+            String(
+                pedidoEdicion.a_medida
+            ).toLowerCase() === "true" ||
+            String(
+                pedidoEdicion.a_medida
+            ) === "1";
+
+
+        /*
+         * MEDIDAS
+         */
+
+        formulario.elements[
+            "cuello"
+        ].value =
+            pedidoEdicion.cuello ?? "";
+
+
+        formulario.elements[
+            "busto"
+        ].value =
+            pedidoEdicion.busto ?? "";
+
+
+        formulario.elements[
+            "cintura"
+        ].value =
+            pedidoEdicion.cintura ?? "";
+
+
+        formulario.elements[
+            "alto"
+        ].value =
+            pedidoEdicion.alto ?? "";
+
+
+        /*
+         * VENTA
+         */
+
+        formulario.elements[
+            "precio"
+        ].value =
+            pedidoEdicion.precio ?? "";
+
+
+        formulario.elements[
+            "sena"
+        ].value =
+            pedidoEdicion.sena ?? "";
+
+
+        formulario.elements[
+            "saldo"
+        ].value =
+            pedidoEdicion.saldo ??
+            (
+                Number(
+                    pedidoEdicion.precio || 0
+                ) -
+                Number(
+                    pedidoEdicion.sena || 0
+                )
+            );
+
+
+        /*
+         * CONFIGURACIÓN
+         */
+
+        formulario.elements[
+            "metodo_pago"
+        ].value =
+            pedidoEdicion.metodo_pago || "";
+
+
+        formulario.elements[
+            "tipo_entrega"
+        ].value =
+            pedidoEdicion.tipo_entrega || "";
+
+
+        formulario.elements[
+            "estado"
+        ].value =
+            pedidoEdicion.estado || "";
+
+
+        /*
+         * FECHA DE ENTREGA
+         */
+
+        if (
+            pedidoEdicion.fecha_entrega
+        ) {
+
+            formulario.elements[
+                "fecha_entrega"
+            ].value =
+                String(
+                    pedidoEdicion.fecha_entrega
+                ).substring(
+                    0,
+                    10
+                );
+
+        }
+
+
+        /*
+         * OBSERVACIONES
+         */
+
+        formulario.elements[
+            "observaciones"
+        ].value =
+            pedidoEdicion.observaciones || "";
+
+
+        actualizarSaldo();
 
     }
 
@@ -6568,6 +6916,7 @@ async function mostrarNuevoPedido() {
                     ".btn-guardar-pedido"
                 );
 
+
             const mensaje =
                 formulario.querySelector(
                     "#nuevo-pedido-mensaje"
@@ -6584,6 +6933,7 @@ async function mostrarNuevoPedido() {
                 formData.get(
                     "cliente_id"
                 );
+
 
             const modeloId =
                 formData.get(
@@ -6619,6 +6969,7 @@ async function mostrarNuevoPedido() {
                         "precio"
                     ) || 0
                 );
+
 
             const senaValor =
                 Number(
@@ -6680,6 +7031,17 @@ async function mostrarNuevoPedido() {
                 );
 
 
+            if (!modelo) {
+
+                alert(
+                    "No se encontró el modelo seleccionado."
+                );
+
+                return;
+
+            }
+
+
             const data = {
 
                 empresa_id:
@@ -6687,20 +7049,38 @@ async function mostrarNuevoPedido() {
                         empresaActual.empresa_id
                     ),
 
+
+                /*
+                 * En edición conservamos
+                 * la fecha original.
+                 *
+                 * En nuevo usamos la fecha actual.
+                 */
+
                 fecha:
-                    new Date()
-                        .toISOString()
-                        .split("T")[0],
+                    esEdicion
+                        ? (
+                            pedidoEdicion.fecha ||
+                            new Date()
+                                .toISOString()
+                                .split("T")[0]
+                        )
+                        : new Date()
+                            .toISOString()
+                            .split("T")[0],
+
 
                 cliente_id:
                     Number(
                         clienteId
                     ),
 
+
                 cliente_nombre:
                     cliente
                         ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
                         : "",
+
 
                 telefono:
                     cliente
@@ -6709,12 +7089,14 @@ async function mostrarNuevoPedido() {
                         ).trim()
                         : "",
 
+
                 instagram:
                     cliente
                         ? String(
                             cliente.instagram || ""
                         ).trim()
                         : "",
+
 
                 canal_venta:
                     String(
@@ -6723,10 +7105,12 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 modelo_id:
                     Number(
                         modeloId
                     ),
+
 
                 codigo:
                     modelo
@@ -6735,12 +7119,14 @@ async function mostrarNuevoPedido() {
                         ).trim()
                         : "",
 
+
                 modelo:
                     modelo
                         ? String(
                             modelo.nombre || ""
                         ).trim()
                         : "",
+
 
                 material:
                     String(
@@ -6749,12 +7135,14 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 color_cuero:
                     String(
                         formData.get(
                             "color_cuero"
                         ) || ""
                     ).trim(),
+
 
                 color_hilo:
                     String(
@@ -6763,6 +7151,7 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 talle:
                     String(
                         formData.get(
@@ -6770,10 +7159,12 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 a_medida:
                     formulario.querySelector(
                         "#pedido-a-medida"
                     ).checked,
+
 
                 cuello:
                     formData.get(
@@ -6786,6 +7177,7 @@ async function mostrarNuevoPedido() {
                             )
                         ),
 
+
                 busto:
                     formData.get(
                         "busto"
@@ -6796,6 +7188,7 @@ async function mostrarNuevoPedido() {
                                 "busto"
                             )
                         ),
+
 
                 cintura:
                     formData.get(
@@ -6808,6 +7201,7 @@ async function mostrarNuevoPedido() {
                             )
                         ),
 
+
                 alto:
                     formData.get(
                         "alto"
@@ -6819,15 +7213,19 @@ async function mostrarNuevoPedido() {
                             )
                         ),
 
+
                 precio:
                     precioValor,
+
 
                 sena:
                     senaValor,
 
+
                 saldo:
                     precioValor -
                     senaValor,
+
 
                 metodo_pago:
                     String(
@@ -6836,12 +7234,14 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 tipo_entrega:
                     String(
                         formData.get(
                             "tipo_entrega"
                         ) || ""
                     ).trim(),
+
 
                 estado:
                     String(
@@ -6850,12 +7250,14 @@ async function mostrarNuevoPedido() {
                         ) || ""
                     ).trim(),
 
+
                 fecha_entrega:
                     String(
                         formData.get(
                             "fecha_entrega"
                         ) || ""
                     ).trim(),
+
 
                 observaciones:
                     String(
@@ -6870,17 +7272,55 @@ async function mostrarNuevoPedido() {
             boton.disabled =
                 true;
 
+
             boton.textContent =
-                "CREANDO...";
+                esEdicion
+                    ? "GUARDANDO..."
+                    : "CREANDO...";
+
 
             mensaje.textContent =
-                "Guardando pedido...";
+                esEdicion
+                    ? "Guardando cambios..."
+                    : "Guardando pedido...";
+
 
             mensaje.className =
                 "pedido-nuevo-mensaje";
 
 
             try {
+
+                const payload = {
+
+                    action:
+                        esEdicion
+                            ? "update"
+                            : "insert",
+
+
+                    resource:
+                        "pedidos",
+
+
+                    data:
+                        data
+
+                };
+
+
+                /*
+                 * En actualización necesitamos
+                 * enviar el ID del pedido.
+                 */
+
+                if (esEdicion) {
+
+                    payload.id =
+                        pedidoEdicion.id_pedido;
+
+                }
+
 
                 const response =
                     await fetch(
@@ -6895,18 +7335,10 @@ async function mostrarNuevoPedido() {
                             },
 
                             body:
-                                JSON.stringify({
+                                JSON.stringify(
+                                    payload
+                                )
 
-                                    action:
-                                        "insert",
-
-                                    resource:
-                                        "pedidos",
-
-                                    data:
-                                        data
-
-                                })
                         }
                     );
 
@@ -6919,14 +7351,21 @@ async function mostrarNuevoPedido() {
 
                     throw new Error(
                         resultado.error ||
-                        "No se pudo crear el pedido."
+                        (
+                            esEdicion
+                                ? "No se pudieron guardar los cambios."
+                                : "No se pudo crear el pedido."
+                        )
                     );
 
                 }
 
 
                 mensaje.textContent =
-                    "Pedido creado correctamente.";
+                    esEdicion
+                        ? "Pedido actualizado correctamente."
+                        : "Pedido creado correctamente.";
+
 
                 mensaje.className =
                     "pedido-nuevo-mensaje exito";
@@ -6973,26 +7412,39 @@ async function mostrarNuevoPedido() {
             } catch (error) {
 
                 console.error(
-                    "Error creando pedido:",
+                    esEdicion
+                        ? "Error actualizando pedido:"
+                        : "Error creando pedido:",
                     error
                 );
 
 
                 mensaje.textContent =
-                    "No se pudo crear el pedido.";
+                    esEdicion
+                        ? "No se pudieron guardar los cambios."
+                        : "No se pudo crear el pedido.";
+
 
                 mensaje.className =
                     "pedido-nuevo-mensaje error";
 
+
                 boton.disabled =
                     false;
 
+
                 boton.textContent =
-                    "CREAR PEDIDO";
+                    esEdicion
+                        ? "GUARDAR CAMBIOS"
+                        : "CREAR PEDIDO";
 
 
                 alert(
-                    "No se pudo crear el pedido.\n\n" +
+                    (
+                        esEdicion
+                            ? "No se pudieron guardar los cambios.\n\n"
+                            : "No se pudo crear el pedido.\n\n"
+                    ) +
                     error.message
                 );
 
@@ -7002,6 +7454,35 @@ async function mostrarNuevoPedido() {
     );
 
 }
+
+
+/* =========================================================
+   EDITAR PEDIDO
+   ========================================================= */
+
+function editarPedido(
+    pedido,
+    pedidosEmpresa
+) {
+
+    if (!pedido) {
+
+        alert(
+            "No se encontró el pedido."
+        );
+
+        return;
+
+    }
+
+
+    mostrarNuevoPedido(
+        pedido,
+        pedidosEmpresa
+    );
+
+}
+
 
 /* =========================================================
    GUARDAR NUEVO PEDIDO
