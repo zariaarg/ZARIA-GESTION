@@ -4718,7 +4718,7 @@ function mostrarResumenDashboard(
             pedido => {
 
                 const fecha =
-                    convertirFecha(
+                    formatearFecha(
                         pedido.fecha
                     );
 
@@ -4997,6 +4997,36 @@ function convertirFecha(
 
     return fecha;
 
+}
+
+/* =========================================================
+  Función general para formatear fechas
+   ========================================================= */
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+        return "-";
+    }
+
+    const fechaObj = new Date(fecha);
+
+    if (isNaN(fechaObj.getTime())) {
+        return String(fecha);
+    }
+
+    const dia = String(
+        fechaObj.getDate()
+    ).padStart(2, "0");
+
+    const mes = String(
+        fechaObj.getMonth() + 1
+    ).padStart(2, "0");
+
+    const anio =
+        fechaObj.getFullYear();
+
+    return `${dia}/${mes}/${anio}`;
 }
 
 /* =========================================================
@@ -8204,7 +8234,7 @@ function mostrarFichaPedido(id, pedidos) {
                     <p>
                         ${escaparHTML(
                                 pedido.fecha
-                                    ? convertirFecha(pedido.fecha)
+                                    ? formatearFecha(pedido.fecha)
                                     : "-"
                             )}
                     </p>
@@ -9195,7 +9225,7 @@ async function iniciarPedidos() {
                                 <p>
                                     ${escaparHTML(
                                             pedido.fecha
-                                                ? convertirFecha(pedido.fecha)
+                                                ? formatearFecha(pedido.fecha)
                                                 : "-"
                                         )}
                                 </p>
