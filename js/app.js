@@ -8201,9 +8201,13 @@ function mostrarFichaPedido(id, pedidos) {
                     ${escaparHTML(nombreCliente)}
                 </h2>
 
-                <p>
-                    ${escaparHTML(pedido.fecha || "-")}
-                </p>
+                    <p>
+                        ${escaparHTML(
+                                pedido.fecha
+                                    ? convertirFecha(pedido.fecha)
+                                    : "-"
+                            )}
+                    </p>
             </div>
 
             <div class="pedido-ficha-seccion">
@@ -9189,7 +9193,11 @@ async function iniciarPedidos() {
                             <div class="pedido-dato">
                                 <span>FECHA</span>
                                 <p>
-                                    ${escaparHTML(pedido.fecha || "-")}
+                                    ${escaparHTML(
+                                            pedido.fecha
+                                                ? convertirFecha(pedido.fecha)
+                                                : "-"
+                                        )}
                                 </p>
                             </div>
 
