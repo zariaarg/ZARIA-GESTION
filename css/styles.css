@@ -2768,7 +2768,11 @@ h2 {
 }
 
 /* =========================================================
-   PEDIDOS — BARRA DE BÚSQUEDA Y NUEVO PEDIDO
+   PEDIDOS
+   ========================================================= */
+
+/* =========================================================
+   BARRA DE BÚSQUEDA
    ========================================================= */
 
 .pedidos-toolbar {
@@ -2813,6 +2817,11 @@ h2 {
     color: #999;
 }
 
+
+/* =========================================================
+   BOTÓN NUEVO PEDIDO
+   ========================================================= */
+
 .btn-nuevo-pedido {
     flex-shrink: 0;
     height: 46px;
@@ -2830,6 +2839,275 @@ h2 {
 .btn-nuevo-pedido:hover {
     opacity: .88;
 }
+
+
+/* =========================================================
+   FILTROS POR ESTADO
+   ========================================================= */
+
+.pedidos-filtros {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.pedido-filtro {
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid #ddd;
+    border-radius: 18px;
+    background: #fff;
+    color: #666;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: .8px;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
+
+.pedido-filtro:hover {
+    border-color: #aaa;
+    color: #222;
+}
+
+.pedido-filtro.activo {
+    border-color: #1d1a1a;
+    background: #1d1a1a;
+    color: #fff;
+}
+
+
+/* =========================================================
+   LISTA DE PEDIDOS
+   ========================================================= */
+
+.pedidos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* =========================================================
+   FILA DE PEDIDO
+   ========================================================= */
+
+.pedido-fila {
+    display: grid;
+
+    grid-template-columns:
+        1.6fr
+        .9fr
+        1.1fr
+        .8fr
+        1fr
+        .9fr
+        auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 18px 20px;
+
+    background: #fff;
+
+    border:
+        1px solid #e7e7e7;
+
+    border-radius: 10px;
+
+    transition:
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.pedido-fila:hover {
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.07);
+}
+
+
+/* =========================================================
+   PEDIDO PRINCIPAL
+   ========================================================= */
+
+.pedido-principal span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.2px;
+
+    color: #888;
+}
+
+.pedido-principal h3 {
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #222;
+}
+
+
+/* =========================================================
+   DATOS
+   ========================================================= */
+
+.pedido-dato span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.2px;
+
+    color: #888;
+}
+
+.pedido-dato p {
+    margin: 0;
+
+    font-size: 13px;
+
+    color: #555;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.pedido-dinero p {
+    font-weight: 600;
+    color: #222;
+}
+
+
+/* =========================================================
+   BOTÓN VER
+   ========================================================= */
+
+.btn-ver-pedido {
+    height: 36px;
+
+    padding: 0 15px;
+
+    border:
+        1px solid #1d1a1a;
+
+    border-radius: 7px;
+
+    background: #fff;
+
+    color: #1d1a1a;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: .5px;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.btn-ver-pedido:hover {
+    background: #1d1a1a;
+    color: #fff;
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.pedido-estado {
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   SIN RESULTADOS / ERROR
+   ========================================================= */
+
+.pedidos-vacio,
+.pedidos-error {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    background: #fff;
+
+    border:
+        1px solid #e7e7e7;
+
+    border-radius: 12px;
+}
+
+.pedidos-vacio h3 {
+    margin: 0 0 8px;
+
+    font-size: 18px;
+}
+
+.pedidos-vacio p,
+.pedidos-error p {
+    margin: 0;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .pedido-fila {
+        grid-template-columns:
+            1.5fr
+            1fr
+            1fr
+            1fr
+            auto;
+
+        gap: 15px;
+    }
+
+    .pedido-fila .pedido-dinero {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
 @media (max-width: 800px) {
 
     .pedidos-toolbar {
@@ -2843,5 +3121,60 @@ h2 {
 
     .btn-nuevo-pedido {
         width: 100%;
+    }
+
+    .pedidos-filtros {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .pedido-filtro {
+        flex-shrink: 0;
+    }
+
+    .pedido-fila {
+        grid-template-columns: 1fr auto;
+
+        gap: 12px 15px;
+
+        padding: 16px;
+    }
+
+    .pedido-principal {
+        grid-column: 1;
+    }
+
+    .pedido-dato {
+        grid-column: 1 / -1;
+    }
+
+    .btn-ver-pedido {
+        grid-column: 2;
+        grid-row: 1;
+
+        align-self: center;
+    }
+}
+
+
+/* =========================================================
+   CELULAR PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .pedido-fila {
+        display: grid;
+
+        grid-template-columns: 1fr auto;
+    }
+
+    .pedido-dato {
+        grid-column: 1 / -1;
+    }
+
+    .pedido-principal h3 {
+        font-size: 14px;
     }
 }
