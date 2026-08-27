@@ -5123,85 +5123,240 @@ async function mostrarVistaModelos() {
    ========================================================= */
 
 function configurarDashboard() {
-    const btnModelos = document.getElementById("btn-dashboard-modelos");
-    const btnAccesoModelos = document.getElementById("btn-acceso-modelos");
-    const btnClientes = document.getElementById("btn-dashboard-clientes");
-    const btnAccesoClientes = document.getElementById("btn-acceso-clientes");
-    const btnPedidos = document.getElementById("btn-dashboard-pedidos");
-    const btnAccesoPedidos = document.getElementById("btn-acceso-pedidos");
-    const btnVolverModelos = document.getElementById("btn-volver-dashboard");
-    const btnVolverClientes = document.getElementById("btn-volver-dashboard-clientes");
-    const btnVolverPedidos = document.getElementById("btn-volver-dashboard-pedidos");
-    const btnNuevoPedido = document.getElementById("btn-dashboard-nuevo-pedido");
+
+    const btnModelos =
+        document.getElementById(
+            "btn-dashboard-modelos"
+        );
+
+    const btnAccesoModelos =
+        document.getElementById(
+            "btn-acceso-modelos"
+        );
+
+    const btnClientes =
+        document.getElementById(
+            "btn-dashboard-clientes"
+        );
+
+    const btnAccesoClientes =
+        document.getElementById(
+            "btn-acceso-clientes"
+        );
+
+    const btnPedidos =
+        document.getElementById(
+            "btn-dashboard-pedidos"
+        );
+
+    const btnAccesoPedidos =
+        document.getElementById(
+            "btn-acceso-pedidos"
+        );
+
+    const btnAccesoMateriales =
+        document.getElementById(
+            "btn-acceso-materiales"
+        );
+
+    const btnVolverModelos =
+        document.getElementById(
+            "btn-volver-dashboard"
+        );
+
+    const btnVolverClientes =
+        document.getElementById(
+            "btn-volver-dashboard-clientes"
+        );
+
+    const btnVolverPedidos =
+        document.getElementById(
+            "btn-volver-dashboard-pedidos"
+        );
+
+    const btnNuevoPedido =
+        document.getElementById(
+            "btn-dashboard-nuevo-pedido"
+        );
+
+
+    /* =====================================================
+       MODELOS
+       ===================================================== */
 
     if (btnModelos) {
-        btnModelos.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaModelos();
-        };
+
+        btnModelos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaModelos();
+
+            };
+
     }
+
 
     if (btnAccesoModelos) {
-        btnAccesoModelos.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaModelos();
-        };
+
+        btnAccesoModelos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaModelos();
+
+            };
+
     }
+
+
+    /* =====================================================
+       CLIENTES
+       ===================================================== */
 
     if (btnClientes) {
-        btnClientes.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaClientes();
-        };
+
+        btnClientes.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaClientes();
+
+            };
+
     }
+
 
     if (btnAccesoClientes) {
-        btnAccesoClientes.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaClientes();
-        };
+
+        btnAccesoClientes.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaClientes();
+
+            };
+
     }
+
+
+    /* =====================================================
+       PEDIDOS
+       ===================================================== */
 
     if (btnPedidos) {
-        btnPedidos.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaPedidos();
-        };
+
+        btnPedidos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaPedidos();
+
+            };
+
     }
+
 
     if (btnAccesoPedidos) {
-        btnAccesoPedidos.onclick = function(event) {
-            event.preventDefault();
-            mostrarVistaPedidos();
-        };
+
+        btnAccesoPedidos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarVistaPedidos();
+
+            };
+
     }
+
+
+    /* =====================================================
+       MATERIALES
+       ===================================================== */
+
+    if (btnAccesoMateriales) {
+
+        btnAccesoMateriales.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                iniciarMateriales();
+
+            };
+
+    }
+
+
+    /* =====================================================
+       VOLVER AL DASHBOARD
+       ===================================================== */
 
     if (btnVolverModelos) {
-        btnVolverModelos.onclick = function(event) {
-            event.preventDefault();
-            mostrarDashboard();
-        };
+
+        btnVolverModelos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarDashboard();
+
+            };
+
     }
+
 
     if (btnVolverClientes) {
-        btnVolverClientes.onclick = function(event) {
-            event.preventDefault();
-            mostrarDashboard();
-        };
+
+        btnVolverClientes.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarDashboard();
+
+            };
+
     }
 
+
     if (btnVolverPedidos) {
-        btnVolverPedidos.onclick = function(event) {
-            event.preventDefault();
-            mostrarDashboard();
-        };
+
+        btnVolverPedidos.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarDashboard();
+
+            };
+
     }
-   if (btnNuevoPedido) {
-    btnNuevoPedido.onclick = function(event) {
-        event.preventDefault();
-        mostrarNuevoPedido();
-    };
-}
+
+
+    /* =====================================================
+       NUEVO PEDIDO
+       ===================================================== */
+
+    if (btnNuevoPedido) {
+
+        btnNuevoPedido.onclick =
+            function(event) {
+
+                event.preventDefault();
+
+                mostrarNuevoPedido();
+
+            };
+
+    }
+
 }
 
 /* =========================================================
@@ -9786,6 +9941,628 @@ async function iniciarPedidos() {
         `;
     }
 }
+
+/* =========================================================
+   INICIAR MATERIALES
+   ========================================================= */
+
+async function iniciarMateriales() {
+
+    const container =
+        document.getElementById(
+            "materiales-container"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!empresaActual) {
+
+        container.innerHTML =
+            "<p>No hay una empresa seleccionada.</p>";
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="materiales-toolbar">
+
+            <div class="materiales-buscador">
+
+                <span>⌕</span>
+
+                <input
+                    type="search"
+                    id="buscar-materiales"
+                    placeholder="Buscar por material o proveedor..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                class="btn-nuevo-material"
+                id="btn-nuevo-material"
+            >
+                + NUEVO MATERIAL
+            </button>
+
+        </div>
+
+
+        <div id="materiales-lista">
+
+            <p>
+                Cargando materiales...
+            </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        /*
+         * CARGAR MATERIALES
+         */
+
+        const materiales =
+            await llamarAPI(
+                "materiales",
+                empresaActual.empresa_id
+            );
+
+
+        /*
+         * FILTRAR POR EMPRESA
+         */
+
+        const materialesEmpresa =
+            filtrarPorEmpresa(
+                materiales
+            );
+
+
+        const lista =
+            document.getElementById(
+                "materiales-lista"
+            );
+
+
+        const buscador =
+            document.getElementById(
+                "buscar-materiales"
+            );
+
+
+        if (!lista) {
+            return;
+        }
+
+
+        /* =====================================================
+           MOSTRAR LISTA
+           ===================================================== */
+
+        function mostrarListaMateriales(
+            materialesMostrados
+        ) {
+
+            if (
+                !materialesMostrados.length
+            ) {
+
+                lista.innerHTML = `
+
+                    <div class="materiales-vacio">
+
+                        <h3>
+                            No se encontraron materiales
+                        </h3>
+
+                        <p>
+                            Probá con otro material o proveedor.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            lista.innerHTML = `
+
+                <div class="materiales-lista">
+
+                    ${materialesMostrados
+                        .map(
+                            material => {
+
+                                const stockActual =
+                                    Number(
+                                        material.stock_actual || 0
+                                    );
+
+
+                                const stockMinimo =
+                                    Number(
+                                        material.stock_minimo || 0
+                                    );
+
+
+                                let estadoStock =
+                                    "stock-normal";
+
+
+                                let textoStock =
+                                    "STOCK OK";
+
+
+                                if (
+                                    stockActual <= 0
+                                ) {
+
+                                    estadoStock =
+                                        "stock-sin-stock";
+
+                                    textoStock =
+                                        "SIN STOCK";
+
+                                }
+
+                                else if (
+                                    stockActual <=
+                                    stockMinimo
+                                ) {
+
+                                    estadoStock =
+                                        "stock-bajo";
+
+                                    textoStock =
+                                        "STOCK BAJO";
+
+                                }
+
+
+                                return `
+
+                                    <article
+                                        class="material-fila"
+                                    >
+
+                                        <div
+                                            class="material-principal"
+                                        >
+
+                                            <span>
+                                                MATERIAL
+                                            </span>
+
+                                            <h3>
+                                                ${escaparHTML(
+                                                    material.nombre || "-"
+                                                )}
+                                            </h3>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-dato"
+                                        >
+
+                                            <span>
+                                                UNIDAD
+                                            </span>
+
+                                            <p>
+                                                ${escaparHTML(
+                                                    material.unidad_compra || "-"
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-dato"
+                                        >
+
+                                            <span>
+                                                COSTO UNITARIO
+                                            </span>
+
+                                            <p>
+                                                $${escaparHTML(
+                                                    material.costo_unitario || "0"
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-dato"
+                                        >
+
+                                            <span>
+                                                PROVEEDOR
+                                            </span>
+
+                                            <p>
+                                                ${escaparHTML(
+                                                    material.proveedor || "-"
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-dato material-stock"
+                                        >
+
+                                            <span>
+                                                STOCK
+                                            </span>
+
+                                            <p>
+                                                ${escaparHTML(
+                                                    material.stock_actual || "0"
+                                                )}
+                                                ${escaparHTML(
+                                                    material.unidad_compra || ""
+                                                )}
+                                            </p>
+
+                                            <small
+                                                class="${estadoStock}"
+                                            >
+                                                ${textoStock}
+                                            </small>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-dato"
+                                        >
+
+                                            <span>
+                                                MÍNIMO
+                                            </span>
+
+                                            <p>
+                                                ${escaparHTML(
+                                                    material.stock_minimo || "0"
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            class="material-acciones"
+                                        >
+
+                                            <button
+                                                type="button"
+                                                class="btn-ver-material"
+                                                data-material-id="${escaparHTML(
+                                                    material.material_id
+                                                )}"
+                                            >
+                                                VER
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                class="btn-editar-material"
+                                                data-material-id="${escaparHTML(
+                                                    material.material_id
+                                                )}"
+                                            >
+                                                EDITAR
+                                            </button>
+
+                                        </div>
+
+                                    </article>
+
+                                `;
+
+                            }
+                        )
+                        .join("")
+                    }
+
+                </div>
+
+            `;
+
+
+            /* =================================================
+               BOTÓN VER
+               ================================================= */
+
+            lista
+                .querySelectorAll(
+                    ".btn-ver-material"
+                )
+                .forEach(
+                    boton => {
+
+                        boton.addEventListener(
+                            "click",
+                            function() {
+
+                                const materialId =
+                                    this.dataset.materialId;
+
+
+                                const material =
+                                    materialesEmpresa.find(
+                                        item =>
+                                            String(
+                                                item.material_id
+                                            ) ===
+                                            String(
+                                                materialId
+                                            )
+                                    );
+
+
+                                if (!material) {
+
+                                    alert(
+                                        "No se encontró el material."
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                /*
+                                 * Lo conectamos
+                                 * en el próximo paso.
+                                 */
+
+                                if (
+                                    typeof mostrarFichaMaterial ===
+                                    "function"
+                                ) {
+
+                                    mostrarFichaMaterial(
+                                        materialId,
+                                        materialesEmpresa
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /* =================================================
+               BOTÓN EDITAR
+               ================================================= */
+
+            lista
+                .querySelectorAll(
+                    ".btn-editar-material"
+                )
+                .forEach(
+                    boton => {
+
+                        boton.addEventListener(
+                            "click",
+                            function() {
+
+                                const materialId =
+                                    this.dataset.materialId;
+
+
+                                const material =
+                                    materialesEmpresa.find(
+                                        item =>
+                                            String(
+                                                item.material_id
+                                            ) ===
+                                            String(
+                                                materialId
+                                            )
+                                    );
+
+
+                                if (!material) {
+
+                                    alert(
+                                        "No se encontró el material."
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                /*
+                                 * Lo conectamos
+                                 * en el próximo paso.
+                                 */
+
+                                if (
+                                    typeof editarMaterial ===
+                                    "function"
+                                ) {
+
+                                    editarMaterial(
+                                        material,
+                                        materialesEmpresa
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           BUSCADOR
+           ===================================================== */
+
+        function aplicarFiltroMateriales() {
+
+            const texto =
+                buscador
+                    ? buscador.value
+                        .trim()
+                        .toLowerCase()
+                    : "";
+
+
+            const filtrados =
+                materialesEmpresa.filter(
+                    material => {
+
+                        const nombre =
+                            String(
+                                material.nombre || ""
+                            )
+                            .toLowerCase();
+
+
+                        const proveedor =
+                            String(
+                                material.proveedor || ""
+                            )
+                            .toLowerCase();
+
+
+                        const unidad =
+                            String(
+                                material.unidad_compra || ""
+                            )
+                            .toLowerCase();
+
+
+                        return (
+                            !texto ||
+                            nombre.includes(texto) ||
+                            proveedor.includes(texto) ||
+                            unidad.includes(texto)
+                        );
+
+                    }
+                );
+
+
+            mostrarListaMateriales(
+                filtrados
+            );
+
+        }
+
+
+        /*
+         * MOSTRAR LISTA INICIAL
+         */
+
+        mostrarListaMateriales(
+            materialesEmpresa
+        );
+
+
+        /*
+         * ACTIVAR BUSCADOR
+         */
+
+        if (buscador) {
+
+            buscador.addEventListener(
+                "input",
+                aplicarFiltroMateriales
+            );
+
+        }
+
+
+        /* =====================================================
+           NUEVO MATERIAL
+           ===================================================== */
+
+        const botonNuevo =
+            document.getElementById(
+                "btn-nuevo-material"
+            );
+
+
+        if (botonNuevo) {
+
+            botonNuevo.addEventListener(
+                "click",
+                function() {
+
+                    if (
+                        typeof mostrarNuevoMaterial ===
+                        "function"
+                    ) {
+
+                        mostrarNuevoMaterial();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando materiales:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="materiales-error">
+
+                <p>
+                    No se pudieron cargar los materiales.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
 /* =========================================================
    VISTA CLIENTES
    ========================================================= */
