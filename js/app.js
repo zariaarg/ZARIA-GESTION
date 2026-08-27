@@ -5040,6 +5040,7 @@ async function mostrarDashboard() {
     const modelosView = document.getElementById("modelos-view");
     const clientesView = document.getElementById("clientes-view");
     const pedidosView = document.getElementById("pedidos-view");
+    const materialesView = document.getElementById("materiales-view");
 
     vistaActual = "dashboard";
 
@@ -5063,6 +5064,11 @@ async function mostrarDashboard() {
         pedidosView.setAttribute("aria-hidden", "true");
     }
 
+    if (materialesView) {
+        materialesView.style.display = "none";
+        materialesView.setAttribute("aria-hidden","true"  );
+
+    }
     if (typeof iniciarDashboard === "function") {
         await iniciarDashboard();
     }
