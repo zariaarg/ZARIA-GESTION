@@ -9259,13 +9259,25 @@ async function iniciarPedidos() {
                                 </p>
                             </div>
 
-                            <button
-                                type="button"
-                                class="btn-ver-pedido"
-                                data-pedido-id="${escaparHTML(pedido.id_pedido)}"
-                            >
-                                VER
-                            </button>
+                                <div class="pedido-acciones">
+
+                                    <button
+                                        type="button"
+                                        class="btn-ver-pedido"
+                                        data-pedido-id="${escaparHTML(pedido.id_pedido)}"
+                                    >
+                                        VER
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="btn-editar-pedido"
+                                        data-pedido-id="${escaparHTML(pedido.id_pedido)}"
+                                    >
+                                        EDITAR
+                                    </button>
+
+                                </div>                            
                         </article>
                     `).join("")}
                 </div>
