@@ -2766,50 +2766,82 @@ h2 {
         gap: 15px;
     }
 }
+
 /* =========================================================
-   VISTA PEDIDOS
+   PEDIDOS — BARRA DE BÚSQUEDA Y NUEVO PEDIDO
    ========================================================= */
 
 .pedidos-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 22px;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
 .pedidos-buscador {
-    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 520px;
+    height: 46px;
+    padding: 0 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.pedidos-buscador span {
+    font-size: 22px;
+    color: #777;
 }
 
 .pedidos-buscador input {
     width: 100%;
-    min-height: 46px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #222;
     box-sizing: border-box;
-    padding: 0 14px;
-    border: 1px solid #ddd;
-    border-radius: 9px;
-    background: #fff;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
+}
+
+.pedidos-buscador input::placeholder {
+    color: #999;
 }
 
 .btn-nuevo-pedido {
-    height: 40px;
+    flex-shrink: 0;
+    height: 46px;
     padding: 0 20px;
-    margin-top: 8px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #1d1a1a;
+    border: none;
     border-radius: 9px;
-
     background: #1d1a1a;
     color: #fff;
-
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
-    letter-spacing: 1px;
-
+    letter-spacing: .5px;
     cursor: pointer;
+}
+
+.btn-nuevo-pedido:hover {
+    opacity: .88;
+}
+@media (max-width: 800px) {
+
+    .pedidos-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pedidos-buscador {
+        max-width: none;
+    }
+
+    .btn-nuevo-pedido {
+        width: 100%;
+    }
 }
