@@ -9289,6 +9289,33 @@ async function iniciarPedidos() {
                     mostrarFichaPedido(pedidoId, pedidosEmpresa);
                 });
             });
+
+            lista.querySelectorAll(".btn-editar-pedido").forEach(boton => {
+                boton.addEventListener("click", function() {
+
+                    const pedidoId =
+                        this.dataset.pedidoId;
+
+                    const pedido =
+                        pedidosEmpresa.find(
+                            item =>
+                                String(item.id_pedido) ===
+                                String(pedidoId)
+                        );
+
+                    if (!pedido) {
+                        alert("No se encontró el pedido.");
+                        return;
+                    }
+
+                    editarPedido(
+                        pedido,
+                        pedidosEmpresa
+                    );
+
+                });
+            });
+
         }
 
         function aplicarFiltros() {
