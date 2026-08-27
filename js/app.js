@@ -5289,7 +5289,7 @@ function configurarDashboard() {
 
                 event.preventDefault();
 
-                iniciarMateriales();
+                mostrarVistaMateriales();
 
             };
 
