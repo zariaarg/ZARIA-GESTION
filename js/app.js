@@ -1317,7 +1317,21 @@ function verModelo(id) {
 
                     </div>
 
+<div class="modelo-detalle-costo">
 
+    <span class="modelo-detalle-label">
+        COSTO
+    </span>
+
+    <span
+        id="modelo-detalle-costo"
+    >
+        ${formatearPrecio(
+            modelo.costo || 0
+        )}
+    </span>
+
+</div>
                     ${
                         modelo.descripcion
                         ? `
@@ -1393,6 +1407,19 @@ function verModelo(id) {
 
                     </div>
 
+    <div class="modelo-materiales-acciones">
+
+        <button
+            type="button"
+            class="btn-calcular-costo"
+            onclick="calcularCostoModelo(
+                ${modelo.modelo_id}
+            )"
+        >
+            CALCULAR COSTO
+        </button>
+
+    </div>
 
                     <div class="modelo-detalle-seccion">
 
@@ -1908,6 +1935,9 @@ async function guardarMaterialModelo(
             modeloId
         );
 
+        await calcularCostoModelo(
+            modeloId
+        );
 
     } catch (error) {
 
@@ -1934,7 +1964,187 @@ async function guardarMaterialModelo(
 
 }
 
+/* =========================
+   CALCULAR COSTO MODELO
+========================= */
 
+async function calcularCostoModelo(
+    modeloId
+) {
+
+    if (!modeloId) {
+
+        alert(
+            "No se pudo identificar el modelo."
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        document.querySelector(
+            ".btn-calcular-costo"
+        );
+
+
+    if (boton) {
+
+        boton.disabled = true;
+
+        boton.textContent =
+            "CALCULANDO...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            accion:
+                                "calcular_costo_modelo",
+
+                            empresa_id:
+                                empresaActual
+                                    ? empresaActual.empresa_id
+                                    : null,
+
+                            modelo_id:
+                                modeloId
+
+                        })
+
+                }
+            );
+
+
+        const resultado =
+            await response.json();
+
+
+        if (!resultado.success) {
+
+            throw new Error(
+                resultado.error ||
+                "No se pudo calcular el costo."
+            );
+
+        }
+
+
+        /*
+         * ACTUALIZAR EL MODELO
+         * EN MEMORIA
+         */
+
+        const modelo =
+            modelos.find(
+                item =>
+                    Number(
+                        item.modelo_id
+                    ) ===
+                    Number(
+                        modeloId
+                    )
+            );
+
+
+        if (modelo) {
+
+            modelo.costo =
+                resultado.costo;
+
+        }
+
+
+        /*
+         * ACTUALIZAR COSTO
+         * EN LA FICHA
+         */
+
+        const costoElemento =
+            document.getElementById(
+                "modelo-detalle-costo"
+            );
+
+
+        if (costoElemento) {
+
+            costoElemento.textContent =
+                formatearPrecio(
+                    resultado.costo
+                );
+
+        }
+
+
+        /*
+         * ACTUALIZAR TARJETAS
+         */
+
+        if (
+            typeof mostrarModelos ===
+            "function"
+        ) {
+
+            mostrarModelos();
+
+        }
+
+
+        /*
+         * MENSAJE
+         */
+
+        console.log(
+            "Costo del modelo calculado:",
+            resultado.costo,
+            resultado.materiales
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error calculando costo:",
+            error
+        );
+
+
+        alert(
+            "No se pudo calcular el costo.\n\n" +
+            error.message
+        );
+
+
+    } finally {
+
+        if (boton) {
+
+            boton.disabled = false;
+
+            boton.textContent =
+                "CALCULAR COSTO";
+
+        }
+
+    }
+
+}
 /* =========================
    MATERIALES DEL MODELO
 ========================= */
