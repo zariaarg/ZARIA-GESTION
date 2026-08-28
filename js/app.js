@@ -1683,7 +1683,6 @@ function abrirAgregarMaterial() {
 
 }
 
-
 /* =========================
    GUARDAR MATERIAL MODELO
 ========================= */
@@ -1727,6 +1726,34 @@ async function guardarMaterialModelo(
         unidadInput.value;
 
 
+    /*
+     * EMPRESA ACTUAL
+     */
+
+    if (
+        !empresaActual ||
+        !empresaActual.empresa_id
+    ) {
+
+        alert(
+            "No hay una empresa seleccionada."
+        );
+
+        return;
+
+    }
+
+
+    const empresaId =
+        Number(
+            empresaActual.empresa_id
+        );
+
+
+    /*
+     * VALIDACIONES
+     */
+
     if (!materialId) {
 
         alert(
@@ -1763,13 +1790,19 @@ async function guardarMaterialModelo(
     }
 
 
+    /*
+     * BOTÓN
+     */
+
     const boton =
         modal.querySelector(
             ".material-btn-guardar"
         );
 
 
-    boton.disabled = true;
+    boton.disabled =
+        true;
+
 
     boton.textContent =
         "GUARDANDO...";
@@ -1777,15 +1810,33 @@ async function guardarMaterialModelo(
 
     try {
 
+        /*
+         * GUARDAR RELACIÓN
+         *
+         * modelo_material_id
+         * lo genera Apps Script.
+         *
+         * Nosotros enviamos:
+         * empresa_id
+         * modelo_id
+         * material_id
+         * cantidad
+         * unidad
+         */
+
         const response =
             await fetch(
                 API_URL,
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "text/plain;charset=utf-8"
+
                     },
 
                     body:
@@ -1794,19 +1845,24 @@ async function guardarMaterialModelo(
                             accion:
                                 "agregar_modelo_material",
 
+
                             empresa_id:
-                                empresaActual
-                                    ? empresaActual.empresa_id
-                                    : 1,
+                                empresaId,
+
 
                             modelo_id:
-                                modeloId,
+                                Number(
+                                    modeloId
+                                ),
+
 
                             material_id:
                                 materialId,
 
+
                             cantidad:
                                 cantidad,
+
 
                             unidad:
                                 unidad
@@ -1821,20 +1877,34 @@ async function guardarMaterialModelo(
             await response.json();
 
 
-        if (!resultado.success) {
+        /*
+         * VERIFICAR RESPUESTA
+         */
+
+        if (
+            !resultado.success
+        ) {
 
             throw new Error(
                 resultado.error ||
-                "No se pudo guardar"
+                "No se pudo guardar el material."
             );
 
         }
 
 
+        /*
+         * CERRAR MODAL
+         */
+
         modal.remove();
 
 
-        cargarMaterialesModelo(
+        /*
+         * RECARGAR MATERIALES
+         */
+
+        await cargarMaterialesModelo(
             modeloId
         );
 
@@ -1842,7 +1912,7 @@ async function guardarMaterialModelo(
     } catch (error) {
 
         console.error(
-            "Error guardando material:",
+            "Error guardando material del modelo:",
             error
         );
 
@@ -1853,7 +1923,9 @@ async function guardarMaterialModelo(
         );
 
 
-        boton.disabled = false;
+        boton.disabled =
+            false;
+
 
         boton.textContent =
             "GUARDAR";
