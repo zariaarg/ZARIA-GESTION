@@ -831,6 +831,472 @@ h2 {
     cursor: wait;
 }
 
+/* =========================================================
+   MODAL NUEVO MATERIAL
+   ========================================================= */
+
+.material-nuevo-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+}
+
+
+/* =========================================================
+   FONDO OSCURO
+   ========================================================= */
+
+.material-nuevo-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.material-nuevo-contenido {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: min(720px, 100%);
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.25);
+
+}
+
+
+/* =========================================================
+   BOTÓN CERRAR
+   ========================================================= */
+
+.material-nuevo-cerrar {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 16px;
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    color: #1d1a1a;
+
+}
+
+
+.material-nuevo-cerrar:hover {
+
+    color: #C47456;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.material-nuevo-header {
+
+    margin-bottom: 25px;
+
+}
+
+
+.material-nuevo-header > span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #C47456;
+
+}
+
+
+.material-nuevo-header h2 {
+
+    margin: 0 0 8px 0;
+
+    font-size: 24px;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.material-nuevo-header p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    color: #666;
+
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.material-seccion {
+
+    margin-bottom: 24px;
+
+    padding: 20px;
+
+    border: 1px solid #e4dfdb;
+
+    border-radius: 10px;
+
+}
+
+
+.material-seccion-titulo {
+
+    margin-bottom: 18px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.2px;
+
+    color: #555;
+
+}
+
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+
+.material-campo {
+
+    margin-bottom: 15px;
+
+}
+
+
+.material-campo label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    color: #555;
+
+}
+
+
+.material-campo input,
+
+.material-campo select {
+
+    width: 100%;
+
+    height: 42px;
+
+    padding: 0 12px;
+
+    border: 1px solid #d8d3cf;
+
+    border-radius: 7px;
+
+    background: white;
+
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+}
+
+
+.material-campo input:focus,
+
+.material-campo select:focus {
+
+    border-color: #C47456;
+
+}
+
+
+/* =========================================================
+   GRILLA
+   ========================================================= */
+
+.material-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(
+        2,
+        minmax(0, 1fr)
+    );
+
+    gap: 15px;
+
+}
+
+
+/* =========================================================
+   TEXTOS DE AYUDA
+   ========================================================= */
+
+.material-campo small {
+
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+
+    color: #888;
+
+}
+
+
+/* =========================================================
+   ESTADO ACTIVO
+   ========================================================= */
+
+.material-activo label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 13px;
+
+    color: #444;
+
+}
+
+
+.material-activo input {
+
+    width: 16px;
+
+    height: 16px;
+
+}
+
+
+/* =========================================================
+   MENSAJE
+   ========================================================= */
+
+.material-nuevo-mensaje {
+
+    min-height: 20px;
+
+    margin: 10px 0;
+
+    font-size: 13px;
+
+}
+
+
+.material-nuevo-mensaje.exito {
+
+    color: #3d7a50;
+
+}
+
+
+.material-nuevo-mensaje.error {
+
+    color: #a33a3a;
+
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.material-nuevo-botones {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+.btn-cancelar-material,
+
+.btn-guardar-material {
+
+    min-width: 150px;
+
+    height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+
+}
+
+
+.btn-cancelar-material {
+
+    background: white;
+
+    color: #1d1a1a;
+
+    border: 1px solid #d8d3cf;
+
+}
+
+
+.btn-guardar-material {
+
+    background: #C47456;
+
+    color: white;
+
+    border: 1px solid #C47456;
+
+}
+
+
+.btn-cancelar-material:hover {
+
+    border-color: #1d1a1a;
+
+}
+
+
+.btn-guardar-material:hover {
+
+    opacity: 0.9;
+
+}
+
+
+.btn-guardar-material:disabled {
+
+    opacity: 0.5;
+
+    cursor: wait;
+
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .material-nuevo-contenido {
+
+        padding: 20px;
+
+        max-height: calc(100vh - 20px);
+
+    }
+
+
+    .material-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .material-nuevo-botones {
+
+        flex-direction: column-reverse;
+
+    }
+
+
+    .btn-cancelar-material,
+
+    .btn-guardar-material {
+
+        width: 100%;
+
+    }
+
+}
+
 /* =========================
    SELECTOR DE EMPRESA
 ========================= */
