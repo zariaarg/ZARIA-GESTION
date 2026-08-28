@@ -432,233 +432,523 @@ h2 {
     }
 }
 
-/* =========================
-   MODAL - DETALLE MODELO
-========================= */
+/* =========================================================
+   MODAL / FICHA DEL MODELO
+========================================================= */
+
 .modelo-modal {
+
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 9000;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     padding: 30px;
+
 }
 
 
 .modelo-modal-overlay {
+
     position: absolute;
     inset: 0;
-    /* Fondo oscuro con un leve tinte cálido */
-    background: rgba(44, 38, 34, 0.65);
-    backdrop-filter: blur(3px);
+
+    background: rgba(0, 0, 0, 0.45);
+
 }
 
 
 .modelo-modal-contenido {
+
     position: relative;
-    z-index: 2;
-    width: min(1000px, 95vw);
-    max-height: 90vh;
+    z-index: 1;
+
+    width: min(1050px, 100%);
+
+    max-height: 92vh;
+
     overflow-y: auto;
-    background: #f7f5f3;
-    border-radius: 16px;
+
+    background: #fff;
+
+    border-radius: 14px;
+
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3);
-   /* Borde sutil para darle definición al modal */
-    border: 1px solid #e4dfda;
+        0 15px 50px rgba(0, 0, 0, 0.20);
+
 }
 
 
-/* =========================
+/* =========================================================
    BOTÓN CERRAR
-========================= */
+========================================================= */
 
 .modelo-modal-cerrar {
+
     position: absolute;
-    top: 15px;
+
+    top: 14px;
     right: 18px;
-    z-index: 5;
-    width: 38px;
-    height: 38px;
+
+    z-index: 10;
+
     border: none;
-    border-radius: 50%;
-    background: white;
-    color: #1d1a1a;
-    font-size: 26px;
+
+    background: transparent;
+
+    font-size: 28px;
+
     line-height: 1;
+
+    color: #1d1a1a;
+
     cursor: pointer;
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.15);
-   transition: background 0.2s ease, color 0.2s ease;
+
 }
+
 
 .modelo-modal-cerrar:hover {
-    background: #f7f5f3;
+
     color: #C47456;
+
 }
 
-/* =========================
-   DETALLE
-========================= */
 
-.modelo-detalle {
+/* =========================================================
+   PARTE SUPERIOR
+   IMAGEN + INFORMACIÓN
+========================================================= */
+
+.modelo-detalle-superior {
+
     display: grid;
+
     grid-template-columns:
-        1fr 1fr;
-    gap: 40px;
-    padding: 40px;
+        minmax(420px, 1fr)
+        minmax(320px, 0.85fr);
+
+    gap: 45px;
+
+    padding: 45px;
+
 }
 
-/* =========================
+
+/* =========================================================
    IMÁGENES
-========================= */
+========================================================= */
 
 .modelo-detalle-imagenes {
+
     display: flex;
+
     flex-direction: column;
+
     gap: 15px;
+
 }
 
 
-.modelo-detalle-imagen-principal,
+.modelo-detalle-imagen-principal {
+
+    width: 100%;
+
+    height: 500px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #f7f5f3;
+
+}
+
+
+.modelo-detalle-imagen-principal img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+
+}
+
+
 .modelo-detalle-imagen-secundaria {
 
     width: 100%;
-    background: #f7f5f3;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #e5e0dc;
-}
 
-.modelo-detalle-imagen-principal {
-    height: 420px;
-}
-
-.modelo-detalle-imagen-secundaria {
     height: 180px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #f7f5f3;
+
 }
 
-.modelo-detalle-imagen-principal img,
+
 .modelo-detalle-imagen-secundaria img {
 
     width: 100%;
     height: 100%;
+
     object-fit: contain;
+
     display: block;
+
 }
 
 
-/* =========================
-   INFORMACIÓN
-========================= */
+.modelo-detalle-imagen-principal.sin-imagen {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #888;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN PRINCIPAL
+========================================================= */
 
 .modelo-detalle-info {
-    padding: 15px 20px 20px 0;
+
+    padding: 10px 20px 20px 0;
+
 }
+
+
+/* CÓDIGO + TIPO */
+
+.modelo-detalle-codigo-tipo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+}
+
 
 .modelo-detalle-codigo {
-    display: inline-block;
-    font-size: 13px;
+
+    font-size: 12px;
+
     color: #888;
-    margin-bottom: 8px;
+
+    letter-spacing: 1px;
+
 }
+
 
 .modelo-detalle-tipo {
+
     display: inline-block;
-    margin-left: 8px;
-    padding: 5px 9px;
+
+    padding: 5px 10px;
+
     border-radius: 5px;
+
     background: #f1efed;
+
     color: #555;
-    font-size: 11px;
+
+    font-size: 10px;
+
     font-weight: bold;
+
     letter-spacing: 1px;
+
 }
+
+
+/* NOMBRE */
 
 .modelo-detalle-info h2 {
-    margin: 10px 0 5px;
+
+    margin: 0 0 12px;
+
     font-size: 34px;
+
+    line-height: 1.15;
+
     letter-spacing: 1px;
+
     color: #1d1a1a;
+
 }
+
+
+/* MATERIAL BASE */
 
 .modelo-detalle-material {
+
     color: #666;
-    font-size: 15px;
-    margin-bottom: 20px;
-}
 
-.modelo-detalle-precio {
-    font-size: 25px;
-    font-weight: bold;
-    color: #C47456;
+    font-size: 14px;
+
     margin-bottom: 30px;
+
 }
 
-/* =========================
+
+/* =========================================================
+   PRECIO + COSTO
+========================================================= */
+
+.modelo-detalle-valores {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 45px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.modelo-detalle-valor {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.modelo-detalle-label {
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.2px;
+
+    color: #888;
+
+}
+
+
+.modelo-detalle-valor strong {
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    color: #C47456;
+
+}
+
+
+.modelo-detalle-valor:last-child strong {
+
+    color: #1d1a1a;
+
+}
+
+
+/* =========================================================
+   PARTE INFERIOR
+========================================================= */
+
+.modelo-detalle-inferior {
+
+    padding: 0 45px 45px;
+
+}
+
+
+/* =========================================================
    SECCIONES
-========================= */
+========================================================= */
 
 .modelo-detalle-seccion {
+
     border-top: 1px solid #ddd7d2;
-    padding-top: 20px;
-    margin-top: 20px;
+
+    padding-top: 22px;
+
+    margin-top: 25px;
+
 }
 
+
 .modelo-detalle-seccion h3 {
+
     margin: 0 0 10px;
+
     font-size: 11px;
+
     letter-spacing: 1.5px;
+
     color: #555;
+
 }
+
 
 .modelo-detalle-seccion p {
 
     margin: 0;
+
     font-size: 14px;
+
     line-height: 1.7;
+
     color: #444;
+
 }
+
 
 .modelo-medidas {
+
     line-height: 1.9 !important;
+
 }
 
-/* =========================
+
+/* =========================================================
+   ACCIONES DE MATERIALES
+========================================================= */
+
+.modelo-materiales-acciones {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+}
+
+
+.btn-calcular-costo {
+
+    padding: 10px 18px;
+
+    border: 1px solid #1d1a1a;
+
+    border-radius: 7px;
+
+    background: #1d1a1a;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.btn-calcular-costo:hover {
+
+    opacity: 0.85;
+
+}
+
+
+/* =========================================================
    RESPONSIVE
-========================= */
+========================================================= */
+
 @media (max-width: 750px) {
+
     .modelo-modal {
+
         padding: 15px;
+
     }
+
+
     .modelo-modal-contenido {
+
         max-height: 95vh;
+
     }
-    .modelo-detalle {
+
+
+    .modelo-detalle-superior {
+
         grid-template-columns: 1fr;
-        gap: 20px;
+
+        gap: 25px;
+
         padding: 25px;
+
     }
 
 
     .modelo-detalle-imagen-principal {
 
-        height: 320px;
+        height: 360px;
+
     }
+
+
     .modelo-detalle-imagen-secundaria {
+
         height: 180px;
+
     }
+
+
     .modelo-detalle-info {
+
         padding: 0;
+
     }
+
+
     .modelo-detalle-info h2 {
+
         font-size: 28px;
+
     }
+
+
+    .modelo-detalle-inferior {
+
+        padding: 0 25px 30px;
+
+    }
+
+
+    .modelo-detalle-valores {
+
+        gap: 30px;
+
+    }
+
 }
+
 /* =========================
    MATERIALES DEL MODELO
 ========================= */
