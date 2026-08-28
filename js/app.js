@@ -12683,6 +12683,1045 @@ async function mostrarNuevoMaterial() {
     );
 
 }
+
+/* =========================================================
+   VER MATERIAL
+   ========================================================= */
+
+function mostrarFichaMaterial(
+    materialId,
+    materiales
+) {
+
+    const material =
+        materiales.find(
+            item =>
+                String(
+                    item.material_id
+                ) ===
+                String(
+                    materialId
+                )
+        );
+
+
+    if (!material) {
+
+        alert(
+            "No se encontró el material."
+        );
+
+        return;
+
+    }
+
+
+    cerrarModalesAbiertos();
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.className =
+        "material-ver-modal";
+
+
+    const activo =
+        material.activo === true ||
+        String(
+            material.activo
+        ).toUpperCase() === "TRUE";
+
+
+    const stockActual =
+        Number(
+            material.stock_actual || 0
+        );
+
+
+    const stockMinimo =
+        Number(
+            material.stock_minimo || 0
+        );
+
+
+    let estadoStock =
+        "STOCK OK";
+
+
+    if (
+        stockActual <= 0
+    ) {
+
+        estadoStock =
+            "SIN STOCK";
+
+    }
+
+    else if (
+        stockActual <=
+        stockMinimo
+    ) {
+
+        estadoStock =
+            "STOCK BAJO";
+
+    }
+
+
+    modal.innerHTML = `
+
+        <div class="material-ver-overlay"></div>
+
+
+        <div class="material-ver-contenido">
+
+            <button
+                type="button"
+                class="material-ver-cerrar"
+            >
+                ×
+            </button>
+
+
+            <div class="material-ver-header">
+
+                <span>
+                    MATERIALES
+                </span>
+
+                <h2>
+                    ${escaparHTML(
+                        material.nombre || "-"
+                    )}
+                </h2>
+
+                <p>
+                    Ficha del material
+                </p>
+
+            </div>
+
+
+            <div class="material-ver-seccion">
+
+                <div class="material-ver-seccion-titulo">
+                    INFORMACIÓN
+                </div>
+
+
+                <div class="material-ver-grid">
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            ID MATERIAL
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                material.material_id
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            UNIDAD DE COMPRA
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                material.unidad_compra || "-"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            PROVEEDOR
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                material.proveedor || "-"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            ESTADO
+                        </span>
+
+                        <strong
+                            class="${
+                                activo
+                                    ? "material-estado-activo"
+                                    : "material-estado-inactivo"
+                            }"
+                        >
+                            ${
+                                activo
+                                    ? "ACTIVO"
+                                    : "INACTIVO"
+                            }
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="material-ver-seccion">
+
+                <div class="material-ver-seccion-titulo">
+                    COSTOS Y STOCK
+                </div>
+
+
+                <div class="material-ver-grid">
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            COSTO UNITARIO PROMEDIO
+                        </span>
+
+                        <strong>
+                            $${escaparHTML(
+                                material.costo_unitario || "0"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            STOCK ACTUAL
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                material.stock_actual || "0"
+                            )}
+                            ${escaparHTML(
+                                material.unidad_compra || ""
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            STOCK MÍNIMO
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                material.stock_minimo || "0"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="material-ver-dato">
+
+                        <span>
+                            ESTADO DEL STOCK
+                        </span>
+
+                        <strong>
+                            ${escaparHTML(
+                                estadoStock
+                            )}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="material-ver-botones">
+
+                <button
+                    type="button"
+                    class="material-ver-cerrar-btn"
+                >
+                    CERRAR
+                </button>
+
+                <button
+                    type="button"
+                    class="material-ver-editar-btn"
+                >
+                    EDITAR MATERIAL
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    const cerrar =
+        () => modal.remove();
+
+
+    modal
+        .querySelector(
+            ".material-ver-cerrar"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    modal
+        .querySelector(
+            ".material-ver-overlay"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    modal
+        .querySelector(
+            ".material-ver-cerrar-btn"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    modal
+        .querySelector(
+            ".material-ver-editar-btn"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+
+                editarMaterial(
+                    material,
+                    materiales
+                );
+
+            }
+        );
+
+}
+
+/* =========================================================
+   EDITAR MATERIAL
+   ========================================================= */
+
+function editarMaterial(
+    material,
+    materiales
+) {
+
+    if (!material) {
+
+        alert(
+            "No se encontró el material."
+        );
+
+        return;
+
+    }
+
+
+    cerrarModalesAbiertos();
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.className =
+        "material-editar-modal";
+
+
+    const activo =
+        material.activo === true ||
+        String(
+            material.activo
+        ).toUpperCase() === "TRUE";
+
+
+    modal.innerHTML = `
+
+        <div class="material-editar-overlay"></div>
+
+
+        <div class="material-editar-contenido">
+
+            <button
+                type="button"
+                class="material-editar-cerrar"
+            >
+                ×
+            </button>
+
+
+            <div class="material-editar-header">
+
+                <span>
+                    MATERIALES
+                </span>
+
+                <h2>
+                    Editar material
+                </h2>
+
+                <p>
+                    ${escaparHTML(
+                        material.nombre || "-"
+                    )}
+                </p>
+
+            </div>
+
+
+            <form
+                id="form-editar-material"
+            >
+
+
+                <div class="material-editar-seccion">
+
+                    <div class="material-editar-seccion-titulo">
+                        INFORMACIÓN DEL MATERIAL
+                    </div>
+
+
+                    <div class="material-editar-campo">
+
+                        <label>
+                            NOMBRE
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nombre"
+                            value="${escaparHTML(
+                                material.nombre || ""
+                            )}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="material-editar-grid">
+
+                        <div class="material-editar-campo">
+
+                            <label>
+                                UNIDAD DE COMPRA
+                            </label>
+
+                            <select
+                                name="unidad_compra"
+                                required
+                            >
+
+                                <option
+                                    value="METRO"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "METRO"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    METRO
+                                </option>
+
+                                <option
+                                    value="GRAMO"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "GRAMO"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    GRAMO
+                                </option>
+
+                                <option
+                                    value="KILOGRAMO"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "KILOGRAMO"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    KILOGRAMO
+                                </option>
+
+                                <option
+                                    value="UNIDAD"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "UNIDAD"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    UNIDAD
+                                </option>
+
+                                <option
+                                    value="ROLLO"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "ROLLO"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    ROLLO
+                                </option>
+
+                                <option
+                                    value="PAR"
+                                    ${
+                                        String(
+                                            material.unidad_compra
+                                        ).toUpperCase() ===
+                                        "PAR"
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    PAR
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="material-editar-campo">
+
+                            <label>
+                                PROVEEDOR
+                            </label>
+
+                            <input
+                                type="text"
+                                name="proveedor"
+                                value="${escaparHTML(
+                                    material.proveedor || ""
+                                )}"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="material-editar-seccion">
+
+                    <div class="material-editar-seccion-titulo">
+                        COSTOS Y STOCK
+                    </div>
+
+
+                    <div class="material-editar-grid">
+
+                        <div class="material-editar-campo">
+
+                            <label>
+                                COSTO UNITARIO PROMEDIO
+                            </label>
+
+                            <input
+                                type="number"
+                                name="costo_unitario"
+                                min="0"
+                                step="0.01"
+                                value="${escaparHTML(
+                                    material.costo_unitario || "0"
+                                )}"
+                            >
+
+                        </div>
+
+
+                        <div class="material-editar-campo">
+
+                            <label>
+                                STOCK ACTUAL
+                            </label>
+
+                            <input
+                                type="number"
+                                name="stock_actual"
+                                min="0"
+                                step="0.01"
+                                value="${escaparHTML(
+                                    material.stock_actual || "0"
+                                )}"
+                            >
+
+                        </div>
+
+
+                        <div class="material-editar-campo">
+
+                            <label>
+                                STOCK MÍNIMO
+                            </label>
+
+                            <input
+                                type="number"
+                                name="stock_minimo"
+                                min="0"
+                                step="0.01"
+                                value="${escaparHTML(
+                                    material.stock_minimo || "0"
+                                )}"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="material-editar-seccion">
+
+                    <div class="material-editar-seccion-titulo">
+                        ESTADO
+                    </div>
+
+
+                    <label class="material-editar-activo">
+
+                        <input
+                            type="checkbox"
+                            name="activo"
+                            ${
+                                activo
+                                    ? "checked"
+                                    : ""
+                            }
+                        >
+
+                        Material activo
+
+                    </label>
+
+                </div>
+
+
+                <div
+                    id="editar-material-mensaje"
+                    class="material-editar-mensaje"
+                ></div>
+
+
+                <div class="material-editar-botones">
+
+                    <button
+                        type="button"
+                        class="material-editar-cancelar"
+                    >
+                        CANCELAR
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="material-editar-guardar"
+                    >
+                        GUARDAR CAMBIOS
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    const formulario =
+        modal.querySelector(
+            "#form-editar-material"
+        );
+
+
+    const cerrar =
+        () => modal.remove();
+
+
+    modal
+        .querySelector(
+            ".material-editar-cerrar"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    modal
+        .querySelector(
+            ".material-editar-overlay"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    modal
+        .querySelector(
+            ".material-editar-cancelar"
+        )
+        .addEventListener(
+            "click",
+            cerrar
+        );
+
+
+    formulario.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const boton =
+                formulario.querySelector(
+                    ".material-editar-guardar"
+                );
+
+
+            const mensaje =
+                formulario.querySelector(
+                    "#editar-material-mensaje"
+                );
+
+
+            const formData =
+                new FormData(
+                    formulario
+                );
+
+
+            const nombre =
+                String(
+                    formData.get(
+                        "nombre"
+                    ) || ""
+                ).trim();
+
+
+            const unidadCompra =
+                String(
+                    formData.get(
+                        "unidad_compra"
+                    ) || ""
+                ).trim();
+
+
+            const proveedor =
+                String(
+                    formData.get(
+                        "proveedor"
+                    ) || ""
+                ).trim();
+
+
+            const costo =
+                Number(
+                    formData.get(
+                        "costo_unitario"
+                    ) || 0
+                );
+
+
+            const stockActual =
+                Number(
+                    formData.get(
+                        "stock_actual"
+                    ) || 0
+                );
+
+
+            const stockMinimo =
+                Number(
+                    formData.get(
+                        "stock_minimo"
+                    ) || 0
+                );
+
+
+            const activoActual =
+                formulario.querySelector(
+                    'input[name="activo"]'
+                ).checked;
+
+
+            if (!nombre) {
+
+                alert(
+                    "Ingresá el nombre del material."
+                );
+
+                return;
+
+            }
+
+
+            if (!unidadCompra) {
+
+                alert(
+                    "Seleccioná la unidad de compra."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                costo < 0 ||
+                stockActual < 0 ||
+                stockMinimo < 0
+            ) {
+
+                alert(
+                    "El costo y el stock no pueden ser negativos."
+                );
+
+                return;
+
+            }
+
+
+            const data = {
+
+                nombre:
+                    nombre,
+
+                unidad_compra:
+                    unidadCompra,
+
+                proveedor:
+                    proveedor,
+
+                costo_unitario:
+                    costo,
+
+                stock_actual:
+                    stockActual,
+
+                stock_minimo:
+                    stockMinimo,
+
+                activo:
+                    activoActual
+
+            };
+
+
+            boton.disabled =
+                true;
+
+
+            boton.textContent =
+                "GUARDANDO...";
+
+
+            mensaje.textContent =
+                "Guardando cambios...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    action:
+                                        "update",
+
+                                    resource:
+                                        "materiales",
+
+                                    id:
+                                        material.material_id,
+
+                                    data:
+                                        data
+
+                                })
+
+                        }
+                    );
+
+
+                const resultado =
+                    await response.json();
+
+
+                if (
+                    !resultado.success
+                ) {
+
+                    throw new Error(
+                        resultado.error ||
+                        "No se pudieron guardar los cambios."
+                    );
+
+                }
+
+
+                mensaje.textContent =
+                    "Material actualizado correctamente.";
+
+
+                mensaje.className =
+                    "material-editar-mensaje exito";
+
+
+                setTimeout(
+                    async function() {
+
+                        modal.remove();
+
+
+                        try {
+
+                            await iniciarMateriales();
+
+                        } catch (error) {
+
+                            console.error(
+                                "Error actualizando materiales:",
+                                error
+                            );
+
+                        }
+
+                    },
+                    700
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error editando material:",
+                    error
+                );
+
+
+                mensaje.textContent =
+                    "No se pudieron guardar los cambios.";
+
+
+                mensaje.className =
+                    "material-editar-mensaje error";
+
+
+                boton.disabled =
+                    false;
+
+
+                boton.textContent =
+                    "GUARDAR CAMBIOS";
+
+
+                alert(
+                    "No se pudieron guardar los cambios.\n\n" +
+                    error.message
+                );
+
+            }
+
+        }
+    );
+
+}
+
 /* =========================================================
    ESTILOS FICHA DE CLIENTE
    ========================================================= */
