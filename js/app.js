@@ -1045,43 +1045,38 @@ function mostrarModelos() {
                     </p>
 
 
-                    <div class="modelo-precios">
+<div class="modelo-precios">
 
-                        <div class="modelo-precio-item">
+    <div class="modelo-precio-item">
 
-                            <span class="modelo-precio-label">
-                                PRECIO DE VENTA
-                            </span>
+        <span class="modelo-precio-label">
+            PRECIO DE VENTA
+        </span>
 
-                            <strong class="modelo-precio-valor">
+        <div class="modelo-precio">
+            ${formatearPrecio(
+                modelo.precio_venta
+            )}
+        </div>
 
-                                ${formatearPrecio(
-                                    modelo.precio_venta
-                                )}
-
-                            </strong>
-
-                        </div>
+    </div>
 
 
-                        <div class="modelo-precio-item">
+    <div class="modelo-precio-item">
 
-                            <span class="modelo-precio-label">
-                                COSTO
-                            </span>
+        <span class="modelo-precio-label">
+            COSTO
+        </span>
 
-                            <strong class="modelo-costo-valor">
+        <div class="modelo-precio">
+            ${formatearPrecio(
+                modelo.costo
+            )}
+        </div>
 
-                                ${formatearPrecio(
-                                    modelo.costo
-                                )}
+    </div>
 
-                            </strong>
-
-                        </div>
-
-                    </div>
-
+</div>
                     <div class="modelo-botones">
 
 

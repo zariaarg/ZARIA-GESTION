@@ -191,17 +191,41 @@ h2 {
 }
 
 
-/* =========================
-   PRECIO
-========================= */
+ /* =========================
+    PRECIO
+ ========================= */
 
 .modelo-precio {
     font-size: 18px;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 0;
     color: #C47456;
 }
 
+
+/* =========================
+   PRECIO Y COSTO
+========================= */
+
+.modelo-precios {
+    display: flex;
+    align-items: flex-end;
+    gap: 22px;
+    margin-top: 15px;
+}
+
+.modelo-precio-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.modelo-precio-label {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    color: #777;
+    margin-bottom: 2px;
+}
 
 /* =========================
    CONTROLES DE MODELOS
