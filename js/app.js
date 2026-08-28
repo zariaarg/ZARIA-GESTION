@@ -10030,9 +10030,9 @@ async function iniciarMateriales() {
 
     try {
 
-        /*
-         * CARGAR MATERIALES
-         */
+        /* =====================================================
+           CARGAR MATERIALES
+           ===================================================== */
 
         const materiales =
             await llamarAPI(
@@ -10041,9 +10041,9 @@ async function iniciarMateriales() {
             );
 
 
-        /*
-         * FILTRAR POR EMPRESA
-         */
+        /* =====================================================
+           FILTRAR POR EMPRESA
+           ===================================================== */
 
         const materialesEmpresa =
             filtrarPorEmpresa(
@@ -10355,11 +10355,6 @@ async function iniciarMateriales() {
                                 }
 
 
-                                /*
-                                 * Lo conectamos
-                                 * en el próximo paso.
-                                 */
-
                                 if (
                                     typeof mostrarFichaMaterial ===
                                     "function"
@@ -10420,11 +10415,6 @@ async function iniciarMateriales() {
 
                                 }
 
-
-                                /*
-                                 * Lo conectamos
-                                 * en el próximo paso.
-                                 */
 
                                 if (
                                     typeof editarMaterial ===
@@ -10504,18 +10494,18 @@ async function iniciarMateriales() {
         }
 
 
-        /*
-         * MOSTRAR LISTA INICIAL
-         */
+        /* =====================================================
+           MOSTRAR LISTA INICIAL
+           ===================================================== */
 
         mostrarListaMateriales(
             materialesEmpresa
         );
 
 
-        /*
-         * ACTIVAR BUSCADOR
-         */
+        /* =====================================================
+           ACTIVAR BUSCADOR
+           ===================================================== */
 
         if (buscador) {
 
@@ -10527,7 +10517,7 @@ async function iniciarMateriales() {
         }
 
 
-         /* =====================================================
+        /* =====================================================
            NUEVO MATERIAL
            ===================================================== */
 
@@ -10581,674 +10571,30 @@ async function iniciarMateriales() {
 
         }
 
-/* =========================================================
-   NUEVO MATERIAL
-   ========================================================= */
+    } catch (error) {
 
-async function mostrarNuevoMaterial() {
-
-    if (!empresaActual) {
-
-        alert(
-            "No hay una empresa seleccionada."
+        console.error(
+            "Error cargando materiales:",
+            error
         );
 
-        return;
 
-    }
+        container.innerHTML = `
 
-
-    cerrarModalesAbiertos();
-
-
-    const modal =
-        document.createElement("div");
-
-
-    modal.className =
-        "material-nuevo-modal";
-
-
-    modal.innerHTML = `
-
-        <div class="material-nuevo-overlay"></div>
-
-
-        <div class="material-nuevo-contenido">
-
-            <button
-                type="button"
-                class="material-nuevo-cerrar"
-            >
-                ×
-            </button>
-
-
-            <div class="material-nuevo-header">
-
-                <span>
-                    MATERIALES
-                </span>
-
-                <h2>
-                    Nuevo material
-                </h2>
+            <div class="materiales-error">
 
                 <p>
-                    Empresa:
-                    <strong>
-                        ${escaparHTML(
-                            empresaActual.nombre_comercial ||
-                            empresaActual.nombre ||
-                            ""
-                        )}
-                    </strong>
+                    No se pudieron cargar los materiales.
                 </p>
 
             </div>
 
+        `;
 
-            <form id="form-nuevo-material">
-
-
-                <!-- =================================================
-                     INFORMACIÓN DEL MATERIAL
-                ================================================== -->
-
-                <div class="material-seccion">
-
-                    <div class="material-seccion-titulo">
-                        INFORMACIÓN DEL MATERIAL
-                    </div>
-
-
-                    <div class="material-campo">
-
-                        <label>
-                            NOMBRE
-                        </label>
-
-                        <input
-                            type="text"
-                            name="nombre"
-                            id="material-nombre"
-                            placeholder="Ej: Cuero liso"
-                            autocomplete="off"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="material-grid">
-
-                        <div class="material-campo">
-
-                            <label>
-                                UNIDAD DE COMPRA
-                            </label>
-
-                            <select
-                                name="unidad_compra"
-                                id="material-unidad"
-                                required
-                            >
-
-                                <option value="">
-                                    Seleccionar...
-                                </option>
-
-                                <option value="METRO">
-                                    METRO
-                                </option>
-
-                                <option value="GRAMO">
-                                    GRAMO
-                                </option>
-
-                                <option value="KILOGRAMO">
-                                    KILOGRAMO
-                                </option>
-
-                                <option value="UNIDAD">
-                                    UNIDAD
-                                </option>
-
-                                <option value="ROLLO">
-                                    ROLLO
-                                </option>
-
-                                <option value="PAR">
-                                    PAR
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="material-campo">
-
-                            <label>
-                                PROVEEDOR
-                            </label>
-
-                            <input
-                                type="text"
-                                name="proveedor"
-                                id="material-proveedor"
-                                placeholder="Nombre del proveedor"
-                                autocomplete="off"
-                            >
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     COSTOS Y STOCK
-                ================================================== -->
-
-                <div class="material-seccion">
-
-                    <div class="material-seccion-titulo">
-                        COSTOS Y STOCK
-                    </div>
-
-
-                    <div class="material-grid">
-
-                        <div class="material-campo">
-
-                            <label>
-                                COSTO UNITARIO PROMEDIO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="costo_unitario"
-                                id="material-costo"
-                                min="0"
-                                step="0.01"
-                                placeholder="$ 0"
-                            >
-
-                            <small>
-                                Podés actualizar este valor cuando cambie el costo de compra.
-                            </small>
-
-                        </div>
-
-
-                        <div class="material-campo">
-
-                            <label>
-                                STOCK ACTUAL
-                            </label>
-
-                            <input
-                                type="number"
-                                name="stock_actual"
-                                id="material-stock"
-                                min="0"
-                                step="0.01"
-                                placeholder="0"
-                            >
-
-                        </div>
-
-
-                        <div class="material-campo">
-
-                            <label>
-                                STOCK MÍNIMO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="stock_minimo"
-                                id="material-stock-minimo"
-                                min="0"
-                                step="0.01"
-                                placeholder="0"
-                            >
-
-                            <small>
-                                Te avisará cuando el stock llegue a este nivel.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     ESTADO
-                ================================================== -->
-
-                <div class="material-seccion">
-
-                    <div class="material-seccion-titulo">
-                        ESTADO
-                    </div>
-
-
-                    <div class="material-activo">
-
-                        <label>
-
-                            <input
-                                type="checkbox"
-                                name="activo"
-                                id="material-activo"
-                                checked
-                            >
-
-                            Material activo
-
-                        </label>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     MENSAJE
-                ================================================== -->
-
-                <div
-                    class="material-nuevo-mensaje"
-                    id="nuevo-material-mensaje"
-                ></div>
-
-
-                <!-- =================================================
-                     BOTONES
-                ================================================== -->
-
-                <div class="material-nuevo-botones">
-
-                    <button
-                        type="button"
-                        class="btn-cancelar-material"
-                    >
-                        CANCELAR
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        class="btn-guardar-material"
-                    >
-                        CREAR MATERIAL
-                    </button>
-
-                </div>
-
-
-            </form>
-
-        </div>
-
-    `;
-
-
-    document.body.appendChild(
-        modal
-    );
-
-
-    /*
-     * ELEMENTOS
-     */
-
-    const formulario =
-        modal.querySelector(
-            "#form-nuevo-material"
-        );
-
-
-    const cerrarModal =
-        () => modal.remove();
-
-
-    /*
-     * CERRAR
-     */
-
-    modal
-        .querySelector(
-            ".material-nuevo-cerrar"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
-
-    modal
-        .querySelector(
-            ".material-nuevo-overlay"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
-
-    modal
-        .querySelector(
-            ".btn-cancelar-material"
-        )
-        .addEventListener(
-            "click",
-            cerrarModal
-        );
-
-
-    /* =========================================================
-       GUARDAR MATERIAL
-    ========================================================= */
-
-    formulario.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-
-            const boton =
-                formulario.querySelector(
-                    ".btn-guardar-material"
-                );
-
-
-            const mensaje =
-                formulario.querySelector(
-                    "#nuevo-material-mensaje"
-                );
-
-
-            const formData =
-                new FormData(
-                    formulario
-                );
-
-
-            const nombre =
-                String(
-                    formData.get(
-                        "nombre"
-                    ) || ""
-                ).trim();
-
-
-            const unidadCompra =
-                String(
-                    formData.get(
-                        "unidad_compra"
-                    ) || ""
-                ).trim();
-
-
-            const proveedor =
-                String(
-                    formData.get(
-                        "proveedor"
-                    ) || ""
-                ).trim();
-
-
-            const costo =
-                Number(
-                    formData.get(
-                        "costo_unitario"
-                    ) || 0
-                );
-
-
-            const stockActual =
-                Number(
-                    formData.get(
-                        "stock_actual"
-                    ) || 0
-                );
-
-
-            const stockMinimo =
-                Number(
-                    formData.get(
-                        "stock_minimo"
-                    ) || 0
-                );
-
-
-            const activo =
-                formulario.querySelector(
-                    "#material-activo"
-                ).checked;
-
-
-            /*
-             * VALIDACIONES
-             */
-
-            if (!nombre) {
-
-                alert(
-                    "Ingresá el nombre del material."
-                );
-
-                return;
-
-            }
-
-
-            if (!unidadCompra) {
-
-                alert(
-                    "Seleccioná la unidad de compra."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                costo < 0 ||
-                stockActual < 0 ||
-                stockMinimo < 0
-            ) {
-
-                alert(
-                    "El costo y el stock no pueden ser negativos."
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * DATOS
-             */
-
-            const data = {
-
-                empresa_id:
-                    Number(
-                        empresaActual.empresa_id
-                    ),
-
-                nombre:
-                    nombre,
-
-                unidad_compra:
-                    unidadCompra,
-
-                costo_unitario:
-                    costo,
-
-                proveedor:
-                    proveedor,
-
-                stock_actual:
-                    stockActual,
-
-                stock_minimo:
-                    stockMinimo,
-
-                activo:
-                    activo
-
-            };
-
-
-            boton.disabled =
-                true;
-
-
-            boton.textContent =
-                "CREANDO...";
-
-
-            mensaje.textContent =
-                "Guardando material...";
-
-
-            mensaje.className =
-                "material-nuevo-mensaje";
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        API_URL,
-                        {
-
-                            method:
-                                "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-
-                            },
-
-                            body:
-                                JSON.stringify({
-
-                                    action:
-                                        "insert",
-
-                                    resource:
-                                        "materiales",
-
-                                    data:
-                                        data
-
-                                })
-
-                        }
-                    );
-
-
-                const resultado =
-                    await response.json();
-
-
-                if (
-                    !resultado.success
-                ) {
-
-                    throw new Error(
-                        resultado.error ||
-                        "No se pudo crear el material."
-                    );
-
-                }
-
-
-                mensaje.textContent =
-                    "Material creado correctamente.";
-
-
-                mensaje.className =
-                    "material-nuevo-mensaje exito";
-
-
-                /*
-                 * CERRAR Y ACTUALIZAR
-                 */
-
-                setTimeout(
-                    async function() {
-
-                        modal.remove();
-
-
-                        try {
-
-                            await iniciarMateriales();
-
-                        } catch (error) {
-
-                            console.error(
-                                "Error actualizando materiales:",
-                                error
-                            );
-
-                        }
-
-                    },
-                    700
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Error creando material:",
-                    error
-                );
-
-
-                mensaje.textContent =
-                    "No se pudo crear el material.";
-
-
-                mensaje.className =
-                    "material-nuevo-mensaje error";
-
-
-                boton.disabled =
-                    false;
-
-
-                boton.textContent =
-                    "CREAR MATERIAL";
-
-
-                alert(
-                    "No se pudo crear el material.\n\n" +
-                    error.message
-                );
-
-            }
-
-        }
-    );
+    }
 
 }
+
 /* =========================================================
    VISTA CLIENTES
    ========================================================= */
