@@ -10527,7 +10527,7 @@ async function iniciarMateriales() {
         }
 
 
-        /* =====================================================
+         /* =====================================================
            NUEVO MATERIAL
            ===================================================== */
 
@@ -10541,14 +10541,38 @@ async function iniciarMateriales() {
 
             botonNuevo.addEventListener(
                 "click",
-                function() {
+                async function(event) {
 
-                    if (
-                        typeof mostrarNuevoMaterial ===
-                        "function"
-                    ) {
+                    event.preventDefault();
 
-                        mostrarNuevoMaterial();
+
+                    console.log(
+                        "CLICK EN NUEVO MATERIAL"
+                    );
+
+
+                    console.log(
+                        "mostrarNuevoMaterial:",
+                        typeof mostrarNuevoMaterial
+                    );
+
+
+                    try {
+
+                        await mostrarNuevoMaterial();
+
+                    } catch (error) {
+
+                        console.error(
+                            "ERROR ABRIENDO NUEVO MATERIAL:",
+                            error
+                        );
+
+
+                        alert(
+                            "Error al abrir Nuevo Material:\n\n" +
+                            error.message
+                        );
 
                     }
 
@@ -10556,31 +10580,6 @@ async function iniciarMateriales() {
             );
 
         }
-
-
-    } catch (error) {
-
-        console.error(
-            "Error cargando materiales:",
-            error
-        );
-
-
-        container.innerHTML = `
-
-            <div class="materiales-error">
-
-                <p>
-                    No se pudieron cargar los materiales.
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-}
 
 /* =========================================================
    NUEVO MATERIAL
