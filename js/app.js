@@ -4713,17 +4713,65 @@ function mostrarResumenDashboard(
         ahora.getFullYear();
 
 
+    /* =====================================================
+       PEDIDOS DEL MES
+       ===================================================== */
+
     const pedidosMes =
         pedidos.filter(
             pedido => {
 
-                const fecha =
-                    formatearFecha(
+                if (
+                    !pedido.fecha
+                ) {
+
+                    return false;
+
+                }
+
+
+                /*
+                 * Convertimos siempre la fecha
+                 * a un objeto Date.
+                 */
+
+                let fecha;
+
+
+                if (
+                    pedido.fecha instanceof Date
+                ) {
+
+                    fecha =
+                        pedido.fecha;
+
+                }
+
+                else {
+
+                    fecha =
+                        new Date(
+                            pedido.fecha
+                        );
+
+                }
+
+
+                /*
+                 * Si la fecha no es válida,
+                 * no contamos el pedido.
+                 */
+
+                if (
+                    isNaN(
+                        fecha.getTime()
+                    )
+                ) {
+
+                    console.warn(
+                        "Fecha de pedido no válida:",
                         pedido.fecha
                     );
-
-
-                if (!fecha) {
 
                     return false;
 
@@ -4742,6 +4790,10 @@ function mostrarResumenDashboard(
         );
 
 
+    /* =====================================================
+       VENTAS DEL MES
+       ===================================================== */
+
     const ventasMes =
         pedidosMes.reduce(
             (
@@ -4751,14 +4803,18 @@ function mostrarResumenDashboard(
 
                 return total +
                     Number(
-                        pedido.precio
-                    || 0
+                        pedido.precio ||
+                        0
                     );
 
             },
             0
         );
 
+
+    /* =====================================================
+       SEÑAS DEL MES
+       ===================================================== */
 
     const senasMes =
         pedidosMes.reduce(
@@ -4769,14 +4825,18 @@ function mostrarResumenDashboard(
 
                 return total +
                     Number(
-                        pedido.sena
-                    || 0
+                        pedido.sena ||
+                        0
                     );
 
             },
             0
         );
 
+
+    /* =====================================================
+       ELEMENTOS DEL DASHBOARD
+       ===================================================== */
 
     const totalPedidosElemento =
         document.getElementById(
@@ -4814,7 +4874,13 @@ function mostrarResumenDashboard(
         );
 
 
-    if (totalPedidosElemento) {
+    /* =====================================================
+       MOSTRAR TOTALES
+       ===================================================== */
+
+    if (
+        totalPedidosElemento
+    ) {
 
         totalPedidosElemento.textContent =
             totalPedidos;
@@ -4822,7 +4888,9 @@ function mostrarResumenDashboard(
     }
 
 
-    if (totalClientesElemento) {
+    if (
+        totalClientesElemento
+    ) {
 
         totalClientesElemento.textContent =
             totalClientes;
@@ -4830,7 +4898,9 @@ function mostrarResumenDashboard(
     }
 
 
-    if (totalModelosElemento) {
+    if (
+        totalModelosElemento
+    ) {
 
         totalModelosElemento.textContent =
             modelosActivos;
@@ -4838,7 +4908,9 @@ function mostrarResumenDashboard(
     }
 
 
-    if (ventasMesElemento) {
+    if (
+        ventasMesElemento
+    ) {
 
         ventasMesElemento.textContent =
             formatearPrecio(
@@ -4848,7 +4920,9 @@ function mostrarResumenDashboard(
     }
 
 
-    if (senasMesElemento) {
+    if (
+        senasMesElemento
+    ) {
 
         senasMesElemento.textContent =
             formatearPrecio(
@@ -4858,7 +4932,9 @@ function mostrarResumenDashboard(
     }
 
 
-    if (pedidosMesElemento) {
+    if (
+        pedidosMesElemento
+    ) {
 
         pedidosMesElemento.textContent =
             pedidosMes.length;
