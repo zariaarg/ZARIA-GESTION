@@ -1168,10 +1168,8 @@ function verModelo(id) {
             item =>
                 String(item.modelo_id) ===
                 String(id) &&
-
                 (
                     !empresaActual ||
-
                     Number(item.empresa_id) ===
                     Number(
                         empresaActual.empresa_id
@@ -1202,9 +1200,7 @@ function verModelo(id) {
 
 
     const modal =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     modal.className =
@@ -1213,14 +1209,10 @@ function verModelo(id) {
 
     modal.innerHTML = `
 
-        <div
-            class="modelo-modal-overlay"
-        ></div>
+        <div class="modelo-modal-overlay"></div>
 
 
-        <div
-            class="modelo-modal-contenido"
-        >
+        <div class="modelo-modal-contenido">
 
 
             <!-- =========================
@@ -1238,368 +1230,304 @@ function verModelo(id) {
 
             <!-- =================================================
                  PARTE SUPERIOR
-                 IMAGEN + INFORMACIÓN PRINCIPAL
+                 IMÁGENES + INFORMACIÓN
             ================================================== -->
 
-            <div
-                class="modelo-detalle-superior"
-            >
+            <div class="modelo-detalle-superior">
 
 
                 <!-- =========================
+                     COLUMNA IZQUIERDA
                      IMÁGENES
                 ========================= -->
 
-                <div
-                    class="modelo-detalle-imagenes"
-                >
+                <div class="modelo-detalle-columna-izquierda">
 
+
+                    <div class="modelo-detalle-imagenes">
+
+
+                        ${
+                            imagenPrincipal
+                            ? `
+
+                                <div class="modelo-detalle-imagen-principal">
+
+                                    <img
+                                        src="${imagenPrincipal}"
+                                        alt="${escaparHTML(modelo.nombre)}"
+                                    >
+
+                                </div>
+
+                            `
+                            : `
+
+                                <div class="modelo-detalle-imagen-principal sin-imagen">
+
+                                    <span>
+                                        Sin imagen
+                                    </span>
+
+                                </div>
+
+                            `
+                        }
+
+
+                        ${
+                            imagenSecundaria
+                            ? `
+
+                                <div class="modelo-detalle-imagen-secundaria">
+
+                                    <img
+                                        src="${imagenSecundaria}"
+                                        alt="${escaparHTML(modelo.nombre)}"
+                                    >
+
+                                </div>
+
+                            `
+                            : ""
+                        }
+
+
+                    </div>
+
+
+                    <!-- =========================
+                         DESCRIPCIÓN
+                         DEBAJO DE LA IMAGEN
+                    ========================= -->
 
                     ${
-                        imagenPrincipal
-
+                        modelo.descripcion
                         ? `
 
-                            <div
-                                class="modelo-detalle-imagen-principal"
-                            >
+                            <div class="modelo-detalle-seccion">
 
-                                <img
-                                    src="${imagenPrincipal}"
-                                    alt="${escaparHTML(
-                                        modelo.nombre
-                                    )}"
-                                >
+                                <h3>
+                                    DESCRIPCIÓN
+                                </h3>
 
-                            </div>
+                                <p>
 
-                        `
+                                    ${escaparHTML(
+                                        modelo.descripcion
+                                    )}
 
-                        : `
-
-                            <div
-                                class="modelo-detalle-imagen-principal sin-imagen"
-                            >
-
-                                <span>
-                                    Sin imagen
-                                </span>
+                                </p>
 
                             </div>
 
                         `
-                    }
-
-
-                    ${
-                        imagenSecundaria
-
-                        ? `
-
-                            <div
-                                class="modelo-detalle-imagen-secundaria"
-                            >
-
-                                <img
-                                    src="${imagenSecundaria}"
-                                    alt="${escaparHTML(
-                                        modelo.nombre
-                                    )}"
-                                >
-
-                            </div>
-
-                        `
-
                         : ""
                     }
 
 
+                    <!-- =========================
+                         PERSONALIZACIÓN
+                         DEBAJO DE LA DESCRIPCIÓN
+                    ========================= -->
+
+                    <div class="modelo-detalle-seccion">
+
+                        <h3>
+                            PERSONALIZACIÓN
+                        </h3>
+
+
+                        <p>
+
+                            Las prendas se realizan
+                            a pedido y pueden
+                            personalizarse según las
+                            opciones disponibles.
+
+                        </p>
+
+
+                    </div>
+
+
                 </div>
 
 
                 <!-- =========================
-                     INFORMACIÓN PRINCIPAL
+                     COLUMNA DERECHA
+                     INFORMACIÓN + MATERIALES
                 ========================= -->
 
-                <div
-                    class="modelo-detalle-info"
-                >
-
-
-                    <!-- CÓDIGO + TIPO -->
-
-                    <div
-                        class="modelo-detalle-codigo-tipo"
-                    >
-
-                        <span
-                            class="modelo-detalle-codigo"
-                        >
-
-                            ${escaparHTML(
-                                modelo.codigo
-                            )}
-
-                        </span>
-
-
-                        <span
-                            class="modelo-detalle-tipo"
-                        >
-
-                            ${escaparHTML(
-                                modelo.tipo
-                            )}
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- NOMBRE -->
-
-                    <h2>
-
-                        ${escaparHTML(
-                            modelo.nombre
-                        )}
-
-                    </h2>
-
-
-                    <!-- MATERIAL BASE -->
-
-                    <div
-                        class="modelo-detalle-material"
-                    >
-
-                        ${escaparHTML(
-                            modelo.material_base
-                        )}
-
-                    </div>
+                <div class="modelo-detalle-columna-derecha">
 
 
                     <!-- =========================
-                         PRECIO + COSTO
+                         INFORMACIÓN PRINCIPAL
                     ========================= -->
 
-                    <div
-                        class="modelo-detalle-valores"
-                    >
+                    <div class="modelo-detalle-info">
 
 
-                        <!-- PRECIO DE VENTA -->
+                        <!-- CÓDIGO + TIPO -->
 
-                        <div
-                            class="modelo-detalle-valor"
-                        >
+                        <div class="modelo-detalle-codigo-tipo">
+
 
                             <span
-                                class="modelo-detalle-label"
-                            >
-                                PRECIO DE VENTA
-                            </span>
-
-
-                            <strong>
-                                ${formatearPrecio(
-                                    modelo.precio_venta
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <!-- COSTO -->
-
-                        <div
-                            class="modelo-detalle-valor"
-                        >
-
-                            <span
-                                class="modelo-detalle-label"
-                            >
-                                COSTO
-                            </span>
-
-
-                            <strong
-                                id="modelo-detalle-costo"
-                            >
-
-                                ${formatearPrecio(
-                                    modelo.costo || 0
-                                )}
-
-                            </strong>
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 PARTE INFERIOR
-                 OCUPA TODO EL ANCHO
-            ================================================== -->
-
-            <div
-                class="modelo-detalle-inferior"
-            >
-
-
-                <!-- =========================
-                     DESCRIPCIÓN
-                ========================= -->
-
-                ${
-                    modelo.descripcion
-
-                    ? `
-
-                        <div
-                            class="modelo-detalle-seccion"
-                        >
-
-                            <h3>
-                                DESCRIPCIÓN
-                            </h3>
-
-
-                            <p>
-
-                                ${escaparHTML(
-                                    modelo.descripcion
-                                )}
-
-                            </p>
-
-                        </div>
-
-                    `
-
-                    : ""
-                }
-
-
-                <!-- =========================
-                     MEDIDAS
-                ========================= -->
-
-                ${
-                    modelo.medidas
-
-                    ? `
-
-                        <div
-                            class="modelo-detalle-seccion"
-                        >
-
-                            <h3>
-                                MEDIDAS
-                            </h3>
-
-
-                            <p
-                                class="modelo-medidas"
+                                class="modelo-detalle-codigo"
                             >
 
                                 ${escaparHTML(
-                                    modelo.medidas
-                                ).replace(
-                                    /\n/g,
-                                    "<br>"
+                                    modelo.codigo
                                 )}
 
-                            </p>
+                            </span>
+
+
+                            <span
+                                class="modelo-detalle-tipo"
+                            >
+
+                                ${escaparHTML(
+                                    modelo.tipo
+                                )}
+
+                            </span>
+
 
                         </div>
 
-                    `
 
-                    : ""
-                }
+                        <!-- NOMBRE -->
 
+                        <h2>
 
-                <!-- =================================================
-                     MATERIALES Y CONSUMO
-                ================================================== -->
+                            ${escaparHTML(
+                                modelo.nombre
+                            )}
 
-                <div
-                    class="modelo-materiales"
-                >
+                        </h2>
 
 
-                    <h3>
-                        MATERIALES Y CONSUMO
-                    </h3>
+                        <!-- MATERIAL BASE -->
+
+                        <div class="modelo-detalle-material">
+
+                            ${escaparHTML(
+                                modelo.material_base
+                            )}
+
+                        </div>
 
 
-                    <div
-                        id="modelo-materiales-container"
-                    >
+                        <!-- =========================
+                             PRECIO + COSTO
+                        ========================= -->
 
-                        Cargando materiales...
+                        <div class="modelo-detalle-valores">
+
+
+                            <div
+                                class="modelo-detalle-valor"
+                            >
+
+                                <span
+                                    class="modelo-detalle-label"
+                                >
+                                    PRECIO DE VENTA
+                                </span>
+
+
+                                <strong>
+
+                                    ${formatearPrecio(
+                                        modelo.precio_venta
+                                    )}
+
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="modelo-detalle-valor"
+                            >
+
+                                <span
+                                    class="modelo-detalle-label"
+                                >
+                                    COSTO
+                                </span>
+
+
+                                <strong
+                                    id="modelo-detalle-costo"
+                                >
+
+                                    ${formatearPrecio(
+                                        modelo.costo || 0
+                                    )}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
 
                     </div>
 
 
-                    <!-- =========================
-                         ACCIONES
-                    ========================= -->
+                    <!-- =================================================
+                         MATERIALES Y CONSUMO
+                         DEBAJO DE PRECIO Y COSTO
+                    ================================================== -->
 
-                    <div
-                        class="modelo-materiales-acciones"
-                    >
+                    <div class="modelo-materiales">
 
-                        <button
-                            type="button"
-                            class="btn-calcular-costo"
-                            onclick="calcularCostoModelo(
-                                ${modelo.modelo_id}
-                            )"
+
+                        <h3>
+                            MATERIALES Y CONSUMO
+                        </h3>
+
+
+                        <div
+                            id="modelo-materiales-container"
                         >
 
-                            CALCULAR COSTO
+                            Cargando materiales...
 
-                        </button>
+                        </div>
+
+
+                        <!-- =========================
+                             ACCIONES
+                        ========================= -->
+
+                        <div
+                            class="modelo-materiales-acciones"
+                        >
+
+
+                            <button
+                                type="button"
+                                class="btn-calcular-costo"
+                                onclick="calcularCostoModelo(
+                                    ${modelo.modelo_id}
+                                )"
+                            >
+
+                                CALCULAR COSTO
+
+                            </button>
+
+
+                        </div>
+
 
                     </div>
-
-
-                </div>
-
-
-                <!-- =========================
-                     PERSONALIZACIÓN
-                ========================= -->
-
-                <div
-                    class="modelo-detalle-seccion"
-                >
-
-                    <h3>
-                        PERSONALIZACIÓN
-                    </h3>
-
-
-                    <p>
-
-                        Las prendas se realizan
-                        a pedido y pueden
-                        personalizarse según las
-                        opciones disponibles.
-
-                    </p>
 
 
                 </div>
@@ -1613,9 +1541,7 @@ function verModelo(id) {
     `;
 
 
-    document.body.appendChild(
-        modal
-    );
+    document.body.appendChild(modal);
 
 
     /* =========================
@@ -1637,14 +1563,10 @@ function verModelo(id) {
         );
 
 
-    if (botonCerrar) {
-
-        botonCerrar.addEventListener(
-            "click",
-            cerrarModal
-        );
-
-    }
+    botonCerrar.addEventListener(
+        "click",
+        cerrarModal
+    );
 
 
     /* =========================
@@ -1657,14 +1579,10 @@ function verModelo(id) {
         );
 
 
-    if (overlay) {
-
-        overlay.addEventListener(
-            "click",
-            cerrarModal
-        );
-
-    }
+    overlay.addEventListener(
+        "click",
+        cerrarModal
+    );
 
 
     /* =========================

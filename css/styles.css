@@ -5083,3 +5083,676 @@ h2 {
     }
 
 }
+/* =========================================================
+   FICHA MODELO - NUEVA DISTRIBUCIÓN
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.modelo-modal-contenido {
+    width: min(1120px, 95vw);
+    max-height: 92vh;
+    overflow-y: auto;
+}
+
+
+/* =========================================================
+   PARTE SUPERIOR
+   IMAGEN IZQUIERDA + INFORMACIÓN DERECHA
+   ========================================================= */
+
+.modelo-detalle-superior {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(360px, 0.85fr);
+
+    gap: 55px;
+
+    padding: 40px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   COLUMNA IZQUIERDA
+   ========================================================= */
+
+.modelo-detalle-columna-izquierda {
+
+    min-width: 0;
+
+}
+
+
+/* =========================================================
+   COLUMNA DERECHA
+   ========================================================= */
+
+.modelo-detalle-columna-derecha {
+
+    min-width: 0;
+
+}
+
+
+/* =========================================================
+   IMÁGENES
+   ========================================================= */
+
+.modelo-detalle-imagenes {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    width: 100%;
+
+}
+
+
+.modelo-detalle-imagen-principal {
+
+    width: 100%;
+
+    height: 470px;
+
+    background: #f7f5f3;
+
+    border: 1px solid #e5e0dc;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.modelo-detalle-imagen-secundaria {
+
+    width: 100%;
+
+    height: 170px;
+
+    background: #f7f5f3;
+
+    border: 1px solid #e5e0dc;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.modelo-detalle-imagen-principal img,
+.modelo-detalle-imagen-secundaria img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   INFORMACIÓN PRINCIPAL
+   ========================================================= */
+
+.modelo-detalle-info {
+
+    padding: 5px 20px 0 0;
+
+}
+
+
+/* CÓDIGO + TIPO */
+
+.modelo-detalle-codigo-tipo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.modelo-detalle-codigo {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    color: #888;
+
+}
+
+
+.modelo-detalle-tipo {
+
+    margin: 0;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+
+    background: #f1efed;
+
+    color: #555;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   NOMBRE
+   ========================================================= */
+
+.modelo-detalle-info h2 {
+
+    margin: 0 0 8px 0;
+
+    font-size: 38px;
+
+    line-height: 1.05;
+
+    letter-spacing: 1px;
+
+    color: #1d1a1a;
+
+}
+
+
+/* =========================================================
+   MATERIAL BASE
+   ========================================================= */
+
+.modelo-detalle-material {
+
+    margin: 0 0 28px 0;
+
+    color: #666;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================================================
+   PRECIO + COSTO
+   ========================================================= */
+
+.modelo-detalle-valores {
+
+    display: flex;
+
+    gap: 55px;
+
+    align-items: flex-start;
+
+    margin-bottom: 28px;
+
+}
+
+
+.modelo-detalle-valor {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.modelo-detalle-label {
+
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #777;
+
+}
+
+
+.modelo-detalle-valor strong {
+
+    display: block;
+
+    font-size: 27px;
+
+    line-height: 1.1;
+
+    color: #1d1a1a;
+
+}
+
+
+.modelo-detalle-valor:first-child strong {
+
+    color: #C47456;
+
+}
+
+
+/* =========================================================
+   MATERIALES Y CONSUMO
+   DEBAJO DE PRECIO Y COSTO
+   ========================================================= */
+
+.modelo-materiales {
+
+    margin-top: 0;
+
+    padding-top: 24px;
+
+    border-top: 1px solid #e0dbd6;
+
+}
+
+
+.modelo-materiales h3 {
+
+    margin: 0 0 16px 0;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    color: #555;
+
+}
+
+
+/* =========================================================
+   LISTADO DE MATERIALES
+   ========================================================= */
+
+.material-modelo-item {
+
+    background: white;
+
+    border: 1px solid #e5e0dc;
+
+    border-radius: 8px;
+
+    padding: 11px 14px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.material-modelo-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.material-modelo-info strong {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #1d1a1a;
+
+}
+
+
+.material-modelo-info span {
+
+    font-size: 12px;
+
+    color: #666;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================================
+   MENSAJES DE MATERIALES
+   ========================================================= */
+
+.materiales-cargando,
+.materiales-vacio,
+.materiales-error {
+
+    padding: 12px 14px;
+
+    background: white;
+
+    border: 1px solid #e5e0dc;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    color: #777;
+
+}
+
+
+/* =========================================================
+   BOTÓN AGREGAR MATERIAL
+   ========================================================= */
+
+.btn-agregar-material {
+
+    margin-top: 12px;
+
+    padding: 9px 14px;
+
+    border: 1px solid #C47456;
+
+    border-radius: 7px;
+
+    background: white;
+
+    color: #C47456;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.btn-agregar-material:hover {
+
+    background: #C47456;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   BOTÓN CALCULAR COSTO
+   PEQUEÑO Y SECUNDARIO
+   ========================================================= */
+
+.modelo-materiales-acciones {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 10px;
+
+}
+
+
+.btn-calcular-costo {
+
+    padding: 6px 10px;
+
+    border: 1px solid #d4cec9;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.7px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.btn-calcular-costo:hover {
+
+    background: #1d1a1a;
+
+    border-color: #1d1a1a;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   DESCRIPCIÓN
+   DEBAJO DE LA IMAGEN
+   ========================================================= */
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion {
+
+    border-top: 1px solid #ddd7d2;
+
+    padding-top: 20px;
+
+    margin-top: 25px;
+
+}
+
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion h3 {
+
+    margin: 0 0 10px 0;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    color: #555;
+
+}
+
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    color: #444;
+
+}
+
+
+/* =========================================================
+   PERSONALIZACIÓN
+   ========================================================= */
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion + .modelo-detalle-seccion {
+
+    margin-top: 22px;
+
+}
+
+
+/* =========================================================
+   SIN IMAGEN
+   ========================================================= */
+
+.modelo-detalle-imagen-principal.sin-imagen {
+
+    color: #999;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .modelo-detalle-superior {
+
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+
+        padding: 25px;
+
+    }
+
+
+    .modelo-detalle-columna-derecha {
+
+        width: 100%;
+
+    }
+
+
+    .modelo-detalle-info {
+
+        padding: 0;
+
+    }
+
+
+    .modelo-detalle-imagen-principal {
+
+        height: 400px;
+
+    }
+
+
+    .modelo-detalle-info h2 {
+
+        font-size: 32px;
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .modelo-modal {
+
+        padding: 10px;
+
+    }
+
+
+    .modelo-modal-contenido {
+
+        width: 100%;
+
+        max-height: 96vh;
+
+    }
+
+
+    .modelo-detalle-superior {
+
+        padding: 20px;
+
+    }
+
+
+    .modelo-detalle-imagen-principal {
+
+        height: 320px;
+
+    }
+
+
+    .modelo-detalle-imagen-secundaria {
+
+        height: 150px;
+
+    }
+
+
+    .modelo-detalle-info h2 {
+
+        font-size: 28px;
+
+    }
+
+
+    .modelo-detalle-valores {
+
+        gap: 30px;
+
+    }
+
+
+    .modelo-detalle-valor strong {
+
+        font-size: 23px;
+
+    }
+
+}
