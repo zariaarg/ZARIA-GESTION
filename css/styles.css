@@ -5756,3 +5756,56 @@ h2 {
     }
 
 }
+/* =========================================================
+   ACCIONES DE MATERIALES
+========================================================= */
+
+.modelo-materiales-acciones {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    margin-top: 12px !important;
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   BOTÓN CALCULAR COSTO
+========================================================= */
+
+.btn-calcular-costo {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+
+    padding: 6px 13px !important;
+
+    margin: 0 !important;
+
+    border: 1px solid #C47456 !important;
+    border-radius: 7px !important;
+
+    background: transparent !important;
+    color: #C47456 !important;
+
+    font-size: 10px !important;
+    font-weight: 500 !important;
+
+    letter-spacing: 1.3px !important;
+
+    line-height: 1.2 !important;
+
+    cursor: pointer !important;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease !important;
+}
+
+
+.btn-calcular-costo:hover {
+    background: #C47456 !important;
+    color: white !important;
+}

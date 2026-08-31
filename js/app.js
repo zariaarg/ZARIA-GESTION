@@ -1325,7 +1325,37 @@ function verModelo(id) {
                         : ""
                     }
 
+                    <!-- =========================
+                        MEDIDAS
+                        DEBAJO DE LA DESCRIPCIÓN
+                    ========================= -->
 
+                    ${
+                        modelo.medidas
+                        ? `
+
+                            <div class="modelo-detalle-seccion">
+
+                                <h3>
+                                    MEDIDAS
+                                </h3>
+
+                                <p class="modelo-medidas">
+
+                                    ${escaparHTML(
+                                        modelo.medidas
+                                    ).replace(
+                                        /\n/g,
+                                        "<br>"
+                                    )}
+
+                                </p>
+
+                            </div>
+
+                        `
+                        : ""
+                    }
                     <!-- =========================
                          PERSONALIZACIÓN
                          DEBAJO DE LA DESCRIPCIÓN
