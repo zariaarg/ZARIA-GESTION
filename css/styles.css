@@ -954,67 +954,188 @@ h2 {
 ========================= */
 
 .modelo-materiales {
+
     margin-top: 30px;
+
     padding-top: 25px;
+
     border-top: 1px solid #e5e0dc;
+
 }
 
 .modelo-materiales h3 {
+
     margin: 0 0 18px 0;
+
     font-size: 14px;
+
     letter-spacing: 1px;
+
 }
+
 
 .material-modelo-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
     background: #f7f5f3;
+
     border-radius: 8px;
+
     padding: 12px 15px;
+
     margin-bottom: 8px;
+
 }
+
 
 .material-modelo-info {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 15px;
+
+    flex: 1;
+
+    min-width: 0;
+
 }
+
 
 .material-modelo-info strong {
+
     font-size: 14px;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
 }
+
 
 .material-modelo-info span {
+
     font-size: 13px;
+
     color: #666;
+
+    white-space: nowrap;
+
 }
+
+
+/* =========================
+   BOTÓN ELIMINAR MATERIAL
+========================= */
+
+.btn-eliminar-material {
+
+    flex-shrink: 0;
+
+    width: 24px;
+
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #999;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+.btn-eliminar-material:hover {
+
+    background: #eee5e1;
+
+    color: #C47456;
+
+}
+
 
 .materiales-cargando,
+
 .materiales-vacio,
+
 .materiales-error {
+
     padding: 15px;
+
     background: #f7f5f3;
+
     border-radius: 8px;
+
     font-size: 13px;
+
     color: #777;
+
 }
+
 
 .btn-agregar-material {
+
     margin-top: 12px;
+
     padding: 10px 15px;
+
     border: 1px solid #C47456;
+
     border-radius: 7px;
+
     background: white;
+
     color: #C47456;
+
     font-size: 11px;
+
     font-weight: bold;
+
     letter-spacing: 0.8px;
+
     cursor: pointer;
-   transition: background 0.2s ease, color 0.2s ease;
+
+    transition: background 0.2s ease, color 0.2s ease;
+
 }
 
+
 .btn-agregar-material:hover {
+
     background: #C47456;
+
     color: white;
+
 }
 
 /* =========================
