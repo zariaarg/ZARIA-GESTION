@@ -2299,13 +2299,22 @@ async function cargarMaterialesModelo(
 
 
     container.innerHTML = `
+
         <div class="materiales-cargando">
+
             Cargando materiales...
+
         </div>
+
     `;
 
 
     try {
+
+        /*
+         * OBTENER RELACIÓN
+         * MODELO ↔ MATERIALES
+         */
 
         const data =
             await llamarAPI(
@@ -2316,16 +2325,32 @@ async function cargarMaterialesModelo(
             );
 
 
+        /*
+         * FILTRAR LOS MATERIALES
+         * DEL MODELO ACTUAL
+         */
+
         const materialesModelo =
             (data || []).filter(
                 item =>
-                    Number(item.modelo_id) ===
-                    Number(modeloId) &&
+
+                    Number(
+                        item.modelo_id
+                    ) ===
+                    Number(
+                        modeloId
+                    )
+
+                    &&
 
                     (
-                        !empresaActual ||
+                        !empresaActual
 
-                        Number(item.empresa_id) ===
+                        ||
+
+                        Number(
+                            item.empresa_id
+                        ) ===
                         Number(
                             empresaActual.empresa_id
                         )
@@ -2333,13 +2358,20 @@ async function cargarMaterialesModelo(
             );
 
 
+        /*
+         * COMPLETAR INFORMACIÓN
+         * CON LA TABLA MATERIALES
+         */
+
         const materialesCompletos =
             materialesModelo.map(
                 item => {
 
+
                     const material =
                         materiales.find(
                             material =>
+
                                 Number(
                                     material.material_id
                                 ) ===
@@ -2353,16 +2385,41 @@ async function cargarMaterialesModelo(
 
                         ...item,
 
+
+                        /*
+                         * NOMBRE
+                         */
+
                         nombre:
                             material
                                 ? material.nombre
-                                : `Material #${item.material_id}`
+                                : `Material #${item.material_id}`,
+
+
+                        /*
+                         * COSTO UNITARIO
+                         *
+                         * Lo necesitamos para
+                         * calcular el costo
+                         * según el consumo.
+                         */
+
+                        costo_unitario:
+                            material
+                                ? Number(
+                                    material.costo_unitario || 0
+                                )
+                                : 0
 
                     };
 
                 }
             );
 
+
+        /*
+         * MOSTRAR MATERIALES
+         */
 
         mostrarMaterialesModelo(
             materialesCompletos
@@ -2378,15 +2435,19 @@ async function cargarMaterialesModelo(
 
 
         container.innerHTML = `
+
             <div class="materiales-error">
-                No se pudieron cargar los materiales.
+
+                No se pudieron cargar
+                los materiales.
+
             </div>
+
         `;
 
     }
 
 }
-
 
 /* =========================
    MOSTRAR MATERIALES MODELO
@@ -2444,11 +2505,67 @@ function mostrarMaterialesModelo(materialesModelo) {
 
 
     /*
+     * ENCABEZADO DE LA TABLA
+     */
+
+    html += `
+
+        <div class="material-modelo-header">
+
+            <span>
+                DESCRIPCIÓN
+            </span>
+
+            <span>
+                CANTIDAD
+            </span>
+
+            <span>
+                UNIDAD
+            </span>
+
+            <span>
+                COSTO
+            </span>
+
+            <span>
+            </span>
+
+        </div>
+
+    `;
+
+
+    /*
      * LISTA DE MATERIALES
      */
 
     materialesModelo.forEach(
         material => {
+
+
+            const cantidad =
+                Number(
+                    material.cantidad || 0
+                );
+
+
+            const costoUnitario =
+                Number(
+                    material.costo_unitario || 0
+                );
+
+
+            /*
+             * COSTO DEL MATERIAL
+             *
+             * cantidad × costo unitario
+             */
+
+            const costoMaterial =
+                cantidad *
+                costoUnitario;
+
 
             html += `
 
@@ -2458,28 +2575,51 @@ function mostrarMaterialesModelo(materialesModelo) {
 
 
                     <div
-                        class="material-modelo-info"
+                        class="material-modelo-descripcion"
+                        title="${
+                            material.material_nombre ||
+                            material.nombre ||
+                            ""
+                        }"
                     >
 
+                        ${
+                            material.material_nombre ||
+                            material.nombre ||
+                            ""
+                        }
 
-                        <strong>
-
-                            ${
-                                material.material_nombre ||
-                                material.nombre ||
-                                ""
-                            }
-
-                        </strong>
+                    </div>
 
 
-                        <span>
+                    <div
+                        class="material-modelo-cantidad"
+                    >
 
-                            ${material.cantidad || 0}
-                            ${material.unidad || ""}
+                        ${cantidad}
 
-                        </span>
+                    </div>
 
+
+                    <div
+                        class="material-modelo-unidad"
+                    >
+
+                        ${
+                            material.unidad ||
+                            ""
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="material-modelo-costo"
+                    >
+
+                        ${formatearPrecio(
+                            costoMaterial
+                        )}
 
                     </div>
 
@@ -2534,6 +2674,7 @@ function mostrarMaterialesModelo(materialesModelo) {
         html;
 
 }
+
 /* =========================
    ELIMINAR MATERIAL MODELO
 ========================= */
