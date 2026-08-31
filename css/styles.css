@@ -5322,11 +5322,12 @@ h2 {
 
     display: grid;
 
+    /* Un poco menos de ancho para la imagen y más para la información. */
     grid-template-columns:
-        minmax(0, 1.15fr)
-        minmax(360px, 0.85fr);
+        minmax(0, 1fr)
+        minmax(390px, 0.95fr);
 
-    gap: 55px;
+    gap: 35px;
 
     padding: 40px;
 
@@ -5625,13 +5626,23 @@ h2 {
 
 .material-modelo-item {
 
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    gap: 6px;
+
     background: white;
 
     border: 1px solid #e5e0dc;
 
     border-radius: 8px;
 
-    padding: 11px 14px;
+    padding: 9px 10px;
 
     margin-bottom: 7px;
 
@@ -5640,33 +5651,93 @@ h2 {
 
 .material-modelo-info {
 
-    display: flex;
+    display: grid;
 
-    justify-content: space-between;
+    grid-template-columns:
+        minmax(0, 1fr)
+        42px
+        45px
+        68px;
 
     align-items: center;
 
-    gap: 15px;
+    gap: 5px;
+
+    flex: 1 1 auto;
+
+    min-width: 0;
 
 }
 
 
+/* DESCRIPCIÓN */
+
 .material-modelo-info strong {
 
-    font-size: 13px;
+    min-width: 0;
 
-    font-weight: 600;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    font-weight: bold;
 
     color: #1d1a1a;
 
 }
 
 
-.material-modelo-info span {
+/* CANTIDAD */
 
-    font-size: 12px;
+.material-modelo-info .material-cantidad {
+
+    min-width: 0;
+
+    font-size: 11px;
 
     color: #666;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+}
+
+
+/* UNIDAD */
+
+.material-modelo-info .material-unidad {
+
+    min-width: 0;
+
+    font-size: 11px;
+
+    color: #666;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+}
+
+
+/* COSTO */
+
+.material-modelo-info .material-costo {
+
+    min-width: 0;
+
+    font-size: 11px;
+
+    color: #333;
+
+    font-weight: 600;
+
+    text-align: right;
 
     white-space: nowrap;
 
@@ -6008,11 +6079,8 @@ h2 {
     font-weight: 500 !important;
 
     letter-spacing: 1.3px !important;
-
     line-height: 1.2 !important;
-
     cursor: pointer !important;
-
     transition:
         background 0.2s ease,
         color 0.2s ease !important;
@@ -6027,54 +6095,32 @@ h2 {
    BOTÓN ELIMINAR MATERIAL
 ========================= */
 
-.material-modelo-item {
-    position: relative;
-}
-
-
 .btn-eliminar-material {
 
-    width: 24px;
-    height: 24px;
-
-    margin-left: 12px;
-
-    flex-shrink: 0;
-
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin: 0;
+    padding: 0;
     border: none;
-
     background: transparent;
-
     color: #999;
-
-    font-size: 20px;
-
+    font-size: 16px;
     line-height: 1;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     cursor: pointer;
-
     border-radius: 50%;
-
     transition:
         color 0.2s ease,
         background 0.2s ease,
         transform 0.2s ease;
-
 }
 
-
 .btn-eliminar-material:hover {
-
     color: #C47456;
-
     background: #f3eeeb;
-
     transform: scale(1.08);
-
 }

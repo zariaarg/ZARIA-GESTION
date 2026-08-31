@@ -2505,38 +2505,6 @@ function mostrarMaterialesModelo(materialesModelo) {
 
 
     /*
-     * ENCABEZADO DE LA TABLA
-     */
-
-    html += `
-
-        <div class="material-modelo-header">
-
-            <span>
-                DESCRIPCIÓN
-            </span>
-
-            <span>
-                CANTIDAD
-            </span>
-
-            <span>
-                UNIDAD
-            </span>
-
-            <span>
-                COSTO
-            </span>
-
-            <span>
-            </span>
-
-        </div>
-
-    `;
-
-
-    /*
      * LISTA DE MATERIALES
      */
 
