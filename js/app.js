@@ -2405,70 +2405,128 @@ function mostrarMaterialesModelo(materialesModelo) {
     }
 
 
+    /*
+     * SIN MATERIALES
+     */
+
     if (
         !materialesModelo ||
         materialesModelo.length === 0
     ) {
 
         container.innerHTML = `
+
             <div class="materiales-vacio">
+
                 Este modelo todavía no tiene
                 materiales cargados.
+
             </div>
+
 
             <button
                 type="button"
                 class="btn-agregar-material"
                 onclick="abrirAgregarMaterial()"
             >
+
                 + AGREGAR MATERIAL
+
             </button>
+
         `;
 
         return;
-
     }
 
 
     let html = "";
 
 
-    materialesModelo.forEach(material => {
+    /*
+     * LISTA DE MATERIALES
+     */
 
-        html += `
-            <div class="material-modelo-item">
+    materialesModelo.forEach(
+        material => {
 
-                <div class="material-modelo-info">
+            html += `
 
-                    <strong>
-                        ${
-                            material.material_nombre ||
-                            material.nombre ||
-                            ""
-                        }
-                    </strong>
+                <div
+                    class="material-modelo-item"
+                >
 
-                    <span>
-                        ${material.cantidad || 0}
-                        ${material.unidad || ""}
-                    </span>
+
+                    <div
+                        class="material-modelo-info"
+                    >
+
+
+                        <strong>
+
+                            ${
+                                material.material_nombre ||
+                                material.nombre ||
+                                ""
+                            }
+
+                        </strong>
+
+
+                        <span>
+
+                            ${material.cantidad || 0}
+                            ${material.unidad || ""}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- =========================
+                         ELIMINAR MATERIAL
+                    ========================= -->
+
+                    <button
+                        type="button"
+                        class="btn-eliminar-material"
+                        title="Eliminar material"
+                        aria-label="Eliminar material"
+                        onclick="eliminarMaterialModelo(
+                            ${material.modelo_material_id}
+                        )"
+                    >
+
+                        ×
+
+                    </button>
+
 
                 </div>
 
-            </div>
-        `;
+            `;
 
-    });
+        }
+    );
 
+
+    /*
+     * BOTÓN AGREGAR
+     */
 
     html += `
+
         <button
             type="button"
             class="btn-agregar-material"
             onclick="abrirAgregarMaterial()"
         >
+
             + AGREGAR MATERIAL
+
         </button>
+
     `;
 
 
@@ -2476,7 +2534,127 @@ function mostrarMaterialesModelo(materialesModelo) {
         html;
 
 }
+/* =========================
+   ELIMINAR MATERIAL MODELO
+========================= */
 
+async function eliminarMaterialModelo(
+    modeloMaterialId
+) {
+
+    if (!modeloMaterialId) {
+
+        alert(
+            "No se pudo identificar el material."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * CONFIRMAR ELIMINACIÓN
+     */
+
+    const confirmar =
+        confirm(
+            "¿Querés eliminar este material del modelo?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "delete",
+
+                            resource:
+                                "modelo_materiales",
+
+                            id:
+                                modeloMaterialId
+
+                        })
+                }
+            );
+
+
+        const resultado =
+            await response.json();
+
+
+        if (!resultado.success) {
+
+            throw new Error(
+                resultado.error ||
+                "No se pudo eliminar el material."
+            );
+
+        }
+
+
+        /*
+         * Volvemos a cargar
+         * los materiales del modelo.
+         */
+
+        await cargarMaterialesModelo(
+            window.modeloActualId
+        );
+
+
+        /*
+         * Recalculamos el costo
+         * después de eliminar.
+         */
+
+        if (
+            typeof calcularCostoModelo ===
+            "function"
+        ) {
+
+            await calcularCostoModelo(
+                window.modeloActualId
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Error eliminando material:",
+            error
+        );
+
+
+        alert(
+            "No se pudo eliminar el material.\n\n" +
+            error.message
+        );
+
+    }
+
+}
 
 /* =========================
    LISTA DE MATERIALES

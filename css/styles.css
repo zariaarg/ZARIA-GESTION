@@ -5809,3 +5809,58 @@ h2 {
     background: #C47456 !important;
     color: white !important;
 }
+/* =========================
+   BOTÓN ELIMINAR MATERIAL
+========================= */
+
+.material-modelo-item {
+    position: relative;
+}
+
+
+.btn-eliminar-material {
+
+    width: 24px;
+    height: 24px;
+
+    margin-left: 12px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #999;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.btn-eliminar-material:hover {
+
+    color: #C47456;
+
+    background: #f3eeeb;
+
+    transform: scale(1.08);
+
+}
