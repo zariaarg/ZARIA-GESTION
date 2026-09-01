@@ -948,289 +948,37 @@ h2 {
     }
 
 }
-/* =========================
-   MATERIALES DEL MODELO
-========================= */
-
-.modelo-materiales {
-
-    margin-top: 30px;
-
-    padding-top: 25px;
-
-    border-top: 1px solid #e5e0dc;
-
-}
-
-.modelo-materiales h3 {
-
-    margin: 0 0 18px 0;
-
-    font-size: 14px;
-
-    letter-spacing: 1px;
-
-}
-
-
-/* =========================
-   FILA DE MATERIAL
-========================= */
-
-.material-modelo-item {
-
-    display: flex;
-
-    align-items: center;
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    gap: 8px;
-
-    background: #f7f5f3;
-
-    border-radius: 8px;
-
-    padding: 10px 10px;
-
-    margin-bottom: 8px;
-
-}
-
-
-/* =========================
-   INFORMACIÓN DEL MATERIAL
-========================= */
-
-.material-modelo-info {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        55px
-        55px
-        75px;
-
-    align-items: center;
-
-    gap: 8px;
-
-    flex: 1;
-
-    min-width: 0;
-
-}
-
-
-/* DESCRIPCIÓN */
-
-.material-modelo-info strong {
-
-    min-width: 0;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-    font-size: 13px;
-
-}
-
-
-/* CANTIDAD */
-
-.material-modelo-info .material-cantidad {
-
-    font-size: 12px;
-
-    color: #666;
-
-    text-align: right;
-
-    white-space: nowrap;
-
-}
-
-
-/* UNIDAD */
-
-.material-modelo-info .material-unidad {
-
-    font-size: 12px;
-
-    color: #666;
-
-    text-align: left;
-
-    white-space: nowrap;
-
-}
-
-
-/* COSTO */
-
-.material-modelo-info .material-costo {
-
-    font-size: 12px;
-
-    color: #333;
-
-    font-weight: 600;
-
-    text-align: right;
-
-    white-space: nowrap;
-
-}
-
 
 /* =========================
    BOTÓN ELIMINAR MATERIAL
 ========================= */
 
 .btn-eliminar-material {
-
     flex-shrink: 0;
-
     width: 22px;
-
     height: 22px;
-
     min-width: 22px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 0;
-
     margin: 0;
-
     border: none;
-
     border-radius: 50%;
-
     background: transparent;
-
     color: #999;
-
     font-size: 17px;
-
     line-height: 1;
-
     cursor: pointer;
-
 }
-
 
 /* HOVER X */
-
 .btn-eliminar-material:hover {
-
     background: #eee5e1;
-
     color: #C47456;
 
 }
 
-
-/* =========================
-   CARGANDO / VACÍO / ERROR
-========================= */
-
-.materiales-cargando,
-.materiales-vacio,
-.materiales-error {
-
-    padding: 15px;
-
-    background: #f7f5f3;
-
-    border-radius: 8px;
-
-    font-size: 13px;
-
-    color: #777;
-
-}
-
-
-/* =========================
-   BOTÓN AGREGAR MATERIAL
-========================= */
-
-.btn-agregar-material {
-
-    margin-top: 12px;
-
-    padding: 10px 15px;
-
-    border: 1px solid #C47456;
-
-    border-radius: 7px;
-
-    background: white;
-
-    color: #C47456;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
-
-}
-
-
-.btn-agregar-material:hover {
-
-    background: #C47456;
-
-    color: white;
-
-}
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 900px) {
-
-    .material-modelo-info {
-
-        grid-template-columns:
-            minmax(0, 1fr)
-            50px
-            50px
-            70px;
-
-        gap: 6px;
-
-    }
-
-    .material-modelo-item {
-
-        gap: 6px;
-
-        padding: 10px 8px;
-
-    }
-
-}
 /* =========================
    MODAL MATERIAL
 ========================= */
@@ -3012,73 +2760,6 @@ h2 {
     .modelo-detalle-info h2 {
         font-size: 28px;
     }
-}
-/* =========================
-   MATERIALES DEL MODELO
-========================= */
-
-.modelo-materiales {
-    margin-top: 30px;
-    padding-top: 25px;
-    border-top: 1px solid #e5e0dc;
-}
-
-.modelo-materiales h3 {
-    margin: 0 0 18px 0;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-.material-modelo-item {
-    background: #f7f5f3;
-    border-radius: 8px;
-    padding: 12px 15px;
-    margin-bottom: 8px;
-}
-
-.material-modelo-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.material-modelo-info strong {
-    font-size: 14px;
-}
-
-.material-modelo-info span {
-    font-size: 13px;
-    color: #666;
-}
-
-.materiales-cargando,
-.materiales-vacio,
-.materiales-error {
-    padding: 15px;
-    background: #f7f5f3;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #777;
-}
-
-.btn-agregar-material {
-    margin-top: 12px;
-    padding: 10px 15px;
-    border: 1px solid #C47456;
-    border-radius: 7px;
-    background: white;
-    color: #C47456;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-   transition: background 0.2s ease, color 0.2s ease;
-}
-
-.btn-agregar-material:hover {
-    background: #C47456;
-    color: white;
 }
 
 /* =========================
@@ -5694,51 +5375,32 @@ h2 {
 /* CANTIDAD */
 
 .material-modelo-info .material-cantidad {
-
     min-width: 0;
-
     font-size: 11px;
-
     color: #666;
-
     text-align: right;
-
     white-space: nowrap;
-
 }
-
 
 /* UNIDAD */
 
 .material-modelo-info .material-unidad {
-
     min-width: 0;
-
     font-size: 11px;
-
     color: #666;
-
     text-align: left;
-
     white-space: nowrap;
-
 }
-
 
 /* COSTO */
 
 .material-modelo-info .material-costo {
 
     min-width: 0;
-
     font-size: 11px;
-
     color: #333;
-
     font-weight: 600;
-
     text-align: right;
-
     white-space: nowrap;
 
 }
@@ -5765,34 +5427,20 @@ h2 {
     color: #777;
 
 }
-
-
 /* =========================================================
    BOTÓN AGREGAR MATERIAL
    ========================================================= */
-
 .btn-agregar-material {
-
     margin-top: 12px;
-
     padding: 9px 14px;
-
     border: 1px solid #C47456;
-
     border-radius: 7px;
-
     background: white;
-
     color: #C47456;
-
     font-size: 10px;
-
     font-weight: bold;
-
     letter-spacing: 0.8px;
-
     cursor: pointer;
-
     transition:
         background 0.2s ease,
         color 0.2s ease;
@@ -5807,62 +5455,6 @@ h2 {
     color: white;
 
 }
-
-
-/* =========================================================
-   BOTÓN CALCULAR COSTO
-   PEQUEÑO Y SECUNDARIO
-   ========================================================= */
-
-.modelo-materiales-acciones {
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    margin-top: 10px;
-
-}
-
-
-.btn-calcular-costo {
-
-    padding: 6px 10px;
-
-    border: 1px solid #d4cec9;
-
-    border-radius: 6px;
-
-    background: transparent;
-
-    color: #777;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.7px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
-
-}
-
-
-.btn-calcular-costo:hover {
-
-    background: #1d1a1a;
-
-    border-color: #1d1a1a;
-
-    color: white;
-
-}
-
 
 /* =========================================================
    DESCRIPCIÓN
@@ -6090,37 +5682,4 @@ h2 {
 .btn-calcular-costo:hover {
     background: #C47456 !important;
     color: white !important;
-}
-/* =========================
-   BOTÓN ELIMINAR MATERIAL
-========================= */
-
-.btn-eliminar-material {
-
-    flex: 0 0 20px;
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: #999;
-    font-size: 16px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-    transition:
-        color 0.2s ease,
-        background 0.2s ease,
-        transform 0.2s ease;
-}
-
-.btn-eliminar-material:hover {
-    color: #C47456;
-    background: #f3eeeb;
-    transform: scale(1.08);
 }
