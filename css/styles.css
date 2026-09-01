@@ -2,38 +2,30 @@
    ESTILOS GENERALES
 ========================= */
 /* Este es un comentario en CSS  VANE*/
-
 * {
     box-sizing: border-box;
 }
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f7f5f3;
     color: #222;
 }
-
-
 /* =========================
    HEADER
 ========================= */
-
 .header {
     height: 70px;
-
    /* Usamos un verde oliva oscuro y elegante */
     background: #5d6657; 
     color: #ffffff;
-   
-    display: flex;
+       display: flex;
     align-items: center;
     padding: 0 30px;
     gap: 12px;
 /* Agregamos una pequeña sombra para despegarlo del resto */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .header h1 {
     margin: 0;
     font-size: 24px;
@@ -45,25 +37,19 @@ body {
     opacity: 0.8; /* Un poco más legible que 0.7 */
     font-weight: 300;
 }
-
-
 /* =========================
    CONTENIDO PRINCIPAL
 ========================= */
-
 .main {
     padding: 40px;
 }
-
 h2 {
     margin-top: 0;
 }
 
-
 /* =========================
    CONTENEDOR DE MODELOS
 ========================= */
-
 #modelos-container {
     display: grid;
 
@@ -5362,88 +5348,51 @@ h2 {
 /* =========================
    DESCRIPCIÓN
 ========================= */
-
 .material-modelo-info strong {
-
     min-width: 0;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
-
     font-size: 11px !important;
-
     font-weight: 700 !important;
-
     color: #1d1a1a;
-
 }
-
-
 /* =========================
    CANTIDAD
 ========================= */
-
 .material-modelo-info .material-cantidad {
-
     min-width: 0;
-
     font-size: 11px !important;
-
     font-weight: 400;
-
     color: #333;
-
     text-align: right;
-
     white-space: nowrap;
 
 }
-
 
 /* =========================
    UNIDAD
 ========================= */
-
 .material-modelo-info .material-unidad {
-
     min-width: 0;
-
     font-size: 11px !important;
-
     font-weight: 400;
-
     color: #333;
-
     text-align: left;
-
     white-space: nowrap;
-
 }
-
 
 /* =========================
    COSTO
 ========================= */
-
 .material-modelo-info .material-costo {
-
     min-width: 0;
-
     font-size: 11px !important;
-
     font-weight: 400;
-
     color: #333;
-
     text-align: right;
-
     white-space: nowrap;
-
 }
-
 
 /* =========================
    BOTÓN ELIMINAR MATERIAL
@@ -5452,333 +5401,185 @@ h2 {
 .btn-eliminar-material {
 
     flex-shrink: 0;
-
     width: 20px;
-
     height: 20px;
-
     min-width: 20px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 0;
-
     margin: 0;
-
     border: none;
-
     border-radius: 50%;
-
     background: transparent;
-
     color: #999;
-
     font-size: 16px;
-
     line-height: 1;
-
     cursor: pointer;
-
 }
-
-
 .btn-eliminar-material:hover {
-
     background: #eee5e1;
-
     color: #C47456;
-
 }
-
 
 /* =========================
    CARGANDO / VACÍO / ERROR
 ========================= */
-
 .materiales-cargando,
 .materiales-vacio,
 .materiales-error {
-
     padding: 15px;
-
     background: #f7f5f3;
-
     border-radius: 8px;
-
     font-size: 13px;
-
     color: #777;
-
 }
-
 
 /* =========================
    BOTÓN AGREGAR MATERIAL
 ========================= */
 
 .btn-agregar-material {
-
     margin-top: 12px;
-
     padding: 10px 15px;
-
     border: 1px solid #C47456;
-
     border-radius: 7px;
-
     background: white;
-
     color: #C47456;
-
     font-size: 11px;
-
     font-weight: bold;
-
     letter-spacing: 0.8px;
-
     cursor: pointer;
-
     transition:
         background 0.2s ease,
         color 0.2s ease;
-
 }
-
 
 .btn-agregar-material:hover {
-
     background: #C47456;
-
     color: white;
-
 }
-
 
 /* =========================
    RESPONSIVE
 ========================= */
 
 @media (max-width: 900px) {
-
     .material-modelo-info {
-
         grid-template-columns:
             minmax(0, 1fr)
             40px
             45px
             62px;
-
         gap: 4px;
-
     }
-
-
     .material-modelo-item {
-
         gap: 5px;
-
         padding: 7px 7px;
-
     }
-
-
     .btn-eliminar-material {
-
         width: 19px;
-
         height: 19px;
-
         min-width: 19px;
-
     }
-
 }
 
 /* =========================================================
    DESCRIPCIÓN
    DEBAJO DE LA IMAGEN
    ========================================================= */
-
 .modelo-detalle-columna-izquierda
 .modelo-detalle-seccion {
-
     border-top: 1px solid #ddd7d2;
-
     padding-top: 20px;
-
     margin-top: 25px;
-
 }
-
 
 .modelo-detalle-columna-izquierda
 .modelo-detalle-seccion h3 {
-
     margin: 0 0 10px 0;
-
     font-size: 11px;
-
     letter-spacing: 1.5px;
-
     color: #555;
-
 }
-
 
 .modelo-detalle-columna-izquierda
 .modelo-detalle-seccion p {
-
     margin: 0;
-
     font-size: 14px;
-
     line-height: 1.7;
-
     color: #444;
-
 }
-
 
 /* =========================================================
    PERSONALIZACIÓN
    ========================================================= */
-
 .modelo-detalle-columna-izquierda
 .modelo-detalle-seccion + .modelo-detalle-seccion {
-
     margin-top: 22px;
-
 }
-
 
 /* =========================================================
    SIN IMAGEN
    ========================================================= */
-
 .modelo-detalle-imagen-principal.sin-imagen {
-
     color: #999;
-
     font-size: 13px;
-
 }
-
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-
 @media (max-width: 850px) {
-
     .modelo-detalle-superior {
-
         grid-template-columns: 1fr;
-
         gap: 30px;
-
         padding: 25px;
-
     }
-
-
     .modelo-detalle-columna-derecha {
-
         width: 100%;
-
     }
-
-
     .modelo-detalle-info {
-
         padding: 0;
-
     }
-
-
     .modelo-detalle-imagen-principal {
 
         height: 400px;
-
     }
-
-
     .modelo-detalle-info h2 {
-
         font-size: 32px;
-
     }
-
 }
-
-
 @media (max-width: 550px) {
-
     .modelo-modal {
-
         padding: 10px;
-
     }
-
-
     .modelo-modal-contenido {
-
         width: 100%;
-
         max-height: 96vh;
-
     }
-
-
     .modelo-detalle-superior {
-
         padding: 20px;
-
     }
-
-
     .modelo-detalle-imagen-principal {
-
         height: 320px;
-
     }
-
-
     .modelo-detalle-imagen-secundaria {
-
         height: 150px;
-
     }
-
-
     .modelo-detalle-info h2 {
-
         font-size: 28px;
-
     }
-
-
     .modelo-detalle-valores {
-
         gap: 30px;
-
     }
-
-
     .modelo-detalle-valor strong {
-
         font-size: 23px;
-
     }
-
 }
 /* =========================================================
    ACCIONES DE MATERIALES
 ========================================================= */
-
 .modelo-materiales-acciones {
     display: flex !important;
     align-items: center !important;
@@ -5786,7 +5587,6 @@ h2 {
     margin-top: 12px !important;
     width: 100% !important;
 }
-
 
 /* =========================================================
    BOTÓN CALCULAR COSTO
@@ -5796,22 +5596,15 @@ h2 {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-
     width: auto !important;
-
     padding: 6px 13px !important;
-
     margin: 0 !important;
-
     border: 1px solid #C47456 !important;
     border-radius: 7px !important;
-
     background: transparent !important;
     color: #C47456 !important;
-
     font-size: 10px !important;
     font-weight: 500 !important;
-
     letter-spacing: 1.3px !important;
     line-height: 1.2 !important;
     cursor: pointer !important;
@@ -5819,6 +5612,7 @@ h2 {
         background 0.2s ease,
         color 0.2s ease !important;
 }
+   
 
 
 .btn-calcular-costo:hover {
