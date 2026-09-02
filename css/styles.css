@@ -1021,7 +1021,8 @@ h2 {
 ========================= */
 .material-modelo-item {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 42px 48px 65px; 
+/*    grid-template-columns: minmax(0, 1fr) 42px 48px 65px;  vane*/
+    grid-template-columns: minmax(0, 1fr) 42px 48px 65px 30px;
     align-items: center;
     gap: 5px;
     width: 100%;
@@ -1086,10 +1087,10 @@ h2 {
 }
 
 .btn-eliminar-material {
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
+  /*  flex-shrink: 0; comentado vane*/
+    width: 24px;   /* modificado vane 20px; */
+    height: 24px;   /* modificado vane 20px; */
+    /*min-width: 20px; comentado vane */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1100,8 +1101,9 @@ h2 {
     background: transparent;
     color: #999;
     font-size: 16px;
-    line-height: 1;
+    /*line-height: 1;  comentado vane*/
     cursor: pointer;
+    justify-self: center; /*  agregado vane*/
 }
 
 .btn-eliminar-material:hover {
