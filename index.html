@@ -1,499 +1,182 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- Este es un comentario en HTML VANE -->
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRAFT FLOW — Gestión de Productos Creativos</title>
-    <link
-        rel="stylesheet"
-        href="css/styles.css"
-    >
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
-
     <div class="app">
 
         <!-- =========================
              HEADER
         ========================= -->
-
         <header class="header">
-
             <div class="header-marca">
-
-                <h1>
-                    CRAFT FLOW
-                </h1>
-
-                <span>
-                    Gestión de Productos Creativos
-                </span>
-
+                <h1>CRAFT FLOW</h1>
+                <span>Gestión de Productos Creativos</span>
             </div>
-
 
             <div class="empresa-selector">
-
                 <div class="empresa-info">
-
-                    <img
-                        id="empresa-logo"
-                        src=""
-                        alt=""
-                        class="empresa-logo"
-                    >
-
+                    <img id="empresa-logo" src="" alt="" class="empresa-logo">
                     <div class="empresa-texto">
-
-                        <span class="empresa-label">
-                            EMPRESA
-                        </span>
-
-                        <select
-                            id="empresa-select"
-                            aria-label="Seleccionar empresa"
-                        >
-                        </select>
-
+                        <span class="empresa-label">EMPRESA</span>
+                        <select id="empresa-select" aria-label="Seleccionar empresa"></select>
                     </div>
-
                 </div>
-
             </div>
-
         </header>
 
 
         <!-- =========================
              CONTENIDO PRINCIPAL
         ========================= -->
-
         <main class="main">
-
 
             <!-- =========================
                  DASHBOARD
             ========================= -->
-
-            <section
-                id="dashboard-view"
-                class="dashboard-view"
-            >
+            <section id="dashboard-view" class="dashboard-view">
 
                 <div class="dashboard-encabezado">
-
                     <div>
-
-                        <p class="dashboard-saludo">
-                            PANEL PRINCIPAL
-                        </p>
-
-                        <h2>
-                            Resumen
-                        </h2>
-
-                        <p class="dashboard-descripcion">
-                            Una vista general de la actividad de tu negocio.
-                        </p>
-
+                        <p class="dashboard-saludo">PANEL PRINCIPAL</p>
+                        <h2>Resumen</h2>
+                        <p class="dashboard-descripcion">Una vista general de la actividad de tu negocio.</p>
                     </div>
-
                 </div>
 
-
-                <!-- =========================
-                     ACCIONES PRINCIPALES
-                ========================= -->
-
+                <!-- ===== Acciones principales ===== -->
                 <div class="dashboard-acciones">
-
-                    <button
-                        type="button"
-                        class="dashboard-accion dashboard-accion-principal"
-                        id="btn-dashboard-nuevo-pedido"
-                    >
-
-                        <span class="dashboard-accion-icono">
-                            +
-                        </span>
-
+                    <button type="button" class="dashboard-accion dashboard-accion-principal" id="btn-dashboard-nuevo-pedido">
+                        <span class="dashboard-accion-icono">+</span>
                         <span>
-
-                            <strong>
-                                Nuevo pedido
-                            </strong>
-
-                            <small>
-                                Registrar una nueva venta
-                            </small>
-
+                            <strong>Nuevo pedido</strong>
+                            <small>Registrar una nueva venta</small>
                         </span>
-
                     </button>
 
-
-                    <button
-                        type="button"
-                        class="dashboard-accion"
-                        id="btn-dashboard-pedidos"
-                    >
-
-                        <span class="dashboard-accion-icono">
-                            ↗
-                        </span>
-
+                    <button type="button" class="dashboard-accion" id="btn-dashboard-pedidos">
+                        <span class="dashboard-accion-icono">↗</span>
                         <span>
-
-                            <strong>
-                                Pedidos
-                            </strong>
-
-                            <small>
-                                Ver y gestionar pedidos
-                            </small>
-
+                            <strong>Pedidos</strong>
+                            <small>Ver y gestionar pedidos</small>
                         </span>
-
                     </button>
 
-
-                    <button
-                        type="button"
-                        class="dashboard-accion"
-                        id="btn-dashboard-clientes"
-                    >
-
-                        <span class="dashboard-accion-icono">
-                            ○
-                        </span>
-
+                    <button type="button" class="dashboard-accion" id="btn-dashboard-clientes">
+                        <span class="dashboard-accion-icono">○</span>
                         <span>
-
-                            <strong>
-                                Clientes
-                            </strong>
-
-                            <small>
-                                Ver clientes y medidas
-                            </small>
-
+                            <strong>Clientes</strong>
+                            <small>Ver clientes y medidas</small>
                         </span>
-
                     </button>
 
-
-                    <button
-                        type="button"
-                        class="dashboard-accion"
-                        id="btn-dashboard-modelos"
-                    >
-
-                        <span class="dashboard-accion-icono">
-                            □
-                        </span>
-
+                    <button type="button" class="dashboard-accion" id="btn-dashboard-modelos">
+                        <span class="dashboard-accion-icono">□</span>
                         <span>
-
-                            <strong>
-                                Modelos
-                            </strong>
-
-                            <small>
-                                Ver catálogo de modelos
-                            </small>
-
+                            <strong>Modelos</strong>
+                            <small>Ver catálogo de modelos</small>
                         </span>
-
                     </button>
-
                 </div>
 
-
-                <!-- =========================
-                     TARJETAS RESUMEN
-                ========================= -->
-
+                <!-- ===== Tarjetas resumen ===== -->
                 <div class="dashboard-resumen">
-
                     <article class="dashboard-card">
-
-                        <div class="dashboard-card-label">
-                            PEDIDOS
-                        </div>
-
-                        <div
-                            class="dashboard-card-numero"
-                            id="dashboard-total-pedidos"
-                        >
-                            —
-                        </div>
-
-                        <div class="dashboard-card-detalle">
-                            Pedidos registrados
-                        </div>
-
+                        <div class="dashboard-card-label">PEDIDOS</div>
+                        <div class="dashboard-card-numero" id="dashboard-total-pedidos">—</div>
+                        <div class="dashboard-card-detalle">Pedidos registrados</div>
                     </article>
 
-
                     <article class="dashboard-card">
-
-                        <div class="dashboard-card-label">
-                            CLIENTES
-                        </div>
-
-                        <div
-                            class="dashboard-card-numero"
-                            id="dashboard-total-clientes"
-                        >
-                            —
-                        </div>
-
-                        <div class="dashboard-card-detalle">
-                            Clientes registrados
-                        </div>
-
+                        <div class="dashboard-card-label">CLIENTES</div>
+                        <div class="dashboard-card-numero" id="dashboard-total-clientes">—</div>
+                        <div class="dashboard-card-detalle">Clientes registrados</div>
                     </article>
 
-
                     <article class="dashboard-card">
-
-                        <div class="dashboard-card-label">
-                            MODELOS
-                        </div>
-
-                        <div
-                            class="dashboard-card-numero"
-                            id="dashboard-total-modelos"
-                        >
-                            —
-                        </div>
-
-                        <div class="dashboard-card-detalle">
-                            Modelos activos
-                        </div>
-
+                        <div class="dashboard-card-label">MODELOS</div>
+                        <div class="dashboard-card-numero" id="dashboard-total-modelos">—</div>
+                        <div class="dashboard-card-detalle">Modelos activos</div>
                     </article>
-
 
                     <article class="dashboard-card dashboard-card-destacada">
-
-                        <div class="dashboard-card-label">
-                            VENTAS DEL MES
-                        </div>
-
-                        <div
-                            class="dashboard-card-numero dashboard-card-dinero"
-                            id="dashboard-ventas-mes"
-                        >
-                            —
-                        </div>
-
-                        <div class="dashboard-card-detalle">
-                            Total vendido este mes
-                        </div>
-
+                        <div class="dashboard-card-label">VENTAS DEL MES</div>
+                        <div class="dashboard-card-numero dashboard-card-dinero" id="dashboard-ventas-mes">—</div>
+                        <div class="dashboard-card-detalle">Total vendido este mes</div>
                     </article>
-
                 </div>
 
-
-                <!-- =========================
-                     PEDIDOS POR ESTADO
-                ========================= -->
-
+                <!-- ===== Pedidos por estado / Señas ===== -->
                 <div class="dashboard-grid">
-
                     <section class="dashboard-panel">
-
                         <div class="dashboard-panel-header">
-
                             <div>
-
-                                <span class="dashboard-panel-label">
-                                    PEDIDOS
-                                </span>
-
-                                <h3>
-                                    Estado de los pedidos
-                                </h3>
-
+                                <span class="dashboard-panel-label">PEDIDOS</span>
+                                <h3>Estado de los pedidos</h3>
                             </div>
-
-                            <span class="dashboard-panel-icon">
-                                ◌
-                            </span>
-
+                            <span class="dashboard-panel-icon">◌</span>
                         </div>
 
-                        <div
-                            id="dashboard-estados"
-                            class="dashboard-estados"
-                        >
-
-                            <div class="dashboard-cargando">
-                                Cargando información...
-                            </div>
-
+                        <div id="dashboard-estados" class="dashboard-estados">
+                            <div class="dashboard-cargando">Cargando información...</div>
                         </div>
-
                     </section>
 
-
-                    <!-- =========================
-                         SEÑAS
-                    ========================= -->
-
                     <section class="dashboard-panel">
-
                         <div class="dashboard-panel-header">
-
                             <div>
-
-                                <span class="dashboard-panel-label">
-                                    COBROS
-                                </span>
-
-                                <h3>
-                                    Señas del mes
-                                </h3>
-
+                                <span class="dashboard-panel-label">COBROS</span>
+                                <h3>Señas del mes</h3>
                             </div>
-
-                            <span class="dashboard-panel-icon">
-                                $
-                            </span>
-
+                            <span class="dashboard-panel-icon">$</span>
                         </div>
 
                         <div class="dashboard-finanza">
-
-                            <span class="dashboard-finanza-label">
-                                Total de señas cobradas
-                            </span>
-
-                            <strong
-                                id="dashboard-senas-mes"
-                                class="dashboard-finanza-valor"
-                            >
-                                —
-                            </strong>
-
+                            <span class="dashboard-finanza-label">Total de señas cobradas</span>
+                            <strong id="dashboard-senas-mes" class="dashboard-finanza-valor">—</strong>
                         </div>
 
                         <div class="dashboard-finanza-linea">
-
-                            <span>
-                                Pedidos del mes
-                            </span>
-
-                            <strong
-                                id="dashboard-pedidos-mes"
-                            >
-                                —
-                            </strong>
-
+                            <span>Pedidos del mes</span>
+                            <strong id="dashboard-pedidos-mes">—</strong>
                         </div>
-
                     </section>
-
                 </div>
 
-
-                <!-- =========================
-                     ACCESOS RÁPIDOS
-                ========================= -->
-
+                <!-- ===== Accesos rápidos ===== -->
                 <section class="dashboard-panel dashboard-accesos">
-
                     <div class="dashboard-panel-header">
-
                         <div>
-
-                            <span class="dashboard-panel-label">
-                                ACCESOS
-                            </span>
-
-                            <h3>
-                                Gestión
-                            </h3>
-
+                            <span class="dashboard-panel-label">ACCESOS</span>
+                            <h3>Gestión</h3>
                         </div>
-
                     </div>
-
 
                     <div class="dashboard-accesos-grid">
-
-                        <button
-                            type="button"
-                            id="btn-acceso-modelos"
-                        >
-
-                            <span>
-                                MODELOS
-                            </span>
-
-                            <small>
-                                Catálogo y fichas técnicas
-                            </small>
-
+                        <button type="button" id="btn-acceso-modelos">
+                            <span>MODELOS</span>
+                            <small>Catálogo y fichas técnicas</small>
                         </button>
 
-
-                        <button
-                            type="button"
-                            id="btn-acceso-clientes"
-                        >
-
-                            <span>
-                                CLIENTES
-                            </span>
-
-                            <small>
-                                Datos y medidas
-                            </small>
-
+                        <button type="button" id="btn-acceso-clientes">
+                            <span>CLIENTES</span>
+                            <small>Datos y medidas</small>
                         </button>
 
-
-                        <button
-                            type="button"
-                            id="btn-acceso-pedidos"
-                        >
-
-                            <span>
-                                PEDIDOS
-                            </span>
-
-                            <small>
-                                Ventas y producción
-                            </small>
-
+                        <button type="button" id="btn-acceso-pedidos">
+                            <span>PEDIDOS</span>
+                            <small>Ventas y producción</small>
                         </button>
 
-
-                        <button
-                            type="button"
-                            id="btn-acceso-materiales"
-                        >
-
-                            <span>
-                                MATERIALES
-                            </span>
-
-                            <small>
-                                Insumos, Costos y Stock
-                            </small>
-
+                        <button type="button" id="btn-acceso-materiales">
+                            <span>MATERIALES</span>
+                            <small>Insumos, Costos y Stock</small>
                         </button>
-
                     </div>
-
                 </section>
 
             </section>
@@ -501,184 +184,83 @@
 
             <!-- =========================
                  VISTA MODELOS
+                 NOTA: el botón "volver" de esta vista usa el id
+                 "btn-volver-dashboard" (sin sufijo), a diferencia
+                 de las otras 3 vistas que sí lo tienen. Lo dejo
+                 así por ahora para no romper app.js — se unifica
+                 en el mismo paso en que actualicemos app.js.
             ========================= -->
-
-            <section
-                id="modelos-view"
-                class="modulo-view"
-                style="display: none;"
-            >
-
+            <section id="modelos-view" class="modulo-view" style="display: none;">
                 <div class="modulo-header">
-
-                    <button
-                        type="button"
-                        class="btn-volver-dashboard"
-                        id="btn-volver-dashboard"
-                    >
-                        ← Dashboard
-                    </button>
-
+                    <button type="button" class="btn-volver-dashboard" id="btn-volver-dashboard">← Dashboard</button>
                     <div>
-
-                        <span class="modulo-label">
-                            CATÁLOGO
-                        </span>
-
-                        <h2>
-                            Modelos
-                        </h2>
-
+                        <span class="modulo-label">CATÁLOGO</span>
+                        <h2>Modelos</h2>
                     </div>
-
                 </div>
-
 
                 <div id="modelos-container">
-
-                    <p>
-                        Cargando modelos...
-                    </p>
-
+                    <p>Cargando modelos...</p>
                 </div>
-
             </section>
+
 
             <!-- =========================
                  VISTA PEDIDOS
             ========================= -->
-
-            <section
-                id="pedidos-view"
-                class="modulo-view"
-                style="display: none;"
-            >
-
+            <section id="pedidos-view" class="modulo-view" style="display: none;">
                 <div class="modulo-header">
-
-                    <button
-                        type="button"
-                        class="btn-volver-dashboard"
-                        id="btn-volver-dashboard-pedidos"
-                    >
-                        ← Dashboard
-                    </button>
-
+                    <button type="button" class="btn-volver-dashboard" id="btn-volver-dashboard-pedidos">← Dashboard</button>
                     <div>
-                        <span class="modulo-label">
-                            VENTAS
-                        </span>
-
-                        <h2>
-                            Pedidos
-                        </h2>
+                        <span class="modulo-label">VENTAS</span>
+                        <h2>Pedidos</h2>
                     </div>
-
                 </div>
 
                 <div id="pedidos-container">
-                    <p>
-                        Cargando pedidos...
-                    </p>
+                    <p>Cargando pedidos...</p>
                 </div>
-
             </section>
-            
+
+
             <!-- =========================
-                VISTA MATERIALES
+                 VISTA MATERIALES
             ========================= -->
-
-            <section
-                id="materiales-view"
-                class="modulo-view"
-                style="display: none;"
-            >
-
+            <section id="materiales-view" class="modulo-view" style="display: none;">
                 <div class="modulo-header">
-
-                    <button
-                        type="button"
-                        class="btn-volver-dashboard"
-                        id="btn-volver-dashboard-materiales"
-                    >
-                        ← Dashboard
-                    </button>
-
+                    <button type="button" class="btn-volver-dashboard" id="btn-volver-dashboard-materiales">← Dashboard</button>
                     <div>
-                        <span class="modulo-label">
-                            PRODUCCIÓN
-                        </span>
-
-                        <h2>
-                            Materiales
-                        </h2>
+                        <span class="modulo-label">PRODUCCIÓN</span>
+                        <h2>Materiales</h2>
                     </div>
-
                 </div>
 
                 <div id="materiales-container">
-                    <p>
-                        Cargando materiales...
-                    </p>
+                    <p>Cargando materiales...</p>
                 </div>
-
-            </section>            
-            <!-- =========================
-                 VISTA CLIENTES
-            ========================= -->
-
-            <section
-                id="clientes-view"
-                class="modulo-view"
-                style="display: none;"
-            >
-
-                <div class="modulo-header">
-
-                    <button
-                        type="button"
-                        class="btn-volver-dashboard"
-                        id="btn-volver-dashboard-clientes"
-                    >
-                        ← Dashboard
-                    </button>
-
-                    <div>
-
-                        <span class="modulo-label">
-                            CLIENTES
-                        </span>
-
-                        <h2>
-                            Clientes
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="clientes-container"
-                    class="clientes-container"
-                >
-
-                    <p>
-                        Cargando clientes...
-                    </p>
-
-                </div>
-
             </section>
 
 
-        </main>
+            <!-- =========================
+                 VISTA CLIENTES
+            ========================= -->
+            <section id="clientes-view" class="modulo-view" style="display: none;">
+                <div class="modulo-header">
+                    <button type="button" class="btn-volver-dashboard" id="btn-volver-dashboard-clientes">← Dashboard</button>
+                    <div>
+                        <span class="modulo-label">CLIENTES</span>
+                        <h2>Clientes</h2>
+                    </div>
+                </div>
 
+                <div id="clientes-container" class="clientes-container">
+                    <p>Cargando clientes...</p>
+                </div>
+            </section>
+
+        </main>
     </div>
 
-
     <script src="js/app.js"></script>
-
 </body>
-
 </html>
