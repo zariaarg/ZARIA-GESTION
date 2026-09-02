@@ -1021,8 +1021,7 @@ h2 {
 ========================= */
 .material-modelo-item {
     display: grid;
-    /*grid-template-columns: minmax(0, 1fr) 42px 48px 65px;  vane*/
-    grid-template-columns: minmax(0, 1fr) 24px 42px 48px 65px;
+    grid-template-columns: minmax(0, 1fr) 42px 48px 65px; 
     align-items: center;
     gap: 5px;
     width: 100%;
@@ -1087,7 +1086,7 @@ h2 {
 }
 
 .btn-eliminar-material {
-    /*flex-shrink: 0;   vane*/
+    flex-shrink: 0;
     width: 20px;
     height: 20px;
     min-width: 20px;
@@ -1103,7 +1102,7 @@ h2 {
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
-    justify-self: center; /*vane*/
+    justify-self: center;
 }
 
 .btn-eliminar-material:hover {
