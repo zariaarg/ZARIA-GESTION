@@ -1102,7 +1102,6 @@ h2 {
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
-    justify-self: center;
 }
 
 .btn-eliminar-material:hover {
