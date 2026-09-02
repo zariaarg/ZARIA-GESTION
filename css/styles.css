@@ -1,197 +1,478 @@
-/* =========================
-   ESTILOS GENERALES
-========================= */
-/* Este es un comentario en CSS  VANE*/
+/* =============================================================
+   CRAFT FLOW — ESTILOS (styles.css)
+   Reorganizado y depurado: se eliminaron 2 copias completas
+   duplicadas del archivo original y se dejó una sola versión
+   por selector, conservando siempre el valor que realmente
+   estaba activo (el que ganaba la cascada CSS).
+
+   Paleta de referencia (documentación, no variables CSS):
+     - Verde oliva oscuro:  #5d6657
+     - Terracota:           #C47456
+     - Fondo general:       #f7f5f3
+   ============================================================= */
+
+
+/* ============================================================
+   RESET / ESTILOS GENERALES
+   ============================================================ */
+
 * {
     box-sizing: border-box;
 }
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f7f5f3;
     color: #222;
 }
-/* =========================
-   HEADER
-========================= */
-.header {
-    height: 70px;
-   /* Usamos un verde oliva oscuro y elegante */
-    background: #5d6657; 
-    color: #ffffff;
-       display: flex;
-    align-items: center;
-    padding: 0 30px;
-    gap: 12px;
-/* Agregamos una pequeña sombra para despegarlo del resto */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-    letter-spacing: 1px; /* Un poco menos de espacio queda más moderno */
-    font-weight: 600;    /* Un poquito más de peso para que se lea mejor */
-}
 
-.header span {
-    opacity: 0.8; /* Un poco más legible que 0.7 */
-    font-weight: 300;
-}
-/* =========================
-   CONTENIDO PRINCIPAL
-========================= */
 .main {
     padding: 40px;
 }
+
 h2 {
     margin-top: 0;
 }
 
-/* =========================
-   CONTENEDOR DE MODELOS
-========================= */
-#modelos-container {
-    display: grid;
 
-    grid-template-columns:
-        repeat(auto-fill, minmax(220px, 1fr));
+/* ============================================================
+   HEADER
+   ============================================================ */
 
-    gap: 20px;
-}
-
-
-/* =========================
-   TARJETA DE MODELO
-========================= */
-
-.modelo-card {
-    background: white;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-/* Sombra un poquito más suave y refinada */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-/* Añadimos una transición suave para cuando el mouse pase por encima */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
-    /* Un borde muy fino con un tono neutro cálido */
-    border: 1px solid #eae5df;
-   
-}
-/* Efecto cuando pasas el mouse por la tarjeta (le da vida a la app) */
-.modelo-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(196, 116, 86, 0.15); /* La sombra toma un reflejo terracota muy sutil */
-    border-color: #C47456; /* El borde se pinta del terracota de Craft Flow al seleccionarlo */
-}
-
-/* =========================
-   IMAGEN DEL MODELO
-========================= */
-
-.modelo-imagen {
-    width: 100%;
-    height: 200px;
-
-  /* Un fondo cálido muy suave en lugar de un gris frío */
-    background: #f4f0ec;
+.header {
+    height: 70px;
+    background: #5d6657;
+    color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.modelo-imagen img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
+    padding: 0 30px;
+    gap: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.modelo-imagen.sin-imagen {
- /* Color de texto más cálido y elegante */
-    color: #9c8e83;
-    font-size: 13px;
-    font-style: italic;
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+    font-weight: 600;
 }
 
+.header span {
+    opacity: 0.8;
+    font-weight: 300;
+}
 
-/* =========================
-   CONTENIDO DE LA TARJETA
-========================= */
-.modelo-contenido {
-    padding: 18px;
+.header-marca {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
 }
 
 
-/* =========================
-   PARTE SUPERIOR
-========================= */
+/* ============================================================
+   EMPRESA
+   ============================================================ */
 
-.modelo-superior {
+.empresa-selector {
+    margin-left: auto;
+}
+
+.empresa-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
 }
 
-.modelo-codigo {
-  font-size: 12px;
-    color: #8c827a;
-    font-weight: 500;
+.empresa-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: white;
+    padding: 4px;
 }
 
-.modelo-tipo {
+.empresa-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.empresa-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    opacity: 0.55;
+}
+
+#empresa-select {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    padding: 2px 22px 2px 0;
+    background-image: linear-gradient(
+            45deg,
+            transparent 50%,
+            white 50%
+        ),
+        linear-gradient(
+            135deg,
+            white 50%,
+            transparent 50%
+        );
+    background-position: calc(100% - 8px) 50%,
+        calc(100% - 3px) 50%;
+    background-size: 5px 5px,
+        5px 5px;
+    background-repeat: no-repeat;
+}
+
+#empresa-select option {
+    color: #222;
+    background: white;
+}
+
+
+/* ============================================================
+   DASHBOARD — ENCABEZADO
+   ============================================================ */
+
+.dashboard-view {
+    width: 100%;
+}
+
+.dashboard-encabezado {
+    margin-bottom: 30px;
+}
+
+.dashboard-saludo {
+    margin: 0 0 7px;
     font-size: 11px;
     font-weight: bold;
-    letter-spacing: 1px;
-    padding: 5px 8px;
-    border-radius: 5px;
-    /* Usamos un fondo con el verde oliva suave y texto blanco o verde oscuro */
-    background: #e4e8e1;
-    color: #4a5345;
+    letter-spacing: 2px;
+    color: #888;
 }
 
-
-/* =========================
-   NOMBRE
-========================= */
-
-.modelo-nombre {
-    font-size: 22px;
-    font-weight: bold;
-    margin: 8px 0;
-    color: #2c2622; /* Un tono más cálido que el negro puro */
-}
-
-
-/* =========================
-   MATERIAL
-========================= */
-
-.modelo-material {
-    font-size: 13px;
-    color: #7a6e65;
+.dashboard-encabezado h2 {
     margin: 0;
-    min-height: 18px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.dashboard-descripcion {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 14px;
 }
 
 
- /* =========================
-    PRECIO
- ========================= */
+/* ============================================================
+   DASHBOARD — ACCIONES PRINCIPALES
+   ============================================================ */
 
-.modelo-precio {
-    font-size: 18px;
+.dashboard-acciones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-accion {
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid #ddd8d4;
+    border-radius: 12px;
+    background: white;
+    color: #1d1a1a;
+    text-align: left;
+    cursor: pointer;
+    transition: transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.dashboard-accion:hover {
+    transform: translateY(-2px);
+    border-color: #C47456;
+    box-shadow: 0 8px 25px rgba(196, 116, 86, .12);
+}
+
+.dashboard-accion-principal {
+    background: #C47456;
+    color: white;
+    border-color: #C47456;
+}
+
+.dashboard-accion-principal:hover {
+    background: #b26549;
+    border-color: #b26549;
+}
+
+.dashboard-accion-icono {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.dashboard-accion strong {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .4px;
+}
+
+.dashboard-accion small {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    opacity: .75;
+}
+
+
+/* ============================================================
+   DASHBOARD — TARJETAS RESUMEN
+   ============================================================ */
+
+.dashboard-resumen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-card {
+    background: white;
+    border: 1px solid #ddd8d4;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.dashboard-card-destacada {
+    background: #f7f5f3;
+    border-color: #e5e0dc;
+}
+
+.dashboard-card-label {
+    font-size: 10px;
     font-weight: bold;
-    margin-top: 0;
+    letter-spacing: 1.6px;
+    color: #888;
+}
+
+.dashboard-card-numero {
+    margin-top: 10px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.dashboard-card-dinero {
+    font-size: 25px;
     color: #C47456;
 }
 
+.dashboard-card-detalle {
+    margin-top: 9px;
+    font-size: 11px;
+    color: #888;
+}
 
-/* =========================
-   PRECIO Y COSTO
-========================= */
+
+/* ============================================================
+   DASHBOARD — PANELES (ESTADOS / FINANZAS)
+   ============================================================ */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.dashboard-panel {
+    background: white;
+    border: 1px solid #ddd8d4;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.dashboard-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.dashboard-panel-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.6px;
+    color: #888;
+}
+
+.dashboard-panel h3 {
+    margin: 6px 0 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.dashboard-panel-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd8d4;
+    border-radius: 50%;
+    color: #C47456;
+    font-size: 15px;
+}
+
+.dashboard-estados {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dashboard-estado {
+    display: grid;
+    grid-template-columns: 120px 1fr 35px;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-estado-nombre {
+    font-size: 12px;
+    color: #555;
+}
+
+.dashboard-estado-barra {
+    height: 7px;
+    overflow: hidden;
+    background: #ebe8e5;
+    border-radius: 20px;
+}
+
+.dashboard-estado-progreso {
+    height: 100%;
+    background: #C47456;
+    border-radius: 20px;
+    transition: width .4s ease;
+}
+
+.dashboard-estado-cantidad {
+    text-align: right;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1d1a1a;
+}
+
+.dashboard-cargando {
+    padding: 15px 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.dashboard-finanza {
+    padding: 15px 0 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard-finanza-label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+}
+
+.dashboard-finanza-valor {
+    display: block;
+    margin-top: 8px;
+    font-size: 30px;
+    color: #C47456;
+    font-weight: 600;
+}
+
+.dashboard-finanza-linea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 18px;
+    font-size: 12px;
+    color: #777;
+}
+
+.dashboard-finanza-linea strong {
+    color: #1d1a1a;
+}
+
+
+/* ============================================================
+   DASHBOARD — ACCESOS RÁPIDOS
+   ============================================================ */
+
+.dashboard-accesos {
+    margin-bottom: 30px;
+}
+
+.dashboard-accesos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.dashboard-accesos-grid button {
+    min-height: 85px;
+    padding: 16px;
+    background: #f8f7f6;
+    border: 1px solid #e1ddda;
+    border-radius: 9px;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s ease,
+        border-color .2s ease;
+}
+
+.dashboard-accesos-grid button:hover {
+    background: white;
+    border-color: #C47456;
+}
+
+.dashboard-accesos-grid span {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #1d1a1a;
+}
+
+.dashboard-accesos-grid small {
+    display: block;
+    margin-top: 8px;
+    font-size: 10px;
+    color: #888;
+}
+
+
+/* ============================================================
+   VISTA MODELOS — TARJETAS
+   ============================================================ */
 
 .modelo-precios {
     display: flex;
@@ -213,2020 +494,37 @@ h2 {
     margin-bottom: 2px;
 }
 
-/* =========================
-   CONTROLES DE MODELOS
-========================= */
-
-#modelos-controles {
-    margin-bottom: 30px;
-}
-
-
-.modelos-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-
-.modelos-busqueda {
-    flex: 1;
-    min-width: 220px;
-}
-
-.modelos-busqueda input,
-.modelos-filtro select {
-    width: 100%;
-    height: 44px;
-    border: 1px solid #d8d3cf;
-    border-radius: 8px;
-    background: white;
-    padding: 0 14px;
-    font-size: 14px;
-    outline: none;
-/* Transición suave para cuando cambie de color al hacer clic */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-
-.modelos-busqueda input:focus,
-.modelos-filtro select:focus {
-    border-color: #C47456;
-   box-shadow: 0 0 0 3px rgba(196, 116, 86, 0.15); /* Un halo muy sutil y elegante */
-}
-
-
-.modelos-filtro {
-    width: 190px;
-}
-
-
-/* =========================
-   BOTÓN NUEVO MODELO
-========================= */
-
-.btn-nuevo-modelo {
-    height: 44px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 8px;
-   /* Usamos el Terracota principal de Craft Flow */
-    background: #C47456;
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-/* Transición suave y elegante para el hover */
-    transition: background 0.2s ease, transform 0.1s ease;
-}
-
-
-.btn-nuevo-modelo:hover {
-    /* Un terracota un poco más oscuro al pasar el mouse */
-    background: #b06447; 
-}
-
-
-/* =========================
-   BOTONES DE TARJETA
-========================= */
-
-.modelo-botones {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
-}
-
-
-.modelo-botones button {
-    flex: 1;
-    height: 40px;
-    border-radius: 7px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-}
-
-.btn-ver {
-    /* El botón principal de la tarjeta usa el Verde Oliva Suave/Profundo */
-    background: #5d6657; 
-    color: white;
-    border: 1px solid #5d6657;
-}
-
-
-.btn-editar {
-   /* El botón secundario se queda limpio con fondo blanco y bordes cálidos */
-    background: white;
-    color: #5d6657;
-    border: 1px solid #5d6657;
-}
-
-
-.btn-ver:hover {
-    background: #4a5345;
-    border-color: #4a5345;
-    opacity: 1;
-}
-.btn-editar:hover {
-    /* Al pasar el mouse por editar, se pinta suavemente de verde oliva */
-    background: #f0f3ee;
-    opacity: 1;
-}
-
-
-/* =========================
-   SIN RESULTADOS
-========================= */
-
-.sin-resultados {
-    grid-column: 1 / -1;
-    padding: 50px;
-    text-align: center;
-    background: white;
-    border-radius: 12px;
-/* Color de texto cálido acorde al diseño */
-    color: #8c827a; 
-    border: 1px dashed #d8d3cf;
-}
-
-
-/* =========================
-   MENSAJE DE ERROR
-========================= */
-
-.error {
-    padding: 30px;
-    background: white;
-    border-radius: 12px;
-    /* Un tono terracota oscuro/rojizo para errores, manteniendo la paleta */
-    color: #a64d37; 
-    text-align: center;
-    border: 1px solid #f2dcd5;
-}
-
-
-/* =========================
-   RESPONSIVE - TABLET
-========================= */
-
-@media (max-width: 800px) {
-    .main {
-        padding: 25px;
-    }
-    #modelos-container {
-        grid-template-columns:
-            repeat(auto-fill, minmax(200px, 1fr));
-    }
-    .modelo-imagen {
-        height: 190px;
-    }
-}
-
-/* =========================
-   RESPONSIVE - CELULAR
-========================= */
-
-@media (max-width: 550px) {
-    .header {
-        height: 60px;
-        padding: 0 20px;
-    }
-    .header h1 {
-        font-size: 20px;
-    }
-    .main {
-        padding: 20px;
-    }
-    #modelos-container {
-        grid-template-columns: 1fr;
-    }
-    .modelo-imagen {
-        height: 220px;
-    }
-    .modelos-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .modelos-filtro {
-        width: 100%;
-    }
-    .btn-nuevo-modelo {
-        width: 100%;
-    }
-}
-
-/* =========================================================
-   MODAL / FICHA DEL MODELO
-========================================================= */
-
-.modelo-modal {
-
-    position: fixed;
-    inset: 0;
-    z-index: 9000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px;
-
-}
-
-
-.modelo-modal-overlay {
-
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.45);
-
-}
-
-
-.modelo-modal-contenido {
-
-    position: relative;
-    z-index: 1;
-
-    width: min(1050px, 100%);
-
-    max-height: 92vh;
-
-    overflow-y: auto;
-
-    background: #fff;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 15px 50px rgba(0, 0, 0, 0.20);
-
-}
-
-
-/* =========================================================
-   BOTÓN CERRAR
-========================================================= */
-
-.modelo-modal-cerrar {
-
-    position: absolute;
-
-    top: 14px;
-    right: 18px;
-
-    z-index: 10;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 28px;
-
-    line-height: 1;
-
-    color: #1d1a1a;
-
-    cursor: pointer;
-
-}
-
-
-.modelo-modal-cerrar:hover {
-
-    color: #C47456;
-
-}
-
-
-/* =========================================================
-   PARTE SUPERIOR
-   IMAGEN + INFORMACIÓN
-========================================================= */
-
-.modelo-detalle-superior {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(420px, 1fr)
-        minmax(320px, 0.85fr);
-
-    gap: 45px;
-
-    padding: 45px;
-
-}
-
-
-/* =========================================================
-   IMÁGENES
-========================================================= */
-
-.modelo-detalle-imagenes {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-}
-
-
-.modelo-detalle-imagen-principal {
-
-    width: 100%;
-
-    height: 500px;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
-    background: #f7f5f3;
-
-}
-
-
-.modelo-detalle-imagen-principal img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    display: block;
-
-}
-
-
-.modelo-detalle-imagen-secundaria {
-
-    width: 100%;
-
-    height: 180px;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
-    background: #f7f5f3;
-
-}
-
-
-.modelo-detalle-imagen-secundaria img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    display: block;
-
-}
-
-
-.modelo-detalle-imagen-principal.sin-imagen {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    color: #888;
-
-    font-size: 13px;
-
-}
-
-
-/* =========================================================
-   INFORMACIÓN PRINCIPAL
-========================================================= */
-
-.modelo-detalle-info {
-
-    padding: 10px 20px 20px 0;
-
-}
-
-
-/* CÓDIGO + TIPO */
-
-.modelo-detalle-codigo-tipo {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.modelo-detalle-codigo {
-
-    font-size: 12px;
-
-    color: #888;
-
-    letter-spacing: 1px;
-
-}
-
-
-.modelo-detalle-tipo {
-
-    display: inline-block;
-
-    padding: 5px 10px;
-
-    border-radius: 5px;
-
-    background: #f1efed;
-
-    color: #555;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-}
-
-
-/* NOMBRE */
-
-.modelo-detalle-info h2 {
-
-    margin: 0 0 12px;
-
-    font-size: 34px;
-
-    line-height: 1.15;
-
-    letter-spacing: 1px;
-
-    color: #1d1a1a;
-
-}
-
-
-/* MATERIAL BASE */
-
-.modelo-detalle-material {
-
-    color: #666;
-
-    font-size: 14px;
-
-    margin-bottom: 30px;
-
-}
-
-
-/* =========================================================
-   PRECIO + COSTO
-========================================================= */
-
-.modelo-detalle-valores {
-
-    display: flex;
-
-    align-items: flex-end;
-
-    gap: 45px;
-
-    margin-bottom: 10px;
-
-}
-
-
-.modelo-detalle-valor {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-}
-
-
-.modelo-detalle-label {
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.2px;
-
-    color: #888;
-
-}
-
-
-.modelo-detalle-valor strong {
-
-    font-size: 24px;
-
-    line-height: 1;
-
-    color: #C47456;
-
-}
-
-
-.modelo-detalle-valor:last-child strong {
-
-    color: #1d1a1a;
-
-}
-
-
-/* =========================================================
-   PARTE INFERIOR
-========================================================= */
-
-.modelo-detalle-inferior {
-
-    padding: 0 45px 45px;
-
-}
-
-
-/* =========================================================
-   SECCIONES
-========================================================= */
-
-.modelo-detalle-seccion {
-
-    border-top: 1px solid #ddd7d2;
-
-    padding-top: 22px;
-
-    margin-top: 25px;
-
-}
-
-
-.modelo-detalle-seccion h3 {
-
-    margin: 0 0 10px;
-
-    font-size: 11px;
-
-    letter-spacing: 1.5px;
-
-    color: #555;
-
-}
-
-
-.modelo-detalle-seccion p {
-
-    margin: 0;
-
-    font-size: 14px;
-
-    line-height: 1.7;
-
-    color: #444;
-
-}
-
-
-.modelo-medidas {
-
-    line-height: 1.9 !important;
-
-}
-
-
-/* =========================================================
-   ACCIONES DE MATERIALES
-========================================================= */
-
-.modelo-materiales-acciones {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 15px;
-
-}
-
-
-.btn-calcular-costo {
-
-    padding: 10px 18px;
-
-    border: 1px solid #1d1a1a;
-
-    border-radius: 7px;
-
-    background: #1d1a1a;
-
-    color: white;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
-
-}
-
-
-.btn-calcular-costo:hover {
-
-    opacity: 0.85;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 750px) {
-
-    .modelo-modal {
-
-        padding: 15px;
-
-    }
-
-
-    .modelo-modal-contenido {
-
-        max-height: 95vh;
-
-    }
-
-
-    .modelo-detalle-superior {
-
-        grid-template-columns: 1fr;
-
-        gap: 25px;
-
-        padding: 25px;
-
-    }
-
-
-    .modelo-detalle-imagen-principal {
-
-        height: 360px;
-
-    }
-
-
-    .modelo-detalle-imagen-secundaria {
-
-        height: 180px;
-
-    }
-
-
-    .modelo-detalle-info {
-
-        padding: 0;
-
-    }
-
-
-    .modelo-detalle-info h2 {
-
-        font-size: 28px;
-
-    }
-
-
-    .modelo-detalle-inferior {
-
-        padding: 0 25px 30px;
-
-    }
-
-
-    .modelo-detalle-valores {
-
-        gap: 30px;
-
-    }
-
-}
-
-/* =========================
-   BOTÓN ELIMINAR MATERIAL
-========================= */
-
-.btn-eliminar-material {
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    color: #999;
-    font-size: 17px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-/* HOVER X */
-.btn-eliminar-material:hover {
-    background: #eee5e1;
-    color: #C47456;
-
-}
-
-/* =========================
-   MODAL MATERIAL
-========================= */
-
-.material-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.material-modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-}
-
-.material-modal-contenido {
-    position: relative;
-    z-index: 1;
-    width: min(420px, calc(100% - 30px));
-    background: white;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-.material-modal-contenido h2 {
-    margin: 0 0 25px 0;
-    font-size: 18px;
-    letter-spacing: 1px;
-}
-
-.material-modal-cerrar {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    border: none;
-    background: transparent;
-    font-size: 26px;
-    cursor: pointer;
-    color: #1d1a1a;
-}
-
-.material-modal-cerrar:hover {
-    color: #C47456;
-}
-
-.material-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.material-form label {
-    margin-top: 10px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: #555;
-}
-
-.material-form select,
-.material-form input {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    border: 1px solid #d8d3cf;
-    border-radius: 7px;
-    background: white;
-    font-size: 14px;
-    outline: none;
-}
-
-.material-form input:focus,
-.material-form select:focus {
-    border-color: #C47456;
-}
-
-.material-form input[readonly] {
-    background: #f7f5f3;
-}
-
-.material-form-botones {
-    display: flex;
-    gap: 10px;
-    margin-top: 25px;
-}
-
-.material-btn-cancelar,
-.material-btn-guardar {
-    flex: 1;
-    height: 42px;
-    border-radius: 7px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-}
-
-.material-btn-cancelar {
-    background: white;
-    color: #1d1a1a;
-    border: 1px solid #d8d3cf;
-}
-
-.material-btn-guardar {
-    background: #C47456;
-    color: white;
-    border: 1px solid #C47456;
-}
-
-.material-btn-cancelar:hover {
-    border-color: #1d1a1a;
-}
-
-.material-btn-guardar:hover {
-    opacity: 0.9;
-}
-
-.material-btn-guardar:disabled {
-    opacity: 0.5;
-    cursor: wait;
-}
-
-/* =========================================================
-   MODAL NUEVO MATERIAL
-   ========================================================= */
-
-.material-nuevo-modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10000;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-}
-
-
-/* =========================================================
-   FONDO OSCURO
-   ========================================================= */
-
-.material-nuevo-overlay {
-
-    position: absolute;
-
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.45);
-
-}
-
-
-/* =========================================================
-   CONTENIDO
-   ========================================================= */
-
-.material-nuevo-contenido {
-
-    position: relative;
-
-    z-index: 1;
-
-    width: min(720px, 100%);
-
-    max-height: calc(100vh - 40px);
-
-    overflow-y: auto;
-
-    background: #ffffff;
-
-    border-radius: 14px;
-
-    padding: 30px;
-
-    box-shadow:
-        0 15px 50px rgba(0, 0, 0, 0.25);
-
-}
-
-
-/* =========================================================
-   BOTÓN CERRAR
-   ========================================================= */
-
-.material-nuevo-cerrar {
-
-    position: absolute;
-
-    top: 12px;
-
-    right: 16px;
-
-    width: 34px;
-
-    height: 34px;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 28px;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    color: #1d1a1a;
-
-}
-
-
-.material-nuevo-cerrar:hover {
-
-    color: #C47456;
-
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.material-nuevo-header {
-
-    margin-bottom: 25px;
-
-}
-
-
-.material-nuevo-header > span {
-
-    display: block;
-
-    margin-bottom: 5px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.5px;
-
-    color: #C47456;
-
-}
-
-
-.material-nuevo-header h2 {
-
-    margin: 0 0 8px 0;
-
-    font-size: 24px;
-
-    letter-spacing: 0.5px;
-
-}
-
-
-.material-nuevo-header p {
-
-    margin: 0;
-
-    font-size: 13px;
-
-    color: #666;
-
-}
-
-
-/* =========================================================
-   SECCIONES
-   ========================================================= */
-
-.material-seccion {
-
-    margin-bottom: 24px;
-
-    padding: 20px;
-
-    border: 1px solid #e4dfdb;
-
-    border-radius: 10px;
-
-}
-
-
-.material-seccion-titulo {
-
-    margin-bottom: 18px;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.2px;
-
-    color: #555;
-
-}
-
-
-/* =========================================================
-   CAMPOS
-   ========================================================= */
-
-.material-campo {
-
-    margin-bottom: 15px;
-
-}
-
-
-.material-campo label {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-    color: #555;
-
-}
-
-
-.material-campo input,
-
-.material-campo select {
-
-    width: 100%;
-
-    height: 42px;
-
-    padding: 0 12px;
-
-    border: 1px solid #d8d3cf;
-
-    border-radius: 7px;
-
-    background: white;
-
-    font-size: 14px;
-
-    outline: none;
-
-    box-sizing: border-box;
-
-}
-
-
-.material-campo input:focus,
-
-.material-campo select:focus {
-
-    border-color: #C47456;
-
-}
-
-
-/* =========================================================
-   GRILLA
-   ========================================================= */
-
-.material-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(
-        2,
-        minmax(0, 1fr)
-    );
-
-    gap: 15px;
-
-}
-
-
-/* =========================================================
-   TEXTOS DE AYUDA
-   ========================================================= */
-
-.material-campo small {
-
-    display: block;
-
-    margin-top: 6px;
-
-    font-size: 11px;
-
-    line-height: 1.4;
-
-    color: #888;
-
-}
-
-
-/* =========================================================
-   ESTADO ACTIVO
-   ========================================================= */
-
-.material-activo label {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    font-size: 13px;
-
-    color: #444;
-
-}
-
-
-.material-activo input {
-
-    width: 16px;
-
-    height: 16px;
-
-}
-
-
-/* =========================================================
-   MENSAJE
-   ========================================================= */
-
-.material-nuevo-mensaje {
-
-    min-height: 20px;
-
-    margin: 10px 0;
-
-    font-size: 13px;
-
-}
-
-
-.material-nuevo-mensaje.exito {
-
-    color: #3d7a50;
-
-}
-
-
-.material-nuevo-mensaje.error {
-
-    color: #a33a3a;
-
-}
-
-
-/* =========================================================
-   BOTONES
-   ========================================================= */
-
-.material-nuevo-botones {
-
-    display: flex;
-
-    justify-content: flex-end;
-
-    gap: 10px;
-
-    margin-top: 20px;
-
-}
-
-
-.btn-cancelar-material,
-
-.btn-guardar-material {
-
-    min-width: 150px;
-
-    height: 42px;
-
-    padding: 0 18px;
-
-    border-radius: 7px;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-}
-
-
-.btn-cancelar-material {
-
-    background: white;
-
-    color: #1d1a1a;
-
-    border: 1px solid #d8d3cf;
-
-}
-
-
-.btn-guardar-material {
-
-    background: #C47456;
-
-    color: white;
-
-    border: 1px solid #C47456;
-
-}
-
-
-.btn-cancelar-material:hover {
-
-    border-color: #1d1a1a;
-
-}
-
-
-.btn-guardar-material:hover {
-
-    opacity: 0.9;
-
-}
-
-
-.btn-guardar-material:disabled {
-
-    opacity: 0.5;
-
-    cursor: wait;
-
-}
-
-
-/* =========================================================
-   CELULAR
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    .material-nuevo-contenido {
-
-        padding: 20px;
-
-        max-height: calc(100vh - 20px);
-
-    }
-
-
-    .material-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .material-nuevo-botones {
-
-        flex-direction: column-reverse;
-
-    }
-
-
-    .btn-cancelar-material,
-
-    .btn-guardar-material {
-
-        width: 100%;
-
-    }
-
-}
-
-/* =========================
-   SELECTOR DE EMPRESA
-========================= */
-
-.empresa-selector {
-    margin-left: auto;
-}
-.empresa-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.empresa-logo {
-    width: 38px;
-    height: 38px;
-    object-fit: contain;
-    border-radius: 8px;
-    background: white;
-    padding: 4px;
-}
-.empresa-texto {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.empresa-label {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    opacity: 0.55;
-}
-
-#empresa-select {
-    appearance: none;
-    border: none;
-    background: transparent;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    padding: 2px 22px 2px 0;
-    background-image:
-        linear-gradient(
-            45deg,
-            transparent 50%,
-            white 50%
-        ),
-        linear-gradient(
-            135deg,
-            white 50%,
-            transparent 50%
-        );
-
-    background-position:
-        calc(100% - 8px) 50%,
-        calc(100% - 3px) 50%;
-
-    background-size:
-        5px 5px,
-        5px 5px;
-
-    background-repeat: no-repeat;
-}
-
-#empresa-select option {
-    color: #222;
-    background: white;
-}
-
-/* =========================================================
-   CRAFT FLOW — DASHBOARD
-   ========================================================= */
-
-/* =========================
-   HEADER
-========================= */
-
-.header-marca {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-}
-
-/* =========================
-   VISTA GENERAL
-========================= */
-.dashboard-view {
-    width: 100%;
-}
-.dashboard-encabezado {
-    margin-bottom: 30px;
-}
-
-.dashboard-saludo {
-    margin: 0 0 7px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #888;
-}
-
-.dashboard-encabezado h2 {
-    margin: 0;
-    font-size: 30px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.dashboard-descripcion {
-    margin: 8px 0 0;
-    color: #777;
-    font-size: 14px;
-}
-
-/* =========================
-   ACCIONES PRINCIPALES
-========================= */
-
-.dashboard-acciones {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-accion {
-    min-height: 88px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    background: white;
-    color: #1d1a1a;
-    text-align: left;
-    cursor: pointer;
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-}
-
-.dashboard-accion:hover {
-    transform: translateY(-2px);
-    border-color: #C47456;
-    box-shadow: 0 8px 25px rgba(196, 116, 86, .12);
-}
-
-.dashboard-accion-principal {
-    background: #C47456;
-    color: white;
-    border-color: #C47456;
-}
-
-.dashboard-accion-principal:hover {
-    background: #b26549;
-    border-color: #b26549;
-}
-
-.dashboard-accion-icono {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border:
-        1px solid currentColor;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: 300;
-}
-
-.dashboard-accion strong {
-    display: block;
-    font-size: 13px;
-    letter-spacing: .4px;
-}
-
-.dashboard-accion small {
-    display: block;
-    margin-top: 5px;
-    font-size: 11px;
-    opacity: .75;
-}
-
-/* =========================
-   TARJETAS RESUMEN
-========================= */
-
-.dashboard-resumen {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-card {
-    background: white;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-.dashboard-card-destacada {
-    background: #f7f5f3;
-    border-color: #e5e0dc;
-}
-
-.dashboard-card-label {
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.6px;
-    color: #888;
-}
-
-.dashboard-card-numero {
-    margin-top: 10px;
-    font-size: 30px;
-    line-height: 1;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.dashboard-card-dinero {
-    font-size: 25px;
-    color: #C47456;
-}
-
-.dashboard-card-detalle {
-    margin-top: 9px;
-    font-size: 11px;
-    color: #888;
-}
-
-/* =========================
-   GRID DE PANELES
-========================= */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns:
-        1.5fr 1fr;
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-panel {
-    background: white;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    padding: 24px;
-}
-
-.dashboard-panel-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.dashboard-panel-label {
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.6px;
-    color: #888;
-}
-
-.dashboard-panel h3 {
-    margin: 6px 0 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-
-.dashboard-panel-icon {
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 50%;
-    color: #C47456;
-    font-size: 15px;
-}
-
-/* =========================
-   ESTADOS DE PEDIDOS
-========================= */
-.dashboard-estados {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.dashboard-estado {
-    display: grid;
-    grid-template-columns:
-        120px 1fr 35px;
-    align-items: center;
-    gap: 12px;
-}
-
-.dashboard-estado-nombre {
-    font-size: 12px;
-    color: #555;
-}
-
-.dashboard-estado-barra {
-    height: 7px;
-    overflow: hidden;
-    background: #ebe8e5;
-    border-radius: 20px;
-}
-
-.dashboard-estado-progreso {
-    height: 100%;
-    background: #C47456;
-    border-radius: 20px;
-    transition:
-        width .4s ease;
-}
-
-.dashboard-estado-cantidad {
-    text-align: right;
-    font-size: 12px;
-    font-weight: bold;
-    color: #1d1a1a;
-}
-
-.dashboard-cargando {
-    padding: 15px 0;
-    font-size: 12px;
-    color: #999;
-}
-
-/* =========================
-   FINANZAS DEL DASHBOARD
-========================= */
-
-.dashboard-finanza {
-    padding: 15px 0 25px;
-    border-bottom:
-        1px solid #eee;
-}
-
-.dashboard-finanza-label {
-    display: block;
-    font-size: 11px;
-    color: #888;
-}
-
-.dashboard-finanza-valor {
-    display: block;
-    margin-top: 8px;
-    font-size: 30px;
-    color: #C47456;
-    font-weight: 600;
-}
-
-.dashboard-finanza-linea {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 18px;
-    font-size: 12px;
-    color: #777;
-}
-
-.dashboard-finanza-linea strong {
-    color: #1d1a1a;
-}
-
-/* =========================
-   ACCESOS
-========================= */
-
-.dashboard-accesos {
-    margin-bottom: 30px;
-}
-
-.dashboard-accesos-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 10px;
-}
-
-.dashboard-accesos-grid button {
-    min-height: 85px;
-    padding: 16px;
-    background: #f8f7f6;
-    border:
-        1px solid #e1ddda;
-    border-radius: 9px;
-    text-align: left;
-    cursor: pointer;
-    transition:
-        background .2s ease,
-        border-color .2s ease;
-}
-
-.dashboard-accesos-grid button:hover {
-    background: white;
-    border-color: #C47456;
-}
-
-.dashboard-accesos-grid span {
-    display: block;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: #1d1a1a;
-}
-
-.dashboard-accesos-grid small {
-    display: block;
-    margin-top: 8px;
-    font-size: 10px;
-    color: #888;
-}
-
-/* =========================
-   VISTAS DE MÓDULOS
-========================= */
-.modulo-view {
-    width: 100%;
-}
-
-.modulo-header {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 30px;
-}
-
-.modulo-label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    color: #888;
-}
-
-.modulo-header h2 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.btn-volver-dashboard {
-    height: 40px;
-    padding: 0 15px;
-    background: white;
-    border: 1px solid #d8d3cf;
-    border-radius: 8px;
-    color: #1d1a1a;
-    font-size: 12px;
-    cursor: pointer;
-   transition: border-color .2s ease, color .2s ease;
-}
-
-.btn-volver-dashboard:hover {
-    border-color: #C47456;
-    color: #C47456;
-}
-
-/* =========================
-   RESPONSIVE TABLET
-========================= */
-
-@media (max-width: 900px) {
-
-    .dashboard-acciones {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .dashboard-resumen {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .dashboard-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-    .dashboard-accesos-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-}
-
-/* =========================
-   RESPONSIVE CELULAR
-========================= */
-
-@media (max-width: 550px) {
-    .header-marca {
-        display: block;
-    }
-
-    .header-marca span {
-        display: none;
-    }
-    .dashboard-acciones {
-        grid-template-columns:
-            1fr;
-    }
-    .dashboard-resumen {
-        grid-template-columns:
-            1fr 1fr;
-    }
-    .dashboard-card {
-        padding: 17px;
-    }
-    .dashboard-card-numero {
-        font-size: 25px;
-    }
-    .dashboard-card-dinero {
-        font-size: 19px;
-    }
-    .dashboard-panel {
-        padding: 18px;
-    }
-    .dashboard-estado {
-        grid-template-columns:
-            90px 1fr 25px;
-    }
-    .dashboard-accesos-grid {
-        grid-template-columns:
-            1fr;
-    }
-    .modulo-header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-
-/* =========================
-   ESTILOS GENERALES
-========================= */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f7f5f3;
-    color: #222;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.header {
-    height: 70px;
-
-   /* Usamos un verde oliva oscuro y elegante */
-    background: #5d6657; 
-    color: #ffffff;
-   
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    gap: 12px;
-/* Agregamos una pequeña sombra para despegarlo del resto */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-    letter-spacing: 1px; /* Un poco menos de espacio queda más moderno */
-    font-weight: 600;    /* Un poquito más de peso para que se lea mejor */
-}
-
-.header span {
-    opacity: 0.8; /* Un poco más legible que 0.7 */
-    font-weight: 300;
-}
-
-
-/* =========================
-   CONTENIDO PRINCIPAL
-========================= */
-
-.main {
-    padding: 40px;
-}
-
-h2 {
-    margin-top: 0;
-}
-
-
-/* =========================
-   CONTENEDOR DE MODELOS
-========================= */
-
 #modelos-container {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fill, minmax(220px, 1fr));
-
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
 }
 
-
-/* =========================
-   TARJETA DE MODELO
-========================= */
-
 .modelo-card {
     background: white;
-
     border-radius: 12px;
-
     overflow: hidden;
-/* Sombra un poquito más suave y refinada */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-/* Añadimos una transición suave para cuando el mouse pase por encima */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
-    /* Un borde muy fino con un tono neutro cálido */
     border: 1px solid #eae5df;
-   
 }
-/* Efecto cuando pasas el mouse por la tarjeta (le da vida a la app) */
+
 .modelo-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(196, 116, 86, 0.15); /* La sombra toma un reflejo terracota muy sutil */
-    border-color: #C47456; /* El borde se pinta del terracota de Craft Flow al seleccionarlo */
+    box-shadow: 0 8px 20px rgba(196, 116, 86, 0.15);
+    border-color: #C47456;
 }
-
-/* =========================
-   IMAGEN DEL MODELO
-========================= */
 
 .modelo-imagen {
     width: 100%;
     height: 200px;
-
-  /* Un fondo cálido muy suave en lugar de un gris frío */
     background: #f4f0ec;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
+
 .modelo-imagen img {
     width: 100%;
     height: 100%;
@@ -2235,24 +533,14 @@ h2 {
 }
 
 .modelo-imagen.sin-imagen {
- /* Color de texto más cálido y elegante */
     color: #9c8e83;
     font-size: 13px;
     font-style: italic;
 }
 
-
-/* =========================
-   CONTENIDO DE LA TARJETA
-========================= */
 .modelo-contenido {
     padding: 18px;
 }
-
-
-/* =========================
-   PARTE SUPERIOR
-========================= */
 
 .modelo-superior {
     display: flex;
@@ -2262,7 +550,7 @@ h2 {
 }
 
 .modelo-codigo {
-  font-size: 12px;
+    font-size: 12px;
     color: #8c827a;
     font-weight: 500;
 }
@@ -2273,27 +561,16 @@ h2 {
     letter-spacing: 1px;
     padding: 5px 8px;
     border-radius: 5px;
-    /* Usamos un fondo con el verde oliva suave y texto blanco o verde oscuro */
     background: #e4e8e1;
     color: #4a5345;
 }
-
-
-/* =========================
-   NOMBRE
-========================= */
 
 .modelo-nombre {
     font-size: 22px;
     font-weight: bold;
     margin: 8px 0;
-    color: #2c2622; /* Un tono más cálido que el negro puro */
+    color: #2c2622;
 }
-
-
-/* =========================
-   MATERIAL
-========================= */
 
 .modelo-material {
     font-size: 13px;
@@ -2302,11 +579,6 @@ h2 {
     min-height: 18px;
 }
 
-
-/* =========================
-   PRECIO
-========================= */
-
 .modelo-precio {
     font-size: 18px;
     font-weight: bold;
@@ -2314,15 +586,72 @@ h2 {
     color: #C47456;
 }
 
+.modelo-botones {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+}
 
-/* =========================
-   CONTROLES DE MODELOS
-========================= */
+.modelo-botones button {
+    flex: 1;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.btn-ver {
+    background: #5d6657;
+    color: white;
+    border: 1px solid #5d6657;
+}
+
+.btn-editar {
+    background: white;
+    color: #5d6657;
+    border: 1px solid #5d6657;
+}
+
+.btn-ver:hover {
+    background: #4a5345;
+    border-color: #4a5345;
+    opacity: 1;
+}
+
+.btn-editar:hover {
+    background: #f0f3ee;
+    opacity: 1;
+}
+
+.sin-resultados {
+    grid-column: 1 / -1;
+    padding: 50px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    color: #8c827a;
+    border: 1px dashed #d8d3cf;
+}
+
+.error {
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    color: #a64d37;
+    text-align: center;
+    border: 1px solid #f2dcd5;
+}
+
+
+/* ============================================================
+   VISTA MODELOS — FILTROS / BUSCADOR
+   ============================================================ */
 
 #modelos-controles {
     margin-bottom: 30px;
 }
-
 
 .modelos-toolbar {
     display: flex;
@@ -2330,7 +659,6 @@ h2 {
     gap: 12px;
     flex-wrap: wrap;
 }
-
 
 .modelos-busqueda {
     flex: 1;
@@ -2347,182 +675,63 @@ h2 {
     padding: 0 14px;
     font-size: 14px;
     outline: none;
-/* Transición suave para cuando cambie de color al hacer clic */
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 
 .modelos-busqueda input:focus,
 .modelos-filtro select:focus {
     border-color: #C47456;
-   box-shadow: 0 0 0 3px rgba(196, 116, 86, 0.15); /* Un halo muy sutil y elegante */
+    box-shadow: 0 0 0 3px rgba(196, 116, 86, 0.15);
 }
-
 
 .modelos-filtro {
     width: 190px;
 }
-
-
-/* =========================
-   BOTÓN NUEVO MODELO
-========================= */
 
 .btn-nuevo-modelo {
     height: 44px;
     padding: 0 18px;
     border: none;
     border-radius: 8px;
-   /* Usamos el Terracota principal de Craft Flow */
     background: #C47456;
     color: white;
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-/* Transición suave y elegante para el hover */
     transition: background 0.2s ease, transform 0.1s ease;
 }
 
-
 .btn-nuevo-modelo:hover {
-    /* Un terracota un poco más oscuro al pasar el mouse */
-    background: #b06447; 
+    background: #b06447;
 }
 
 
-/* =========================
-   BOTONES DE TARJETA
-========================= */
+/* ============================================================
+   MODAL MODELO — ESTRUCTURA / IMÁGENES / INFO
+   ============================================================ */
 
-.modelo-botones {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
+.modelo-detalle-imagen-principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
-
-.modelo-botones button {
-    flex: 1;
-    height: 40px;
-    border-radius: 7px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
+.modelo-detalle-imagen-secundaria img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
-.btn-ver {
-    /* El botón principal de la tarjeta usa el Verde Oliva Suave/Profundo */
-    background: #5d6657; 
-    color: white;
-    border: 1px solid #5d6657;
+.modelo-detalle-valor:last-child strong {
+    color: #1d1a1a;
 }
 
-
-.btn-editar {
-   /* El botón secundario se queda limpio con fondo blanco y bordes cálidos */
-    background: white;
-    color: #5d6657;
-    border: 1px solid #5d6657;
+.modelo-detalle-inferior {
+    padding: 0 45px 45px;
 }
 
-
-.btn-ver:hover {
-    background: #4a5345;
-    border-color: #4a5345;
-    opacity: 1;
-}
-.btn-editar:hover {
-    /* Al pasar el mouse por editar, se pinta suavemente de verde oliva */
-    background: #f0f3ee;
-    opacity: 1;
-}
-
-
-/* =========================
-   SIN RESULTADOS
-========================= */
-
-.sin-resultados {
-    grid-column: 1 / -1;
-    padding: 50px;
-    text-align: center;
-    background: white;
-    border-radius: 12px;
-/* Color de texto cálido acorde al diseño */
-    color: #8c827a; 
-    border: 1px dashed #d8d3cf;
-}
-
-
-/* =========================
-   MENSAJE DE ERROR
-========================= */
-
-.error {
-    padding: 30px;
-    background: white;
-    border-radius: 12px;
-    /* Un tono terracota oscuro/rojizo para errores, manteniendo la paleta */
-    color: #a64d37; 
-    text-align: center;
-    border: 1px solid #f2dcd5;
-}
-
-
-/* =========================
-   RESPONSIVE - TABLET
-========================= */
-
-@media (max-width: 800px) {
-    .main {
-        padding: 25px;
-    }
-    #modelos-container {
-        grid-template-columns:
-            repeat(auto-fill, minmax(200px, 1fr));
-    }
-    .modelo-imagen {
-        height: 190px;
-    }
-}
-
-/* =========================
-   RESPONSIVE - CELULAR
-========================= */
-
-@media (max-width: 550px) {
-    .header {
-        height: 60px;
-        padding: 0 20px;
-    }
-    .header h1 {
-        font-size: 20px;
-    }
-    .main {
-        padding: 20px;
-    }
-    #modelos-container {
-        grid-template-columns: 1fr;
-    }
-    .modelo-imagen {
-        height: 220px;
-    }
-    .modelos-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .modelos-filtro {
-        width: 100%;
-    }
-    .btn-nuevo-modelo {
-        width: 100%;
-    }
-}
-
-/* =========================
-   MODAL - DETALLE MODELO
-========================= */
 .modelo-modal {
     position: fixed;
     inset: 0;
@@ -2533,85 +742,45 @@ h2 {
     padding: 30px;
 }
 
-
 .modelo-modal-overlay {
     position: absolute;
     inset: 0;
-    /* Fondo oscuro con un leve tinte cálido */
     background: rgba(44, 38, 34, 0.65);
     backdrop-filter: blur(3px);
 }
-
-
-.modelo-modal-contenido {
-    position: relative;
-    z-index: 2;
-    width: min(1000px, 95vw);
-    max-height: 90vh;
-    overflow-y: auto;
-    background: #f7f5f3;
-    border-radius: 16px;
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3);
-   /* Borde sutil para darle definición al modal */
-    border: 1px solid #e4dfda;
-}
-
-
-/* =========================
-   BOTÓN CERRAR
-========================= */
 
 .modelo-modal-cerrar {
     position: absolute;
     top: 15px;
     right: 18px;
     z-index: 5;
-    width: 38px;
-    height: 38px;
     border: none;
-    border-radius: 50%;
     background: white;
-    color: #1d1a1a;
     font-size: 26px;
     line-height: 1;
+    color: #1d1a1a;
     cursor: pointer;
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.15);
-   transition: background 0.2s ease, color 0.2s ease;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .modelo-modal-cerrar:hover {
-    background: #f7f5f3;
     color: #C47456;
+    background: #f7f5f3;
 }
-
-/* =========================
-   DETALLE
-========================= */
 
 .modelo-detalle {
     display: grid;
-    grid-template-columns:
-        1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
     padding: 40px;
 }
 
-/* =========================
-   IMÁGENES
-========================= */
-
-.modelo-detalle-imagenes {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-
 .modelo-detalle-imagen-principal,
 .modelo-detalle-imagen-secundaria {
-
     width: 100%;
     background: #f7f5f3;
     border-radius: 12px;
@@ -2622,74 +791,12 @@ h2 {
     border: 1px solid #e5e0dc;
 }
 
-.modelo-detalle-imagen-principal {
-    height: 420px;
-}
-
-.modelo-detalle-imagen-secundaria {
-    height: 180px;
-}
-
-.modelo-detalle-imagen-principal img,
-.modelo-detalle-imagen-secundaria img {
-
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-
-/* =========================
-   INFORMACIÓN
-========================= */
-
-.modelo-detalle-info {
-    padding: 15px 20px 20px 0;
-}
-
-.modelo-detalle-codigo {
-    display: inline-block;
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 8px;
-}
-
-.modelo-detalle-tipo {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 5px 9px;
-    border-radius: 5px;
-    background: #f1efed;
-    color: #555;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.modelo-detalle-info h2 {
-    margin: 10px 0 5px;
-    font-size: 34px;
-    letter-spacing: 1px;
-    color: #1d1a1a;
-}
-
-.modelo-detalle-material {
-    color: #666;
-    font-size: 15px;
-    margin-bottom: 20px;
-}
-
 .modelo-detalle-precio {
     font-size: 25px;
     font-weight: bold;
     color: #C47456;
     margin-bottom: 30px;
 }
-
-/* =========================
-   SECCIONES
-========================= */
 
 .modelo-detalle-seccion {
     border-top: 1px solid #ddd7d2;
@@ -2705,7 +812,6 @@ h2 {
 }
 
 .modelo-detalle-seccion p {
-
     margin: 0;
     font-size: 14px;
     line-height: 1.7;
@@ -2716,41 +822,362 @@ h2 {
     line-height: 1.9 !important;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 750px) {
-    .modelo-modal {
-        padding: 15px;
-    }
-    .modelo-modal-contenido {
-        max-height: 95vh;
-    }
-    .modelo-detalle {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 25px;
-    }
-
-
-    .modelo-detalle-imagen-principal {
-
-        height: 320px;
-    }
-    .modelo-detalle-imagen-secundaria {
-        height: 180px;
-    }
-    .modelo-detalle-info {
-        padding: 0;
-    }
-    .modelo-detalle-info h2 {
-        font-size: 28px;
-    }
+.modelo-modal-contenido {
+    position: relative;
+    z-index: 2;
+    width: min(1120px, 95vw);
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #f7f5f3;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid #e4dfda;
 }
 
+.modelo-detalle-superior {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr)
+        minmax(390px, 0.95fr);
+    gap: 35px;
+    padding: 40px;
+    align-items: start;
+}
+
+.modelo-detalle-columna-izquierda {
+    min-width: 0;
+}
+
+.modelo-detalle-columna-derecha {
+    min-width: 0;
+}
+
+.modelo-detalle-imagenes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.modelo-detalle-imagen-principal {
+    width: 100%;
+    height: 470px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f7f5f3;
+    border: 1px solid #e5e0dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modelo-detalle-imagen-secundaria {
+    width: 100%;
+    height: 170px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f7f5f3;
+    border: 1px solid #e5e0dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modelo-detalle-imagen-principal img,
+.modelo-detalle-imagen-secundaria img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.modelo-detalle-info {
+    padding: 5px 20px 0 0;
+}
+
+.modelo-detalle-codigo-tipo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.modelo-detalle-codigo {
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 8px;
+    margin: 0;
+}
+
+.modelo-detalle-tipo {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #f1efed;
+    color: #555;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-left: 8px;
+    margin: 0;
+}
+
+.modelo-detalle-info h2 {
+    margin: 0 0 8px 0;
+    font-size: 38px;
+    line-height: 1.05;
+    letter-spacing: 1px;
+    color: #1d1a1a;
+}
+
+.modelo-detalle-material {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin: 0 0 28px 0;
+}
+
+.modelo-detalle-valores {
+    display: flex;
+    align-items: flex-start;
+    gap: 55px;
+    margin-bottom: 28px;
+}
+
+.modelo-detalle-valor {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modelo-detalle-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #777;
+    display: block;
+}
+
+.modelo-detalle-valor strong {
+    font-size: 27px;
+    line-height: 1.1;
+    color: #1d1a1a;
+    display: block;
+}
+
+.modelo-detalle-valor:first-child strong {
+    color: #C47456;
+}
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion {
+    border-top: 1px solid #ddd7d2;
+    padding-top: 20px;
+    margin-top: 25px;
+}
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion h3 {
+    margin: 0 0 10px 0;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #555;
+}
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+}
+
+.modelo-detalle-columna-izquierda
+.modelo-detalle-seccion + .modelo-detalle-seccion {
+    margin-top: 22px;
+}
+
+.modelo-detalle-imagen-principal.sin-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   MODAL MODELO — MATERIALES Y CONSUMO
+   ============================================================ */
+
 /* =========================
-   MODAL MATERIAL
+   FIX: alineación de columnas y
+   negrita real de la descripción
+   (antes apuntaba a .material-modelo-info
+   / .material-cantidad, clases que
+   app.js nunca genera; se corrigió para
+   usar las clases reales del render)
 ========================= */
+.material-modelo-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42px 48px 65px;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    border: 1px solid #e5e0dc;
+    border-radius: 8px;
+    padding: 7px 8px;
+    margin-bottom: 5px;
+}
+
+.material-modelo-descripcion {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1d1a1a;
+}
+
+.material-modelo-cantidad {
+    min-width: 0;
+    font-size: 11px;
+    font-weight: 400;
+    color: #333;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.material-modelo-unidad {
+    min-width: 0;
+    font-size: 11px;
+    font-weight: 400;
+    color: #333;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.material-modelo-costo {
+    min-width: 0;
+    font-size: 11px;
+    font-weight: 400;
+    color: #333;
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+.modelo-materiales {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e0dc;
+}
+
+.modelo-materiales h3 {
+    margin: 0 0 14px 0;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #555;
+}
+
+.btn-eliminar-material {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #999;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.btn-eliminar-material:hover {
+    background: #eee5e1;
+    color: #C47456;
+}
+
+.materiales-cargando,
+.materiales-vacio,
+.materiales-error {
+    padding: 15px;
+    background: #f7f5f3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #777;
+}
+
+.btn-agregar-material {
+    margin-top: 12px;
+    padding: 10px 15px;
+    border: 1px solid #C47456;
+    border-radius: 7px;
+    background: white;
+    color: #C47456;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: background 0.2s ease,
+        color 0.2s ease;
+}
+
+.btn-agregar-material:hover {
+    background: #C47456;
+    color: white;
+}
+
+.modelo-materiales-acciones {
+    display: flex !important;
+    gap: 10px;
+    margin-top: 12px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+}
+
+.btn-calcular-costo {
+    padding: 6px 13px !important;
+    border: 1px solid #C47456 !important;
+    border-radius: 7px !important;
+    background: transparent !important;
+    color: #C47456 !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 1.3px !important;
+    cursor: pointer !important;
+    transition: background 0.2s ease,
+        color 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.btn-calcular-costo:hover {
+    opacity: 0.85;
+    background: #C47456 !important;
+    color: white !important;
+}
+
+
+/* ============================================================
+   MODAL MATERIAL — AGREGAR MATERIAL AL MODELO
+   ============================================================ */
 
 .material-modal {
     position: fixed;
@@ -2774,8 +1201,7 @@ h2 {
     background: white;
     border-radius: 12px;
     padding: 30px;
-    box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .material-modal-contenido h2 {
@@ -2876,565 +1302,727 @@ h2 {
     cursor: wait;
 }
 
-/* =========================
-   SELECTOR DE EMPRESA
-========================= */
 
-.empresa-selector {
-    margin-left: auto;
-}
-.empresa-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.empresa-logo {
-    width: 38px;
-    height: 38px;
-    object-fit: contain;
-    border-radius: 8px;
-    background: white;
-    padding: 4px;
-}
-.empresa-texto {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
+/* ============================================================
+   MODAL NUEVO MATERIAL — ALTA DE MATERIAL EN CATÁLOGO
+   ============================================================ */
 
-.empresa-label {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    opacity: 0.55;
-}
-
-#empresa-select {
-    appearance: none;
-    border: none;
-    background: transparent;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    padding: 2px 22px 2px 0;
-    background-image:
-        linear-gradient(
-            45deg,
-            transparent 50%,
-            white 50%
-        ),
-        linear-gradient(
-            135deg,
-            white 50%,
-            transparent 50%
-        );
-
-    background-position:
-        calc(100% - 8px) 50%,
-        calc(100% - 3px) 50%;
-
-    background-size:
-        5px 5px,
-        5px 5px;
-
-    background-repeat: no-repeat;
-}
-
-#empresa-select option {
-    color: #222;
-    background: white;
-}
-
-/* =========================================================
-   CRAFT FLOW — DASHBOARD
-   ========================================================= */
-
-/* =========================
-   HEADER
-========================= */
-
-.header-marca {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-}
-
-/* =========================
-   VISTA GENERAL
-========================= */
-.dashboard-view {
-    width: 100%;
-}
-.dashboard-encabezado {
-    margin-bottom: 30px;
-}
-
-.dashboard-saludo {
-    margin: 0 0 7px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #888;
-}
-
-.dashboard-encabezado h2 {
-    margin: 0;
-    font-size: 30px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.dashboard-descripcion {
-    margin: 8px 0 0;
-    color: #777;
-    font-size: 14px;
-}
-
-/* =========================
-   ACCIONES PRINCIPALES
-========================= */
-
-.dashboard-acciones {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-accion {
-    min-height: 88px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    background: white;
-    color: #1d1a1a;
-    text-align: left;
-    cursor: pointer;
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-}
-
-.dashboard-accion:hover {
-    transform: translateY(-2px);
-    border-color: #C47456;
-    box-shadow: 0 8px 25px rgba(196, 116, 86, .12);
-}
-
-.dashboard-accion-principal {
-    background: #C47456;
-    color: white;
-    border-color: #C47456;
-}
-
-.dashboard-accion-principal:hover {
-    background: #b26549;
-    border-color: #b26549;
-}
-
-.dashboard-accion-icono {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
+.material-nuevo-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
-    border:
-        1px solid currentColor;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: 300;
+    padding: 20px;
 }
 
-.dashboard-accion strong {
-    display: block;
-    font-size: 13px;
-    letter-spacing: .4px;
+.material-nuevo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
 }
 
-.dashboard-accion small {
-    display: block;
-    margin-top: 5px;
-    font-size: 11px;
-    opacity: .75;
+.material-nuevo-contenido {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
 }
 
-/* =========================
-   TARJETAS RESUMEN
-========================= */
-
-.dashboard-resumen {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-card {
-    background: white;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-.dashboard-card-destacada {
-    background: #f7f5f3;
-    border-color: #e5e0dc;
-}
-
-.dashboard-card-label {
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.6px;
-    color: #888;
-}
-
-.dashboard-card-numero {
-    margin-top: 10px;
-    font-size: 30px;
-    line-height: 1;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.dashboard-card-dinero {
-    font-size: 25px;
-    color: #C47456;
-}
-
-.dashboard-card-detalle {
-    margin-top: 9px;
-    font-size: 11px;
-    color: #888;
-}
-
-/* =========================
-   GRID DE PANELES
-========================= */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns:
-        1.5fr 1fr;
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.dashboard-panel {
-    background: white;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 12px;
-    padding: 24px;
-}
-
-.dashboard-panel-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.dashboard-panel-label {
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.6px;
-    color: #888;
-}
-
-.dashboard-panel h3 {
-    margin: 6px 0 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-
-.dashboard-panel-icon {
+.material-nuevo-cerrar {
+    position: absolute;
+    top: 12px;
+    right: 16px;
     width: 34px;
     height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border:
-        1px solid #ddd8d4;
-    border-radius: 50%;
-    color: #C47456;
-    font-size: 15px;
-}
-
-/* =========================
-   ESTADOS DE PEDIDOS
-========================= */
-.dashboard-estados {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.dashboard-estado {
-    display: grid;
-    grid-template-columns:
-        120px 1fr 35px;
-    align-items: center;
-    gap: 12px;
-}
-
-.dashboard-estado-nombre {
-    font-size: 12px;
-    color: #555;
-}
-
-.dashboard-estado-barra {
-    height: 7px;
-    overflow: hidden;
-    background: #ebe8e5;
-    border-radius: 20px;
-}
-
-.dashboard-estado-progreso {
-    height: 100%;
-    background: #C47456;
-    border-radius: 20px;
-    transition:
-        width .4s ease;
-}
-
-.dashboard-estado-cantidad {
-    text-align: right;
-    font-size: 12px;
-    font-weight: bold;
-    color: #1d1a1a;
-}
-
-.dashboard-cargando {
-    padding: 15px 0;
-    font-size: 12px;
-    color: #999;
-}
-
-/* =========================
-   FINANZAS DEL DASHBOARD
-========================= */
-
-.dashboard-finanza {
-    padding: 15px 0 25px;
-    border-bottom:
-        1px solid #eee;
-}
-
-.dashboard-finanza-label {
-    display: block;
-    font-size: 11px;
-    color: #888;
-}
-
-.dashboard-finanza-valor {
-    display: block;
-    margin-top: 8px;
-    font-size: 30px;
-    color: #C47456;
-    font-weight: 600;
-}
-
-.dashboard-finanza-linea {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 18px;
-    font-size: 12px;
-    color: #777;
-}
-
-.dashboard-finanza-linea strong {
-    color: #1d1a1a;
-}
-
-/* =========================
-   ACCESOS
-========================= */
-
-.dashboard-accesos {
-    margin-bottom: 30px;
-}
-
-.dashboard-accesos-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
-    gap: 10px;
-}
-
-.dashboard-accesos-grid button {
-    min-height: 85px;
-    padding: 16px;
-    background: #f8f7f6;
-    border:
-        1px solid #e1ddda;
-    border-radius: 9px;
-    text-align: left;
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    line-height: 1;
     cursor: pointer;
-    transition:
-        background .2s ease,
-        border-color .2s ease;
-}
-
-.dashboard-accesos-grid button:hover {
-    background: white;
-    border-color: #C47456;
-}
-
-.dashboard-accesos-grid span {
-    display: block;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
     color: #1d1a1a;
 }
 
-.dashboard-accesos-grid small {
-    display: block;
-    margin-top: 8px;
-    font-size: 10px;
-    color: #888;
+.material-nuevo-cerrar:hover {
+    color: #C47456;
 }
 
-/* =========================
-   VISTAS DE MÓDULOS
-========================= */
-.modulo-view {
-    width: 100%;
+.material-nuevo-header {
+    margin-bottom: 25px;
 }
 
-.modulo-header {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 30px;
-}
-
-.modulo-label {
+.material-nuevo-header > span {
     display: block;
     margin-bottom: 5px;
     font-size: 10px;
     font-weight: bold;
     letter-spacing: 1.5px;
-    color: #888;
-}
-
-.modulo-header h2 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    color: #1d1a1a;
-}
-
-.btn-volver-dashboard {
-    height: 40px;
-    padding: 0 15px;
-    background: white;
-    border: 1px solid #d8d3cf;
-    border-radius: 8px;
-    color: #1d1a1a;
-    font-size: 12px;
-    cursor: pointer;
-   transition: border-color .2s ease, color .2s ease;
-}
-
-.btn-volver-dashboard:hover {
-    border-color: #C47456;
     color: #C47456;
 }
 
-/* =========================
-   RESPONSIVE TABLET
-========================= */
-
-@media (max-width: 900px) {
-
-    .dashboard-acciones {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .dashboard-resumen {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .dashboard-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-    .dashboard-accesos-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+.material-nuevo-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    letter-spacing: 0.5px;
 }
 
-/* =========================
-   RESPONSIVE CELULAR
-========================= */
-
-@media (max-width: 550px) {
-    .header-marca {
-        display: block;
-    }
-
-    .header-marca span {
-        display: none;
-    }
-    .dashboard-acciones {
-        grid-template-columns:
-            1fr;
-    }
-    .dashboard-resumen {
-        grid-template-columns:
-            1fr 1fr;
-    }
-    .dashboard-card {
-        padding: 17px;
-    }
-    .dashboard-card-numero {
-        font-size: 25px;
-    }
-    .dashboard-card-dinero {
-        font-size: 19px;
-    }
-    .dashboard-panel {
-        padding: 18px;
-    }
-    .dashboard-estado {
-        grid-template-columns:
-            90px 1fr 25px;
-    }
-    .dashboard-accesos-grid {
-        grid-template-columns:
-            1fr;
-    }
-    .modulo-header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 15px;
-    }
+.material-nuevo-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
 }
 
-/* =========================================================
-   PEDIDOS
-   ========================================================= */
+.material-seccion {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid #e4dfdb;
+    border-radius: 10px;
+}
 
-/* =========================================================
-   BARRA DE BÚSQUEDA
-   ========================================================= */
+.material-seccion-titulo {
+    margin-bottom: 18px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    color: #555;
+}
+
+.material-campo {
+    margin-bottom: 15px;
+}
+
+.material-campo label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #555;
+}
+
+.material-campo input,
+.material-campo select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d8d3cf;
+    border-radius: 7px;
+    background: white;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.material-campo input:focus,
+.material-campo select:focus {
+    border-color: #C47456;
+}
+
+.material-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        2,
+        minmax(0, 1fr)
+    );
+    gap: 15px;
+}
+
+.material-campo small {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #888;
+}
+
+.material-activo label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #444;
+}
+
+.material-activo input {
+    width: 16px;
+    height: 16px;
+}
+
+.material-nuevo-mensaje {
+    min-height: 20px;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.material-nuevo-mensaje.exito {
+    color: #3d7a50;
+}
+
+.material-nuevo-mensaje.error {
+    color: #a33a3a;
+}
+
+.material-nuevo-botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancelar-material,
+.btn-guardar-material {
+    min-width: 150px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+}
+
+.btn-cancelar-material {
+    background: white;
+    color: #1d1a1a;
+    border: 1px solid #d8d3cf;
+}
+
+.btn-guardar-material {
+    background: #C47456;
+    color: white;
+    border: 1px solid #C47456;
+}
+
+.btn-cancelar-material:hover {
+    border-color: #1d1a1a;
+}
+
+.btn-guardar-material:hover {
+    opacity: 0.9;
+}
+
+.btn-guardar-material:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+
+/* ============================================================
+   VISTA MATERIALES — LISTADO PRINCIPAL
+   ============================================================ */
+
+#materiales-container {
+    width: 100%;
+}
+
+.materiales-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.materiales-buscador {
+    display: flex;
+    align-items: center;
+    width: min(420px, 100%);
+    height: 42px;
+    padding: 0 13px;
+    border: 1px solid #d8d3cf;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.materiales-buscador span {
+    margin-right: 9px;
+    font-size: 19px;
+    color: #888;
+}
+
+.materiales-buscador input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    color: #1d1a1a;
+}
+
+.materiales-buscador input::placeholder {
+    color: #999;
+}
+
+.btn-nuevo-material {
+    height: 42px;
+    padding: 0 20px;
+    border: 1px solid #C47456;
+    border-radius: 7px;
+    background: #C47456;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-nuevo-material:hover {
+    opacity: 0.9;
+}
+
+#materiales-lista {
+    width: 100%;
+}
+
+.materiales-lista {
+    width: 100%;
+    border: 1px solid #e3dfdc;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.material-fila {
+    display: grid;
+    grid-template-columns: minmax(180px, 2fr)
+        100px
+        130px
+        minmax(140px, 1.3fr)
+        125px
+        90px
+        150px;
+    align-items: center;
+    min-height: 76px;
+    padding: 0 18px;
+    border-bottom: 1px solid #ebe7e4;
+    background: #fff;
+    transition: background-color 0.15s ease;
+}
+
+.material-fila:last-child {
+    border-bottom: none;
+}
+
+.material-fila:hover {
+    background: #faf8f6;
+}
+
+.material-principal {
+    min-width: 0;
+    padding-right: 15px;
+}
+
+.material-principal > span,
+.material-dato > span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    color: #999;
+}
+
+.material-principal h3 {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1d1a1a;
+}
+
+.material-dato {
+    min-width: 0;
+    padding-right: 12px;
+}
+
+.material-dato p {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #333;
+}
+
+.material-stock p {
+    font-weight: 500;
+}
+
+.material-stock small {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 3px 7px;
+    border-radius: 20px;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.stock-normal {
+    background: #edf4ee;
+    color: #4d7658;
+}
+
+.stock-bajo {
+    background: #f7eee9;
+    color: #a4634e;
+}
+
+.stock-sin-stock {
+    background: #f4e7e7;
+    color: #9b5555;
+}
+
+.material-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+}
+
+.btn-ver-material,
+.btn-editar-material {
+    height: 32px;
+    padding: 0 11px;
+    border-radius: 6px;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+}
+
+.btn-ver-material {
+    background: #fff;
+    color: #333;
+    border: 1px solid #d8d3cf;
+}
+
+.btn-editar-material {
+    background: #C47456;
+    color: #fff;
+    border: 1px solid #C47456;
+}
+
+.btn-ver-material:hover {
+    border-color: #1d1a1a;
+}
+
+.btn-editar-material:hover {
+    opacity: 0.9;
+}
+
+.materiales-vacio {
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px solid #e3dfdc;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.materiales-vacio h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1d1a1a;
+}
+
+.materiales-vacio p {
+    margin: 0;
+    font-size: 12px;
+    color: #888;
+}
+
+.materiales-error {
+    padding: 25px;
+    border: 1px solid #e3dfdc;
+    border-radius: 10px;
+    background: #fff;
+    text-align: center;
+}
+
+.materiales-error p {
+    margin: 0;
+    font-size: 13px;
+    color: #9b5555;
+}
+
+
+/* ============================================================
+   MODAL VER / EDITAR MATERIAL
+   ============================================================ */
+
+.material-ver-modal,
+.material-editar-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.material-ver-overlay,
+.material-editar-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.material-ver-contenido,
+.material-editar-contenido {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+}
+
+.material-ver-cerrar,
+.material-editar-cerrar {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: transparent;
+    font-size: 27px;
+    cursor: pointer;
+    color: #1d1a1a;
+}
+
+.material-ver-cerrar:hover,
+.material-editar-cerrar:hover {
+    color: #C47456;
+}
+
+.material-ver-header,
+.material-editar-header {
+    margin-bottom: 25px;
+}
+
+.material-ver-header > span,
+.material-editar-header > span {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #C47456;
+}
+
+.material-ver-header h2,
+.material-editar-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1d1a1a;
+}
+
+.material-ver-header p,
+.material-editar-header p {
+    margin: 7px 0 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.material-ver-seccion,
+.material-editar-seccion {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e1de;
+}
+
+.material-ver-seccion-titulo,
+.material-editar-seccion-titulo {
+    margin-bottom: 15px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #555;
+}
+
+.material-ver-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.material-ver-dato {
+    padding: 14px;
+    background: #f8f6f4;
+    border-radius: 8px;
+}
+
+.material-ver-dato span {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #777;
+}
+
+.material-ver-dato strong {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1d1a1a;
+}
+
+.material-estado-activo {
+    color: #4d7658 !important;
+}
+
+.material-estado-inactivo {
+    color: #9b5555 !important;
+}
+
+.material-ver-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.material-ver-cerrar-btn,
+.material-ver-editar-btn {
+    flex: 1;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+}
+
+.material-ver-cerrar-btn {
+    background: white;
+    color: #1d1a1a;
+    border: 1px solid #d8d3cf;
+}
+
+.material-ver-editar-btn {
+    background: #C47456;
+    color: white;
+    border: 1px solid #C47456;
+}
+
+.material-editar-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.material-editar-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.material-editar-campo label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #555;
+}
+
+.material-editar-campo input,
+.material-editar-campo select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d8d3cf;
+    border-radius: 7px;
+    background: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.material-editar-campo input:focus,
+.material-editar-campo select:focus {
+    border-color: #C47456;
+}
+
+.material-editar-activo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+}
+
+.material-editar-activo input {
+    width: 17px;
+    height: 17px;
+    accent-color: #C47456;
+}
+
+.material-editar-mensaje {
+    min-height: 20px;
+    margin-top: 18px;
+    font-size: 12px;
+}
+
+.material-editar-mensaje.exito {
+    color: #4d7658;
+}
+
+.material-editar-mensaje.error {
+    color: #9b5555;
+}
+
+.material-editar-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.material-editar-cancelar,
+.material-editar-guardar {
+    flex: 1;
+    height: 42px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+}
+
+.material-editar-cancelar {
+    background: white;
+    color: #1d1a1a;
+    border: 1px solid #d8d3cf;
+}
+
+.material-editar-guardar {
+    background: #C47456;
+    color: white;
+    border: 1px solid #C47456;
+}
+
+.material-editar-guardar:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+
+/* ============================================================
+   VISTA PEDIDOS — LISTADO
+   ============================================================ */
 
 .pedidos-toolbar {
     display: flex;
@@ -3478,11 +2066,6 @@ h2 {
     color: #999;
 }
 
-
-/* =========================================================
-   BOTÓN NUEVO PEDIDO
-   ========================================================= */
-
 .btn-nuevo-pedido {
     flex-shrink: 0;
     height: 46px;
@@ -3500,11 +2083,6 @@ h2 {
 .btn-nuevo-pedido:hover {
     opacity: .88;
 }
-
-
-/* =========================================================
-   FILTROS POR ESTADO
-   ========================================================= */
 
 .pedidos-filtros {
     display: flex;
@@ -3525,8 +2103,7 @@ h2 {
     font-weight: bold;
     letter-spacing: .8px;
     cursor: pointer;
-    transition:
-        background .2s ease,
+    transition: background .2s ease,
         color .2s ease,
         border-color .2s ease;
 }
@@ -3542,154 +2119,84 @@ h2 {
     color: #fff;
 }
 
-
-/* =========================================================
-   LISTA DE PEDIDOS
-   ========================================================= */
-
 .pedidos-lista {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-
-/* =========================================================
-   FILA DE PEDIDO
-   ========================================================= */
-
 .pedido-fila {
     display: grid;
-
-    grid-template-columns:
-        1.6fr
+    grid-template-columns: 1.6fr
         .9fr
         1.1fr
         .8fr
         1fr
         .9fr
         auto;
-
     align-items: center;
-
     gap: 20px;
-
     padding: 18px 20px;
-
     background: #fff;
-
-    border:
-        1px solid #e7e7e7;
-
+    border: 1px solid #e7e7e7;
     border-radius: 10px;
-
-    transition:
-        box-shadow .2s ease,
+    transition: box-shadow .2s ease,
         transform .2s ease;
 }
 
 .pedido-fila:hover {
-    box-shadow:
-        0 6px 20px rgba(0,0,0,.07);
+    box-shadow: 0 6px 20px rgba(0,0,0,.07);
 }
-
-
-/* =========================================================
-   PEDIDO PRINCIPAL
-   ========================================================= */
 
 .pedido-principal span {
     display: block;
-
     margin-bottom: 5px;
-
     font-size: 9px;
-
     font-weight: bold;
-
     letter-spacing: 1.2px;
-
     color: #888;
 }
 
 .pedido-principal h3 {
     margin: 0;
-
     font-size: 15px;
-
     font-weight: 600;
-
     color: #222;
 }
 
-
-/* =========================================================
-   DATOS
-   ========================================================= */
-
 .pedido-dato span {
     display: block;
-
     margin-bottom: 5px;
-
     font-size: 9px;
-
     font-weight: bold;
-
     letter-spacing: 1.2px;
-
     color: #888;
 }
 
 .pedido-dato p {
     margin: 0;
-
     font-size: 13px;
-
     color: #555;
-
     word-break: break-word;
 }
-
-
-/* =========================================================
-   TOTAL
-   ========================================================= */
 
 .pedido-dinero p {
     font-weight: 600;
     color: #222;
 }
 
-
-/* =========================================================
-   BOTÓN VER
-   ========================================================= */
-
 .btn-ver-pedido {
     height: 36px;
-
     padding: 0 15px;
-
-    border:
-        1px solid #1d1a1a;
-
+    border: 1px solid #1d1a1a;
     border-radius: 7px;
-
     background: #fff;
-
     color: #1d1a1a;
-
     font-size: 10px;
-
     font-weight: bold;
-
     letter-spacing: .5px;
-
     cursor: pointer;
-
-    transition:
-        background .2s ease,
+    transition: background .2s ease,
         color .2s ease;
 }
 
@@ -3697,11 +2204,6 @@ h2 {
     background: #1d1a1a;
     color: #fff;
 }
-
-/* =========================================================
-   BOTÓN EDITAR PEDIDO
-   MISMO ESTILO QUE EDITAR CLIENTE
-   ========================================================= */
 
 .btn-editar-pedido {
     height: 42px;
@@ -3711,10 +2213,8 @@ h2 {
     font-weight: bold;
     letter-spacing: .5px;
     cursor: pointer;
-
     background: rgb(240, 240, 240);
     color: #000;
-
     border: 1.6px outset;
 }
 
@@ -3722,78 +2222,222 @@ h2 {
     background: rgb(240, 240, 240);
 }
 
-
-/* =========================================================
-   ESTADO
-   ========================================================= */
-
 .pedido-estado {
     font-weight: 500;
 }
 
-
-/* =========================================================
-   SIN RESULTADOS / ERROR
-   ========================================================= */
-
 .pedidos-vacio,
 .pedidos-error {
     padding: 45px 20px;
-
     text-align: center;
-
     background: #fff;
-
-    border:
-        1px solid #e7e7e7;
-
+    border: 1px solid #e7e7e7;
     border-radius: 12px;
 }
 
 .pedidos-vacio h3 {
     margin: 0 0 8px;
-
     font-size: 18px;
 }
 
 .pedidos-vacio p,
 .pedidos-error p {
     margin: 0;
-
     color: #777;
-
     font-size: 13px;
 }
 
 
-/* =========================================================
-   TABLET
-   ========================================================= */
+/* ============================================================
+   VISTAS DE MÓDULO — ENCABEZADO / VOLVER
+   ============================================================ */
+
+.modulo-view {
+    width: 100%;
+}
+
+.modulo-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.modulo-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #888;
+}
+
+.modulo-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1a1a;
+}
+
+.btn-volver-dashboard {
+    height: 40px;
+    padding: 0 15px;
+    background: white;
+    border: 1px solid #d8d3cf;
+    border-radius: 8px;
+    color: #1d1a1a;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color .2s ease, color .2s ease;
+}
+
+.btn-volver-dashboard:hover {
+    border-color: #C47456;
+    color: #C47456;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+    .material-fila {
+        grid-template-columns: minmax(160px, 2fr)
+            90px
+            110px
+            minmax(120px, 1fr)
+            110px
+            80px
+            135px;
+        padding: 0 14px;
+    }
+
+}
 
 @media (max-width: 1000px) {
-
     .pedido-fila {
-        grid-template-columns:
-            1.5fr
+        grid-template-columns: 1.5fr
             1fr
             1fr
             1fr
             auto;
-
         gap: 15px;
     }
 
     .pedido-fila .pedido-dinero {
         grid-column: auto;
     }
+
 }
 
+@media (max-width: 900px) {
+    .dashboard-acciones {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-/* =========================================================
-   CELULAR
-   ========================================================= */
+    .dashboard-resumen {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-accesos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .material-modelo-item {
+        gap: 5px;
+        padding: 7px 7px;
+        grid-template-columns: minmax(0, 1fr)
+            40px
+            45px
+            62px;
+    }
+
+    .btn-eliminar-material {
+        width: 19px;
+        height: 19px;
+        min-width: 19px;
+    }
+
+}
+
+@media (max-width: 850px) {
+    .materiales-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .materiales-buscador {
+        width: 100%;
+    }
+
+    .btn-nuevo-material {
+        width: 100%;
+    }
+
+    .materiales-lista {
+        border: none;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .material-fila {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 18px;
+        margin-bottom: 12px;
+        border: 1px solid #e3dfdc;
+        border-radius: 10px;
+    }
+
+    .material-principal {
+        grid-column: 1 / -1;
+    }
+
+    .material-acciones {
+        justify-content: flex-start;
+    }
+
+    .modelo-detalle-superior {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 25px;
+    }
+
+    .modelo-detalle-columna-derecha {
+        width: 100%;
+    }
+
+    .modelo-detalle-info {
+        padding: 0;
+    }
+
+    .modelo-detalle-imagen-principal {
+        height: 400px;
+    }
+
+    .modelo-detalle-info h2 {
+        font-size: 32px;
+    }
+
+}
 
 @media (max-width: 800px) {
+    .main {
+        padding: 25px;
+    }
+
+    #modelos-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .modelo-imagen {
+        height: 190px;
+    }
 
     .pedidos-toolbar {
         flex-direction: column;
@@ -3820,9 +2464,7 @@ h2 {
 
     .pedido-fila {
         grid-template-columns: 1fr auto;
-
         gap: 12px 15px;
-
         padding: 16px;
     }
 
@@ -3837,21 +2479,233 @@ h2 {
     .btn-ver-pedido {
         grid-column: 2;
         grid-row: 1;
-
         align-self: center;
     }
+
 }
 
+@media (max-width: 750px) {
+    .modelo-detalle-superior {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 25px;
+    }
 
-/* =========================================================
-   CELULAR PEQUEÑO
-   ========================================================= */
+    .modelo-detalle-inferior {
+        padding: 0 25px 30px;
+    }
+
+    .modelo-detalle-valores {
+        gap: 30px;
+    }
+
+    .modelo-modal {
+        padding: 15px;
+    }
+
+    .modelo-modal-contenido {
+        max-height: 95vh;
+    }
+
+    .modelo-detalle {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .modelo-detalle-imagen-principal {
+        height: 320px;
+    }
+
+    .modelo-detalle-imagen-secundaria {
+        height: 180px;
+    }
+
+    .modelo-detalle-info {
+        padding: 0;
+    }
+
+    .modelo-detalle-info h2 {
+        font-size: 28px;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .material-nuevo-contenido {
+        padding: 20px;
+        max-height: calc(100vh - 20px);
+    }
+
+    .material-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .material-nuevo-botones {
+        flex-direction: column-reverse;
+    }
+
+    .btn-cancelar-material,
+.btn-guardar-material {
+        width: 100%;
+    }
+
+    .material-ver-contenido,
+.material-editar-contenido {
+        padding: 22px;
+    }
+
+    .material-ver-grid,
+.material-editar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .material-ver-botones,
+.material-editar-botones {
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width: 550px) {
+    .header {
+        height: 60px;
+        padding: 0 20px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .main {
+        padding: 20px;
+    }
+
+    #modelos-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modelo-imagen {
+        height: 220px;
+    }
+
+    .modelos-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modelos-filtro {
+        width: 100%;
+    }
+
+    .btn-nuevo-modelo {
+        width: 100%;
+    }
+
+    .header-marca {
+        display: block;
+    }
+
+    .header-marca span {
+        display: none;
+    }
+
+    .dashboard-acciones {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-resumen {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dashboard-card {
+        padding: 17px;
+    }
+
+    .dashboard-card-numero {
+        font-size: 25px;
+    }
+
+    .dashboard-card-dinero {
+        font-size: 19px;
+    }
+
+    .dashboard-panel {
+        padding: 18px;
+    }
+
+    .dashboard-estado {
+        grid-template-columns: 90px 1fr 25px;
+    }
+
+    .dashboard-accesos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modulo-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .modelo-modal {
+        padding: 10px;
+    }
+
+    .modelo-modal-contenido {
+        width: 100%;
+        max-height: 96vh;
+    }
+
+    .modelo-detalle-superior {
+        padding: 20px;
+    }
+
+    .modelo-detalle-imagen-principal {
+        height: 320px;
+    }
+
+    .modelo-detalle-imagen-secundaria {
+        height: 150px;
+    }
+
+    .modelo-detalle-info h2 {
+        font-size: 28px;
+    }
+
+    .modelo-detalle-valores {
+        gap: 30px;
+    }
+
+    .modelo-detalle-valor strong {
+        font-size: 23px;
+    }
+
+}
+
+@media (max-width: 520px) {
+    .material-fila {
+        grid-template-columns: 1fr;
+    }
+
+    .material-principal {
+        grid-column: auto;
+    }
+
+    .material-acciones {
+        width: 100%;
+    }
+
+    .btn-ver-material,
+.btn-editar-material {
+        flex: 1;
+    }
+
+}
 
 @media (max-width: 500px) {
-
     .pedido-fila {
         display: grid;
-
         grid-template-columns: 1fr auto;
     }
 
@@ -3862,1760 +2716,5 @@ h2 {
     .pedido-principal h3 {
         font-size: 14px;
     }
-}
-/* =========================================================
-   MODAL VER MATERIAL
-   ========================================================= */
 
-.material-ver-modal,
-.material-editar-modal {
-
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-}
-
-
-.material-ver-overlay,
-.material-editar-overlay {
-
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.45);
-
-}
-
-
-.material-ver-contenido,
-.material-editar-contenido {
-
-    position: relative;
-    z-index: 1;
-
-    width: min(720px, 100%);
-    max-height: calc(100vh - 40px);
-
-    overflow-y: auto;
-
-    background: #fff;
-
-    border-radius: 12px;
-
-    padding: 30px;
-
-    box-shadow:
-        0 15px 50px rgba(0, 0, 0, 0.25);
-
-}
-
-
-.material-ver-cerrar,
-.material-editar-cerrar {
-
-    position: absolute;
-
-    top: 12px;
-    right: 15px;
-
-    width: 35px;
-    height: 35px;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 27px;
-
-    cursor: pointer;
-
-    color: #1d1a1a;
-
-}
-
-
-.material-ver-cerrar:hover,
-.material-editar-cerrar:hover {
-
-    color: #C47456;
-
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.material-ver-header,
-.material-editar-header {
-
-    margin-bottom: 25px;
-
-}
-
-
-.material-ver-header > span,
-.material-editar-header > span {
-
-    display: block;
-
-    margin-bottom: 6px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 2px;
-
-    color: #C47456;
-
-}
-
-
-.material-ver-header h2,
-.material-editar-header h2 {
-
-    margin: 0;
-
-    font-size: 24px;
-
-    font-weight: 500;
-
-    color: #1d1a1a;
-
-}
-
-
-.material-ver-header p,
-.material-editar-header p {
-
-    margin: 7px 0 0;
-
-    font-size: 13px;
-
-    color: #777;
-
-}
-
-
-/* =========================================================
-   SECCIONES
-   ========================================================= */
-
-.material-ver-seccion,
-.material-editar-seccion {
-
-    margin-top: 20px;
-
-    padding-top: 20px;
-
-    border-top: 1px solid #e5e1de;
-
-}
-
-
-.material-ver-seccion-titulo,
-.material-editar-seccion-titulo {
-
-    margin-bottom: 15px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.5px;
-
-    color: #555;
-
-}
-
-
-/* =========================================================
-   VER
-   ========================================================= */
-
-.material-ver-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 15px;
-
-}
-
-
-.material-ver-dato {
-
-    padding: 14px;
-
-    background: #f8f6f4;
-
-    border-radius: 8px;
-
-}
-
-
-.material-ver-dato span {
-
-    display: block;
-
-    margin-bottom: 6px;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-    color: #777;
-
-}
-
-
-.material-ver-dato strong {
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    color: #1d1a1a;
-
-}
-
-
-.material-estado-activo {
-
-    color: #4d7658 !important;
-
-}
-
-
-.material-estado-inactivo {
-
-    color: #9b5555 !important;
-
-}
-
-
-.material-ver-botones {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 28px;
-
-}
-
-
-.material-ver-cerrar-btn,
-.material-ver-editar-btn {
-
-    flex: 1;
-
-    height: 42px;
-
-    border-radius: 7px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-}
-
-
-.material-ver-cerrar-btn {
-
-    background: white;
-
-    color: #1d1a1a;
-
-    border: 1px solid #d8d3cf;
-
-}
-
-
-.material-ver-editar-btn {
-
-    background: #C47456;
-
-    color: white;
-
-    border: 1px solid #C47456;
-
-}
-
-
-/* =========================================================
-   EDITAR
-   ========================================================= */
-
-.material-editar-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 15px;
-
-}
-
-
-.material-editar-campo {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 7px;
-
-}
-
-
-.material-editar-campo label {
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-    color: #555;
-
-}
-
-
-.material-editar-campo input,
-.material-editar-campo select {
-
-    width: 100%;
-
-    height: 42px;
-
-    padding: 0 12px;
-
-    border: 1px solid #d8d3cf;
-
-    border-radius: 7px;
-
-    background: white;
-
-    font-size: 14px;
-
-    outline: none;
-
-}
-
-
-.material-editar-campo input:focus,
-.material-editar-campo select:focus {
-
-    border-color: #C47456;
-
-}
-
-
-.material-editar-activo {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    font-size: 13px;
-
-    color: #333;
-
-    cursor: pointer;
-
-}
-
-
-.material-editar-activo input {
-
-    width: 17px;
-    height: 17px;
-
-    accent-color: #C47456;
-
-}
-
-
-.material-editar-mensaje {
-
-    min-height: 20px;
-
-    margin-top: 18px;
-
-    font-size: 12px;
-
-}
-
-
-.material-editar-mensaje.exito {
-
-    color: #4d7658;
-
-}
-
-
-.material-editar-mensaje.error {
-
-    color: #9b5555;
-
-}
-
-
-.material-editar-botones {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 20px;
-
-}
-
-
-.material-editar-cancelar,
-.material-editar-guardar {
-
-    flex: 1;
-
-    height: 42px;
-
-    border-radius: 7px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-}
-
-
-.material-editar-cancelar {
-
-    background: white;
-
-    color: #1d1a1a;
-
-    border: 1px solid #d8d3cf;
-
-}
-
-
-.material-editar-guardar {
-
-    background: #C47456;
-
-    color: white;
-
-    border: 1px solid #C47456;
-
-}
-
-
-.material-editar-guardar:disabled {
-
-    opacity: 0.5;
-
-    cursor: wait;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    .material-ver-contenido,
-    .material-editar-contenido {
-
-        padding: 22px;
-
-    }
-
-
-    .material-ver-grid,
-    .material-editar-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .material-ver-botones,
-    .material-editar-botones {
-
-        flex-direction: column;
-
-    }
-
-}
-/* =========================================================
-   MATERIALES — LISTADO
-   ========================================================= */
-
-#materiales-container {
-    width: 100%;
-}
-
-
-/* =========================================================
-   BARRA SUPERIOR
-   ========================================================= */
-
-.materiales-toolbar {
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    margin-bottom: 22px;
-
-}
-
-
-.materiales-buscador {
-
-    display: flex;
-    align-items: center;
-
-    width: min(420px, 100%);
-
-    height: 42px;
-
-    padding: 0 13px;
-
-    border: 1px solid #d8d3cf;
-    border-radius: 8px;
-
-    background: #fff;
-
-}
-
-
-.materiales-buscador span {
-
-    margin-right: 9px;
-
-    font-size: 19px;
-
-    color: #888;
-
-}
-
-
-.materiales-buscador input {
-
-    width: 100%;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-
-    font-size: 13px;
-
-    color: #1d1a1a;
-
-}
-
-
-.materiales-buscador input::placeholder {
-
-    color: #999;
-
-}
-
-
-.btn-nuevo-material {
-
-    height: 42px;
-
-    padding: 0 20px;
-
-    border: 1px solid #C47456;
-    border-radius: 7px;
-
-    background: #C47456;
-
-    color: #fff;
-
-    font-size: 10px;
-    font-weight: bold;
-
-    letter-spacing: 0.8px;
-
-    cursor: pointer;
-
-    white-space: nowrap;
-
-}
-
-
-.btn-nuevo-material:hover {
-
-    opacity: 0.9;
-
-}
-
-
-/* =========================================================
-   CONTENEDOR DE LA LISTA
-   ========================================================= */
-
-#materiales-lista {
-
-    width: 100%;
-
-}
-
-
-.materiales-lista {
-
-    width: 100%;
-
-    border: 1px solid #e3dfdc;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
-    background: #fff;
-
-}
-
-
-/* =========================================================
-   FILA DE MATERIAL
-   ========================================================= */
-
-.material-fila {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(180px, 2fr)
-        100px
-        130px
-        minmax(140px, 1.3fr)
-        125px
-        90px
-        150px;
-
-    align-items: center;
-
-    min-height: 76px;
-
-    padding: 0 18px;
-
-    border-bottom: 1px solid #ebe7e4;
-
-    background: #fff;
-
-    transition:
-        background-color 0.15s ease;
-
-}
-
-
-.material-fila:last-child {
-
-    border-bottom: none;
-
-}
-
-
-.material-fila:hover {
-
-    background: #faf8f6;
-
-}
-
-
-/* =========================================================
-   NOMBRE DEL MATERIAL
-   ========================================================= */
-
-.material-principal {
-
-    min-width: 0;
-
-    padding-right: 15px;
-
-}
-
-
-.material-principal > span,
-.material-dato > span {
-
-    display: block;
-
-    margin-bottom: 5px;
-
-    font-size: 8px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.2px;
-
-    color: #999;
-
-}
-
-
-.material-principal h3 {
-
-    margin: 0;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    color: #1d1a1a;
-
-}
-
-
-/* =========================================================
-   DATOS
-   ========================================================= */
-
-.material-dato {
-
-    min-width: 0;
-
-    padding-right: 12px;
-
-}
-
-
-.material-dato p {
-
-    margin: 0;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-    font-size: 12px;
-
-    color: #333;
-
-}
-
-
-/* =========================================================
-   STOCK
-   ========================================================= */
-
-.material-stock p {
-
-    font-weight: 500;
-
-}
-
-
-.material-stock small {
-
-    display: inline-block;
-
-    margin-top: 5px;
-
-    padding: 3px 7px;
-
-    border-radius: 20px;
-
-    font-size: 8px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.5px;
-
-}
-
-
-.stock-normal {
-
-    background: #edf4ee;
-
-    color: #4d7658;
-
-}
-
-
-.stock-bajo {
-
-    background: #f7eee9;
-
-    color: #a4634e;
-
-}
-
-
-.stock-sin-stock {
-
-    background: #f4e7e7;
-
-    color: #9b5555;
-
-}
-
-
-/* =========================================================
-   ACCIONES
-   ========================================================= */
-
-.material-acciones {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: flex-end;
-
-    gap: 7px;
-
-}
-
-
-.btn-ver-material,
-.btn-editar-material {
-
-    height: 32px;
-
-    padding: 0 11px;
-
-    border-radius: 6px;
-
-    font-size: 8px;
-
-    font-weight: bold;
-
-    letter-spacing: 0.6px;
-
-    cursor: pointer;
-
-}
-
-
-.btn-ver-material {
-
-    background: #fff;
-
-    color: #333;
-
-    border: 1px solid #d8d3cf;
-
-}
-
-
-.btn-editar-material {
-
-    background: #C47456;
-
-    color: #fff;
-
-    border: 1px solid #C47456;
-
-}
-
-
-.btn-ver-material:hover {
-
-    border-color: #1d1a1a;
-
-}
-
-
-.btn-editar-material:hover {
-
-    opacity: 0.9;
-
-}
-
-
-/* =========================================================
-   LISTA VACÍA
-   ========================================================= */
-
-.materiales-vacio {
-
-    padding: 60px 20px;
-
-    text-align: center;
-
-    border: 1px solid #e3dfdc;
-
-    border-radius: 10px;
-
-    background: #fff;
-
-}
-
-
-.materiales-vacio h3 {
-
-    margin: 0 0 8px;
-
-    font-size: 16px;
-
-    font-weight: 500;
-
-    color: #1d1a1a;
-
-}
-
-
-.materiales-vacio p {
-
-    margin: 0;
-
-    font-size: 12px;
-
-    color: #888;
-
-}
-
-
-/* =========================================================
-   ERROR
-   ========================================================= */
-
-.materiales-error {
-
-    padding: 25px;
-
-    border: 1px solid #e3dfdc;
-
-    border-radius: 10px;
-
-    background: #fff;
-
-    text-align: center;
-
-}
-
-
-.materiales-error p {
-
-    margin: 0;
-
-    font-size: 13px;
-
-    color: #9b5555;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-    .material-fila {
-
-        grid-template-columns:
-            minmax(160px, 2fr)
-            90px
-            110px
-            minmax(120px, 1fr)
-            110px
-            80px
-            135px;
-
-        padding: 0 14px;
-
-    }
-
-}
-
-
-@media (max-width: 850px) {
-
-    .materiales-toolbar {
-
-        flex-direction: column;
-
-        align-items: stretch;
-
-    }
-
-
-    .materiales-buscador {
-
-        width: 100%;
-
-    }
-
-
-    .btn-nuevo-material {
-
-        width: 100%;
-
-    }
-
-
-    .materiales-lista {
-
-        border: none;
-
-        background: transparent;
-
-        overflow: visible;
-
-    }
-
-
-    .material-fila {
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 16px;
-
-        padding: 18px;
-
-        margin-bottom: 12px;
-
-        border: 1px solid #e3dfdc;
-
-        border-radius: 10px;
-
-    }
-
-
-    .material-principal {
-
-        grid-column: 1 / -1;
-
-    }
-
-
-    .material-acciones {
-
-        justify-content: flex-start;
-
-    }
-
-}
-
-
-@media (max-width: 520px) {
-
-    .material-fila {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .material-principal {
-
-        grid-column: auto;
-
-    }
-
-
-    .material-acciones {
-
-        width: 100%;
-
-    }
-
-
-    .btn-ver-material,
-    .btn-editar-material {
-
-        flex: 1;
-
-    }
-
-}
-/* =========================================================
-   FICHA MODELO - NUEVA DISTRIBUCIÓN
-   ========================================================= */
-
-
-/* =========================================================
-   CONTENEDOR PRINCIPAL
-   ========================================================= */
-
-.modelo-modal-contenido {
-    width: min(1120px, 95vw);
-    max-height: 92vh;
-    overflow-y: auto;
-}
-
-
-/* =========================================================
-   PARTE SUPERIOR
-   IMAGEN IZQUIERDA + INFORMACIÓN DERECHA
-   ========================================================= */
-
-.modelo-detalle-superior {
-
-    display: grid;
-
-    /* Un poco menos de ancho para la imagen y más para la información. */
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(390px, 0.95fr);
-
-    gap: 35px;
-
-    padding: 40px;
-
-    align-items: start;
-}
-
-
-/* =========================================================
-   COLUMNA IZQUIERDA
-   ========================================================= */
-
-.modelo-detalle-columna-izquierda {
-
-    min-width: 0;
-
-}
-
-
-/* =========================================================
-   COLUMNA DERECHA
-   ========================================================= */
-
-.modelo-detalle-columna-derecha {
-
-    min-width: 0;
-
-}
-
-
-/* =========================================================
-   IMÁGENES
-   ========================================================= */
-
-.modelo-detalle-imagenes {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-
-    width: 100%;
-
-}
-
-
-.modelo-detalle-imagen-principal {
-
-    width: 100%;
-
-    height: 470px;
-
-    background: #f7f5f3;
-
-    border: 1px solid #e5e0dc;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-}
-
-
-.modelo-detalle-imagen-secundaria {
-
-    width: 100%;
-
-    height: 170px;
-
-    background: #f7f5f3;
-
-    border: 1px solid #e5e0dc;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-}
-
-
-.modelo-detalle-imagen-principal img,
-.modelo-detalle-imagen-secundaria img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: contain;
-
-    display: block;
-
-}
-
-
-/* =========================================================
-   INFORMACIÓN PRINCIPAL
-   ========================================================= */
-
-.modelo-detalle-info {
-
-    padding: 5px 20px 0 0;
-
-}
-
-
-/* CÓDIGO + TIPO */
-
-.modelo-detalle-codigo-tipo {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    margin-bottom: 12px;
-
-}
-
-
-.modelo-detalle-codigo {
-
-    margin: 0;
-
-    font-size: 13px;
-
-    color: #888;
-
-}
-
-
-.modelo-detalle-tipo {
-
-    margin: 0;
-
-    padding: 5px 10px;
-
-    border-radius: 5px;
-
-    background: #f1efed;
-
-    color: #555;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-}
-
-
-/* =========================================================
-   NOMBRE
-   ========================================================= */
-
-.modelo-detalle-info h2 {
-
-    margin: 0 0 8px 0;
-
-    font-size: 38px;
-
-    line-height: 1.05;
-
-    letter-spacing: 1px;
-
-    color: #1d1a1a;
-
-}
-
-
-/* =========================================================
-   MATERIAL BASE
-   ========================================================= */
-
-.modelo-detalle-material {
-
-    margin: 0 0 28px 0;
-
-    color: #666;
-
-    font-size: 15px;
-
-}
-
-
-/* =========================================================
-   PRECIO + COSTO
-   ========================================================= */
-
-.modelo-detalle-valores {
-
-    display: flex;
-
-    gap: 55px;
-
-    align-items: flex-start;
-
-    margin-bottom: 28px;
-
-}
-
-
-.modelo-detalle-valor {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-}
-
-
-.modelo-detalle-label {
-
-    display: block;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.5px;
-
-    color: #777;
-
-}
-
-
-.modelo-detalle-valor strong {
-
-    display: block;
-
-    font-size: 27px;
-
-    line-height: 1.1;
-
-    color: #1d1a1a;
-
-}
-
-
-.modelo-detalle-valor:first-child strong {
-
-    color: #C47456;
-
-}
-
-
-/* =========================================================
-   MATERIALES Y CONSUMO
-   DEBAJO DE PRECIO Y COSTO
-   ========================================================= */
-
-/* =========================
-   MATERIALES DEL MODELO
-========================= */
-
-.modelo-materiales {
-
-    margin-top: 30px;
-
-    padding-top: 25px;
-
-    border-top: 1px solid #e5e0dc;
-
-}
-
-
-.modelo-materiales h3 {
-
-    margin: 0 0 14px 0;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.5px;
-
-    color: #555;
-
-}
-
-
-/* =========================
-   FILA DE MATERIAL
-========================= */
-
-.material-modelo-item {
-
-    display: flex;
-
-    align-items: center;
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    gap: 5px;
-
-    background: white;
-
-    border: 1px solid #e5e0dc;
-
-    border-radius: 8px;
-
-    padding: 7px 8px;
-
-    margin-bottom: 5px;
-
-}
-
-
-/* =========================
-   INFORMACIÓN DEL MATERIAL
-========================= */
-
-.material-modelo-info {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        42px
-        48px
-        65px;
-
-    align-items: center;
-
-    gap: 4px;
-
-    flex: 1 1 auto;
-
-    min-width: 0;
-
-}
-
-
-/* =========================
-   DESCRIPCIÓN
-========================= */
-.material-modelo-info strong {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    color: #1d1a1a;
-}
-/* =========================
-   CANTIDAD
-========================= */
-.material-modelo-info .material-cantidad {
-    min-width: 0;
-    font-size: 11px !important;
-    font-weight: 400;
-    color: #333;
-    text-align: right;
-    white-space: nowrap;
-
-}
-
-/* =========================
-   UNIDAD
-========================= */
-.material-modelo-info .material-unidad {
-    min-width: 0;
-    font-size: 11px !important;
-    font-weight: 400;
-    color: #333;
-    text-align: left;
-    white-space: nowrap;
-}
-
-/* =========================
-   COSTO
-========================= */
-.material-modelo-info .material-costo {
-    min-width: 0;
-    font-size: 11px !important;
-    font-weight: 400;
-    color: #333;
-    text-align: right;
-    white-space: nowrap;
-}
-
-/* =========================
-   BOTÓN ELIMINAR MATERIAL
-========================= */
-
-.btn-eliminar-material {
-
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    color: #999;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-}
-.btn-eliminar-material:hover {
-    background: #eee5e1;
-    color: #C47456;
-}
-
-/* =========================
-   CARGANDO / VACÍO / ERROR
-========================= */
-.materiales-cargando,
-.materiales-vacio,
-.materiales-error {
-    padding: 15px;
-    background: #f7f5f3;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #777;
-}
-
-/* =========================
-   BOTÓN AGREGAR MATERIAL
-========================= */
-
-.btn-agregar-material {
-    margin-top: 12px;
-    padding: 10px 15px;
-    border: 1px solid #C47456;
-    border-radius: 7px;
-    background: white;
-    color: #C47456;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
-}
-
-.btn-agregar-material:hover {
-    background: #C47456;
-    color: white;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 900px) {
-    .material-modelo-info {
-        grid-template-columns:
-            minmax(0, 1fr)
-            40px
-            45px
-            62px;
-        gap: 4px;
-    }
-    .material-modelo-item {
-        gap: 5px;
-        padding: 7px 7px;
-    }
-    .btn-eliminar-material {
-        width: 19px;
-        height: 19px;
-        min-width: 19px;
-    }
-}
-
-/* =========================================================
-   DESCRIPCIÓN
-   DEBAJO DE LA IMAGEN
-   ========================================================= */
-.modelo-detalle-columna-izquierda
-.modelo-detalle-seccion {
-    border-top: 1px solid #ddd7d2;
-    padding-top: 20px;
-    margin-top: 25px;
-}
-
-.modelo-detalle-columna-izquierda
-.modelo-detalle-seccion h3 {
-    margin: 0 0 10px 0;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    color: #555;
-}
-
-.modelo-detalle-columna-izquierda
-.modelo-detalle-seccion p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #444;
-}
-
-/* =========================================================
-   PERSONALIZACIÓN
-   ========================================================= */
-.modelo-detalle-columna-izquierda
-.modelo-detalle-seccion + .modelo-detalle-seccion {
-    margin-top: 22px;
-}
-
-/* =========================================================
-   SIN IMAGEN
-   ========================================================= */
-.modelo-detalle-imagen-principal.sin-imagen {
-    color: #999;
-    font-size: 13px;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-@media (max-width: 850px) {
-    .modelo-detalle-superior {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        padding: 25px;
-    }
-    .modelo-detalle-columna-derecha {
-        width: 100%;
-    }
-    .modelo-detalle-info {
-        padding: 0;
-    }
-    .modelo-detalle-imagen-principal {
-
-        height: 400px;
-    }
-    .modelo-detalle-info h2 {
-        font-size: 32px;
-    }
-}
-@media (max-width: 550px) {
-    .modelo-modal {
-        padding: 10px;
-    }
-    .modelo-modal-contenido {
-        width: 100%;
-        max-height: 96vh;
-    }
-    .modelo-detalle-superior {
-        padding: 20px;
-    }
-    .modelo-detalle-imagen-principal {
-        height: 320px;
-    }
-    .modelo-detalle-imagen-secundaria {
-        height: 150px;
-    }
-    .modelo-detalle-info h2 {
-        font-size: 28px;
-    }
-    .modelo-detalle-valores {
-        gap: 30px;
-    }
-    .modelo-detalle-valor strong {
-        font-size: 23px;
-    }
-}
-/* =========================================================
-   ACCIONES DE MATERIALES
-========================================================= */
-.modelo-materiales-acciones {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    margin-top: 12px !important;
-    width: 100% !important;
-}
-
-/* =========================================================
-   BOTÓN CALCULAR COSTO
-========================================================= */
-
-.btn-calcular-costo {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: auto !important;
-    padding: 6px 13px !important;
-    margin: 0 !important;
-    border: 1px solid #C47456 !important;
-    border-radius: 7px !important;
-    background: transparent !important;
-    color: #C47456 !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    letter-spacing: 1.3px !important;
-    line-height: 1.2 !important;
-    cursor: pointer !important;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease !important;
-}
-   
-
-
-.btn-calcular-costo:hover {
-    background: #C47456 !important;
-    color: white !important;
 }
