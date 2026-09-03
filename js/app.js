@@ -1,9 +1,24 @@
+/* =============================================================
+   CRAFT FLOW — FRONTEND (app.js)
+   Índice rápido (Ctrl+F el nombre de la sección):
+     - UTILIDADES GENERALES: llamarAPI, convertirImagenDrive, formatearPrecio, escaparHTML, filtrarPorEmpresa, formatearEstado, convertirFecha, formatearFecha, cerrarModalesAbiertos
+     - INICIALIZACIÓN DEL SISTEMA: iniciarAplicacion, prepararVistasIniciales, iniciarSistema
+     - NAVEGACIÓN / VISTAS: crearControles, mostrarVistaModelos, mostrarVistaPedidos, mostrarVistaClientes, mostrarVistaMateriales
+     - EMPRESAS: cargarEmpresas, establecerEmpresaInicial, mostrarEmpresas, cambiarEmpresa
+     - MODELOS — LISTADO Y FICHA: mostrarModelos, verModelo, abrirNuevoModelo, guardarNuevoModelo, editarModelo, crearOpcionesTipo, guardarModelo, agregarEstilosEditor, agregarEstilosNuevoModelo
+     - MATERIALES DEL MODELO / CONSUMO: abrirAgregarMaterial, guardarMaterialModelo, cargarMaterialesModelo, mostrarMaterialesModelo, eliminarMaterialModelo, cargarMateriales
+     - CÁLCULO DE COSTOS: calcularCostoModelo
+     - DASHBOARD: iniciarDashboard, mostrarResumenDashboard, mostrarEstadosDashboard, mostrarDashboard, configurarDashboard
+     - PEDIDOS: mostrarNuevoPedido, editarPedido, guardarNuevoPedido, cargarConfiguracionPedido, agregarEstilosNuevoPedido, mostrarFichaPedido, agregarEstilosFichaPedido, iniciarPedidos
+     - MATERIALES — MÓDULO / LISTADO: iniciarMateriales, mostrarNuevoMaterial, mostrarFichaMaterial, editarMaterial
+     - CLIENTES: iniciarClientes, abrirNuevoCliente, editarCliente, guardarCambiosCliente, guardarNuevoCliente, agregarEstilosNuevoCliente, mostrarFichaCliente, agregarEstilosFichaCliente, agregarEstilosClientes
+   ============================================================= */
+
 const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
 
 /* =========================
    EMPRESA ACTUAL
 ========================= */
-// comentario vs
 let empresas = [];
 
 let empresaActual = null;
@@ -19,6 +34,11 @@ let vistaActual = "dashboard";
 /* =========================
    API JSONP
 ========================= */
+
+
+/* ========================================================
+   UTILIDADES GENERALES
+   ======================================================== */
 
 function llamarAPI(
     resource,
@@ -111,6 +131,11 @@ function llamarAPI(
 /* =========================
    INICIO VISTA MODELOS
 ========================= */
+
+
+/* ========================================================
+   INICIALIZACIÓN DEL SISTEMA
+   ======================================================== */
 
 async function iniciarAplicacion() {
 
@@ -234,6 +259,11 @@ async function iniciarAplicacion() {
 /* =========================
    CONTROLES DE MODELOS
 ========================= */
+
+
+/* ========================================================
+   NAVEGACIÓN / VISTAS
+   ======================================================== */
 
 function crearControles() {
 
@@ -474,6 +504,11 @@ function crearControles() {
 /* =========================
    CARGAR EMPRESAS
 ========================= */
+
+
+/* ========================================================
+   EMPRESAS
+   ======================================================== */
 
 async function cargarEmpresas() {
 
@@ -861,6 +896,11 @@ async function cambiarEmpresa(event) {
 /* =========================
    MOSTRAR MODELOS
 ========================= */
+
+
+/* ========================================================
+   MODELOS — LISTADO Y FICHA
+   ======================================================== */
 
 function mostrarModelos() {
 
@@ -1631,6 +1671,11 @@ function verModelo(id) {
    AGREGAR MATERIAL
 ========================= */
 
+
+/* ========================================================
+   MATERIALES DEL MODELO / CONSUMO
+   ======================================================== */
+
 function abrirAgregarMaterial() {
 
     const modeloId =
@@ -2102,6 +2147,11 @@ async function guardarMaterialModelo(
    CALCULAR COSTO MODELO
 ========================= */
 
+
+/* ========================================================
+   CÁLCULO DE COSTOS
+   ======================================================== */
+
 async function calcularCostoModelo(
     modeloId
 ) {
@@ -2282,6 +2332,11 @@ async function calcularCostoModelo(
 /* =========================
    MATERIALES DEL MODELO
 ========================= */
+
+
+/* ========================================================
+   MATERIALES DEL MODELO / CONSUMO
+   ======================================================== */
 
 async function cargarMaterialesModelo(
     modeloId
@@ -2814,6 +2869,11 @@ async function cargarMateriales() {
 /* =========================
    NUEVO MODELO
 ========================= */
+
+
+/* ========================================================
+   MODELOS — LISTADO Y FICHA
+   ======================================================== */
 
 function abrirNuevoModelo() {
 
@@ -5132,6 +5192,11 @@ function agregarEstilosNuevoModelo() {
    IMAGEN DRIVE
 ========================= */
 
+
+/* ========================================================
+   UTILIDADES GENERALES
+   ======================================================== */
+
 function convertirImagenDrive(url) {
 
     if (!url) {
@@ -5290,6 +5355,11 @@ function escaparHTML(texto) {
    INICIAR DASHBOARD
    ========================================================= */
 
+
+/* ========================================================
+   DASHBOARD
+   ======================================================== */
+
 async function iniciarDashboard() {
     try {
         if (!empresaActual) {
@@ -5351,6 +5421,11 @@ async function iniciarDashboard() {
    FILTRAR DATOS POR EMPRESA
    ========================================================= */
 
+
+/* ========================================================
+   UTILIDADES GENERALES
+   ======================================================== */
+
 function filtrarPorEmpresa(data) {
 
     if (!empresaActual) {
@@ -5403,6 +5478,11 @@ function filtrarPorEmpresa(data) {
 /* =========================================================
    RESUMEN DASHBOARD
    ========================================================= */
+
+
+/* ========================================================
+   DASHBOARD
+   ======================================================== */
 
 function mostrarResumenDashboard(
     pedidos,
@@ -5739,6 +5819,11 @@ function mostrarEstadosDashboard(pedidos) {
    FORMATEAR ESTADO
    ========================================================= */
 
+
+/* ========================================================
+   UTILIDADES GENERALES
+   ======================================================== */
+
 function formatearEstado(
     estado
 ) {
@@ -5835,6 +5920,11 @@ function formatearFecha(fecha) {
    MOSTRAR DASHBOARD
    ========================================================= */
 
+
+/* ========================================================
+   DASHBOARD
+   ======================================================== */
+
 async function mostrarDashboard() {
     cerrarModalesAbiertos();
 
@@ -5879,6 +5969,11 @@ async function mostrarDashboard() {
    CERRAR MODALES ABIERTOS
    ========================================================= */
 
+
+/* ========================================================
+   UTILIDADES GENERALES
+   ======================================================== */
+
 function cerrarModalesAbiertos() {
     const selectores = [
         ".pedido-ficha-modal",
@@ -5900,6 +5995,11 @@ function cerrarModalesAbiertos() {
 /* =========================================================
    MOSTRAR MODELOS
    ========================================================= */
+
+
+/* ========================================================
+   NAVEGACIÓN / VISTAS
+   ======================================================== */
 
 async function mostrarVistaModelos() {
 
@@ -5929,6 +6029,11 @@ async function mostrarVistaModelos() {
 /* =========================================================
    BOTONES DASHBOARD
    ========================================================= */
+
+
+/* ========================================================
+   DASHBOARD
+   ======================================================== */
 
 function configurarDashboard() {
 
@@ -5969,7 +6074,7 @@ function configurarDashboard() {
 
     const btnVolverModelos =
         document.getElementById(
-            "btn-volver-dashboard"
+            "btn-volver-dashboard-modelos"
         );
 
     const btnVolverClientes =
@@ -6183,6 +6288,11 @@ function configurarDashboard() {
 /* =========================================================
    NUEVO / EDITAR PEDIDO
    ========================================================= */
+
+
+/* ========================================================
+   PEDIDOS
+   ======================================================== */
 
 async function mostrarNuevoPedido(
     pedidoEdicion = null,
@@ -9535,6 +9645,11 @@ function agregarEstilosNuevoPedido() {
    VISTA PEDIDOS
    ========================================================= */
 
+
+/* ========================================================
+   NAVEGACIÓN / VISTAS
+   ======================================================== */
+
 function mostrarVistaPedidos() {
     cerrarModalesAbiertos();
 
@@ -9565,6 +9680,11 @@ function mostrarVistaPedidos() {
 /* =========================================================
    FICHA DE PEDIDO
    ========================================================= */
+
+
+/* ========================================================
+   PEDIDOS
+   ======================================================== */
 
 function mostrarFichaPedido(id, pedidos) {
     const pedido = pedidos.find(
@@ -10767,6 +10887,11 @@ async function iniciarPedidos() {
    INICIAR MATERIALES
    ========================================================= */
 
+
+/* ========================================================
+   MATERIALES — MÓDULO / LISTADO
+   ======================================================== */
+
 async function iniciarMateriales() {
 
     const container =
@@ -11401,6 +11526,11 @@ async function iniciarMateriales() {
    VISTA CLIENTES
    ========================================================= */
 
+
+/* ========================================================
+   NAVEGACIÓN / VISTAS
+   ======================================================== */
+
 function mostrarVistaClientes() {
     const dashboard = document.getElementById("dashboard-view");
     const modelos = document.getElementById("modelos-view");
@@ -11424,6 +11554,11 @@ function mostrarVistaClientes() {
 /* =========================================================
    INICIAR CLIENTES
    ========================================================= */
+
+
+/* ========================================================
+   CLIENTES
+   ======================================================== */
 
 async function iniciarClientes() {
     const container = document.getElementById("clientes-container");
@@ -12671,6 +12806,11 @@ function mostrarFichaCliente(id, clientes) {
    MOSTRAR VISTA MATERIALES
    ========================================================= */
 
+
+/* ========================================================
+   NAVEGACIÓN / VISTAS
+   ======================================================== */
+
 async function mostrarVistaMateriales() {
 
     const dashboard =
@@ -12744,6 +12884,11 @@ async function mostrarVistaMateriales() {
 /* =========================================================
    NUEVO MATERIAL
    ========================================================= */
+
+
+/* ========================================================
+   MATERIALES — MÓDULO / LISTADO
+   ======================================================== */
 
 async function mostrarNuevoMaterial() {
 
@@ -14452,6 +14597,11 @@ function editarMaterial(
    ESTILOS FICHA DE CLIENTE
    ========================================================= */
 
+
+/* ========================================================
+   CLIENTES
+   ======================================================== */
+
 function agregarEstilosFichaCliente() {
     if (document.getElementById("zaria-ficha-cliente-styles")) {
         return;
@@ -14889,6 +15039,11 @@ function agregarEstilosClientes() {
 /* =========================================================
    PREPARAR VISTAS
    ========================================================= */
+
+
+/* ========================================================
+   INICIALIZACIÓN DEL SISTEMA
+   ======================================================== */
 
 function prepararVistasIniciales() {
 
