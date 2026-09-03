@@ -5407,6 +5407,10 @@ async function iniciarDashboard() {
             pedidosEmpresa
         );
 
+        mostrarVentasYTopModelo(
+            pedidosEmpresa
+        );
+
     } catch (error) {
         console.error(
             "Error cargando dashboard:",
@@ -5813,6 +5817,122 @@ function mostrarEstadosDashboard(pedidos) {
             `;
         })
         .join("");
+}
+
+/* =========================================================
+   VENTAS POR MES Y MODELO MÁS VENDIDO
+   ========================================================= */
+
+function mostrarVentasYTopModelo(pedidos) {
+    const grid = document.querySelector(".dashboard-grid");
+    if (!grid) {
+        return;
+    }
+
+    // Contamos como "venta" todo pedido que no esté cancelado.
+    const pedidosValidos = pedidos.filter(
+        p => String(p.estado || "").toLowerCase() !== "cancelado"
+    );
+
+    // ---- Ventas por mes (últimos 6 meses con datos) ----
+    const ventasPorMes = {};
+    pedidosValidos.forEach(pedido => {
+        const fecha = String(pedido.fecha || "").slice(0, 7); // "AAAA-MM"
+        if (!fecha) {
+            return;
+        }
+        const monto = Number(pedido.precio || 0);
+        ventasPorMes[fecha] = (ventasPorMes[fecha] || 0) + monto;
+    });
+
+    const mesesOrdenados = Object.keys(ventasPorMes).sort().slice(-6);
+    const maxVenta = Math.max(1, ...mesesOrdenados.map(m => ventasPorMes[m]));
+
+    const nombresMes = [
+        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ];
+
+    const barrasHTML = mesesOrdenados.map(mes => {
+        const [anio, numeroMes] = mes.split("-");
+        const etiqueta = `${nombresMes[Number(numeroMes) - 1] || mes}`;
+        const monto = ventasPorMes[mes];
+        const alturaPorc = Math.round((monto / maxVenta) * 100);
+
+        return `
+            <div class="dashboard-venta-barra-col">
+                <div class="dashboard-venta-barra-valor">${formatearPrecio(monto)}</div>
+                <div class="dashboard-venta-barra-pista">
+                    <div class="dashboard-venta-barra" style="height:${alturaPorc}%"></div>
+                </div>
+                <div class="dashboard-venta-barra-label">${escaparHTML(etiqueta)}</div>
+            </div>
+        `;
+    }).join("");
+
+    // ---- Modelo más vendido ----
+    const conteoModelos = {};
+    pedidosValidos.forEach(pedido => {
+        const nombre = String(pedido.modelo || "").trim();
+        if (!nombre) {
+            return;
+        }
+        conteoModelos[nombre] = (conteoModelos[nombre] || 0) + 1;
+    });
+
+    const modelosOrdenados = Object.entries(conteoModelos)
+        .sort((a, b) => b[1] - a[1]);
+
+    const topModelo = modelosOrdenados[0];
+
+    // Creamos (o reutilizamos) la fila nueva del dashboard,
+    // inmediatamente después de la fila de paneles existente.
+    let fila = document.getElementById("dashboard-ventas-row");
+    if (!fila) {
+        fila = document.createElement("div");
+        fila.id = "dashboard-ventas-row";
+        fila.className = "dashboard-grid";
+        grid.insertAdjacentElement("afterend", fila);
+    }
+
+    fila.innerHTML = `
+        <section class="dashboard-panel">
+            <div class="dashboard-panel-header">
+                <div>
+                    <span class="dashboard-panel-label">VENTAS</span>
+                    <h3>Ventas por mes</h3>
+                </div>
+            </div>
+
+            ${
+                mesesOrdenados.length
+                    ? `<div class="dashboard-ventas-chart">${barrasHTML}</div>`
+                    : `<div class="dashboard-cargando">Todavía no hay ventas registradas.</div>`
+            }
+        </section>
+
+        <section class="dashboard-panel">
+            <div class="dashboard-panel-header">
+                <div>
+                    <span class="dashboard-panel-label">RANKING</span>
+                    <h3>Modelo más vendido</h3>
+                </div>
+            </div>
+
+            ${
+                topModelo
+                    ? `
+                        <div class="dashboard-top-modelo">
+                            <div class="dashboard-top-modelo-nombre">${escaparHTML(topModelo[0])}</div>
+                            <div class="dashboard-top-modelo-cantidad">
+                                ${topModelo[1]} pedido${topModelo[1] === 1 ? "" : "s"}
+                            </div>
+                        </div>
+                    `
+                    : `<div class="dashboard-cargando">Todavía no hay datos suficientes.</div>`
+            }
+        </section>
+    `;
 }
 
 /* =========================================================
@@ -9747,6 +9867,14 @@ function mostrarFichaPedido(id, pedidos) {
                     ${escaparHTML(pedido.estado || "-")}
                 </div>
 
+                ${renderPedidoStepper(pedido.estado)}
+
+                ${siguienteEstadoPedido(pedido.estado) ? `
+                    <button type="button" class="btn-avanzar-estado">
+                        AVANZAR A "${escaparHTML(siguienteEstadoPedido(pedido.estado).toUpperCase())}"
+                    </button>
+                ` : ""}
+
             </div>
 
             <div class="pedido-ficha-seccion">
@@ -9985,6 +10113,128 @@ function mostrarFichaPedido(id, pedidos) {
             cerrarModal();
             mostrarNuevoPedido();
         });
+
+    const botonAvanzar = modal.querySelector(".btn-avanzar-estado");
+    if (botonAvanzar) {
+        botonAvanzar.addEventListener("click", function() {
+            avanzarEstadoPedido(pedido, modal);
+        });
+    }
+}
+
+/* =========================================================
+   FLUJO DE ESTADOS DEL PEDIDO
+   ========================================================= */
+
+const PASOS_ESTADO_PEDIDO = [
+    "Consulta",
+    "Confirmado",
+    "En producción",
+    "Terminado",
+    "Entregado"
+];
+
+function renderPedidoStepper(estadoActual) {
+    const estado = String(estadoActual || "").trim();
+
+    if (estado.toLowerCase() === "cancelado") {
+        return `
+            <div class="pedido-stepper pedido-stepper-cancelado">
+                <span class="pedido-cancelado-badge">CANCELADO</span>
+            </div>
+        `;
+    }
+
+    const indiceActual = PASOS_ESTADO_PEDIDO.findIndex(
+        paso => paso.toLowerCase() === estado.toLowerCase()
+    );
+
+    return `
+        <div class="pedido-stepper">
+            ${PASOS_ESTADO_PEDIDO.map((paso, i) => {
+                let clase = "pedido-stepper-paso";
+                if (indiceActual !== -1 && i < indiceActual) {
+                    clase += " completado";
+                } else if (i === indiceActual) {
+                    clase += " actual";
+                }
+                return `
+                    <div class="${clase}">
+                        <span class="pedido-stepper-circulo">${i + 1}</span>
+                        <span class="pedido-stepper-label">${escaparHTML(paso)}</span>
+                    </div>
+                `;
+            }).join("")}
+        </div>
+    `;
+}
+
+function siguienteEstadoPedido(estadoActual) {
+    const estado = String(estadoActual || "").trim();
+
+    if (estado.toLowerCase() === "cancelado") {
+        return null;
+    }
+
+    const indice = PASOS_ESTADO_PEDIDO.findIndex(
+        paso => paso.toLowerCase() === estado.toLowerCase()
+    );
+
+    if (indice === -1 || indice === PASOS_ESTADO_PEDIDO.length - 1) {
+        return null;
+    }
+
+    return PASOS_ESTADO_PEDIDO[indice + 1];
+}
+
+async function avanzarEstadoPedido(pedido, modal) {
+    const siguiente = siguienteEstadoPedido(pedido.estado);
+    if (!siguiente) {
+        return;
+    }
+
+    const boton = modal.querySelector(".btn-avanzar-estado");
+    if (boton) {
+        boton.disabled = true;
+        boton.textContent = "ACTUALIZANDO...";
+    }
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+                action: "update",
+                resource: "pedidos",
+                id: pedido.id_pedido,
+                data: { estado: siguiente }
+            })
+        });
+
+        const resultado = await response.json();
+
+        if (!resultado.success) {
+            throw new Error(resultado.error || "No se pudo actualizar el estado.");
+        }
+
+        modal.remove();
+        await mostrarVistaPedidos();
+
+        try {
+            await iniciarDashboard();
+        } catch (error) {
+            console.error("Error actualizando Dashboard:", error);
+        }
+
+    } catch (error) {
+        console.error("Error avanzando estado del pedido:", error);
+        alert("No se pudo actualizar el estado.\n\n" + error.message);
+
+        if (boton) {
+            boton.disabled = false;
+            boton.textContent = `AVANZAR A "${siguiente.toUpperCase()}"`;
+        }
+    }
 }
 
 /* =========================================================
@@ -10254,6 +10504,120 @@ function agregarEstilosFichaPedido() {
 
             letter-spacing: 1px;
 
+        }
+
+
+        /* =================================================
+           STEPPER DE ESTADOS
+           ================================================= */
+
+        .pedido-stepper {
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+            margin-top: 16px;
+            overflow-x: auto;
+        }
+
+        .pedido-stepper-paso {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 64px;
+            position: relative;
+        }
+
+        .pedido-stepper-paso:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 13px;
+            left: calc(50% + 18px);
+            width: calc(100% - 36px);
+            height: 2px;
+            background: #e0dcd8;
+        }
+
+        .pedido-stepper-paso.completado:not(:last-child)::after {
+            background: #5d6657;
+        }
+
+        .pedido-stepper-circulo {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0eeeb;
+            border: 2px solid #e0dcd8;
+            color: #999;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .pedido-stepper-paso.completado .pedido-stepper-circulo {
+            background: #5d6657;
+            border-color: #5d6657;
+            color: #fff;
+        }
+
+        .pedido-stepper-paso.actual .pedido-stepper-circulo {
+            background: #C47456;
+            border-color: #C47456;
+            color: #fff;
+        }
+
+        .pedido-stepper-label {
+            margin-top: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-align: center;
+            color: #777;
+        }
+
+        .pedido-stepper-paso.actual .pedido-stepper-label {
+            color: #1d1a1a;
+        }
+
+        .pedido-stepper-cancelado {
+            margin-top: 16px;
+        }
+
+        .pedido-cancelado-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: #f8e5e0;
+            color: #a33d2a;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-avanzar-estado {
+            margin-top: 16px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #5d6657;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+        }
+
+        .btn-avanzar-estado:hover {
+            background: #4a5245;
+        }
+
+        .btn-avanzar-estado:disabled {
+            opacity: 0.6;
+            cursor: default;
         }
 
 

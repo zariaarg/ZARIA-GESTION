@@ -424,6 +424,87 @@ h2 {
 
 
 /* ============================================================
+   DASHBOARD — VENTAS POR MES / MODELO MÁS VENDIDO
+   ============================================================ */
+
+.dashboard-ventas-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    height: 160px;
+    padding-top: 10px;
+}
+
+.dashboard-venta-barra-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+}
+
+.dashboard-venta-barra-valor {
+    font-size: 10px;
+    font-weight: bold;
+    color: #5d6657;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.dashboard-venta-barra-pista {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    background: #f0eeeb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.dashboard-venta-barra {
+    width: 100%;
+    min-height: 4px;
+    background: linear-gradient(180deg, #C47456, #a85f43);
+    border-radius: 6px 6px 0 0;
+}
+
+.dashboard-venta-barra-label {
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #888;
+    letter-spacing: 0.4px;
+}
+
+.dashboard-top-modelo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.dashboard-top-modelo-nombre {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1d1a1a;
+    margin-bottom: 10px;
+}
+
+.dashboard-top-modelo-cantidad {
+    display: inline-flex;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: #ece7e0;
+    color: #5d6657;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+}
+
+
+/* ============================================================
    DASHBOARD — ACCESOS RÁPIDOS
    ============================================================ */
 
@@ -1021,8 +1102,7 @@ h2 {
 ========================= */
 .material-modelo-item {
     display: grid;
-/*    grid-template-columns: minmax(0, 1fr) 42px 48px 65px;  vane*/
-    grid-template-columns: minmax(0, 1fr) 42px 48px 65px 30px;
+    grid-template-columns: minmax(0, 1fr) 42px 48px 65px;
     align-items: center;
     gap: 5px;
     width: 100%;
@@ -1087,10 +1167,10 @@ h2 {
 }
 
 .btn-eliminar-material {
-  /*  flex-shrink: 0; comentado vane*/
-    width: 24px;   /* modificado vane 20px; */
-    height: 24px;   /* modificado vane 20px; */
-    /*min-width: 20px; comentado vane */
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1101,9 +1181,8 @@ h2 {
     background: transparent;
     color: #999;
     font-size: 16px;
-    /*line-height: 1;  comentado vane*/
+    line-height: 1;
     cursor: pointer;
-    justify-self: center; /*  agregado vane*/
 }
 
 .btn-eliminar-material:hover {
