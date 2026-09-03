@@ -230,6 +230,11 @@ h2 {
     font-weight: 300;
 }
 
+.dashboard-accion-icono svg {
+    width: 19px;
+    height: 19px;
+}
+
 .dashboard-accion strong {
     display: block;
     font-size: 13px;
@@ -343,6 +348,11 @@ h2 {
     border-radius: 50%;
     color: #C47456;
     font-size: 15px;
+}
+
+.dashboard-panel-icon svg {
+    width: 17px;
+    height: 17px;
 }
 
 .dashboard-estados {
@@ -533,6 +543,23 @@ h2 {
 .dashboard-accesos-grid button:hover {
     background: white;
     border-color: #C47456;
+}
+
+.dashboard-accesos-grid .dashboard-acceso-icono {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    border: 1px solid #e1ddda;
+    border-radius: 50%;
+    color: #C47456;
+}
+
+.dashboard-acceso-icono svg {
+    width: 15px;
+    height: 15px;
 }
 
 .dashboard-accesos-grid span {
