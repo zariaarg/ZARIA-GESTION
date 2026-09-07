@@ -5371,16 +5371,25 @@ async function iniciarDashboard() {
 
         const [
             pedidos,
+            pedidoItems,
             clientes,
             modelosDashboard
         ] = await Promise.all([
             llamarAPI("pedidos", empresaId),
+            llamarAPI("pedido_items", empresaId),
             llamarAPI("clientes", empresaId),
             llamarAPI("modelos", empresaId)
         ]);
 
+        const itemsEmpresa = filtrarPorEmpresa(pedidoItems);
+
         const pedidosEmpresa =
-            filtrarPorEmpresa(pedidos);
+            filtrarPorEmpresa(pedidos).map(pedido => ({
+                ...pedido,
+                items: itemsEmpresa.filter(
+                    item => String(item.id_pedido) === String(pedido.id_pedido)
+                )
+            }));
 
         const clientesEmpresa =
             filtrarPorEmpresa(clientes);
@@ -5613,7 +5622,7 @@ function mostrarResumenDashboard(
 
                 return total +
                     Number(
-                        pedido.precio ||
+                        pedido.precio_total ||
                         0
                     );
 
@@ -5841,7 +5850,7 @@ function mostrarVentasYTopModelo(pedidos) {
         if (!fecha) {
             return;
         }
-        const monto = Number(pedido.precio || 0);
+        const monto = Number(pedido.precio_total || 0);
         ventasPorMes[fecha] = (ventasPorMes[fecha] || 0) + monto;
     });
 
@@ -5870,14 +5879,16 @@ function mostrarVentasYTopModelo(pedidos) {
         `;
     }).join("");
 
-    // ---- Modelo más vendido ----
+    // ---- Modelo más vendido (se cuenta por ítem, un pedido puede tener varios) ----
     const conteoModelos = {};
     pedidosValidos.forEach(pedido => {
-        const nombre = String(pedido.modelo || "").trim();
-        if (!nombre) {
-            return;
-        }
-        conteoModelos[nombre] = (conteoModelos[nombre] || 0) + 1;
+        (pedido.items || []).forEach(item => {
+            const nombre = String(item.modelo || "").trim();
+            if (!nombre) {
+                return;
+            }
+            conteoModelos[nombre] = (conteoModelos[nombre] || 0) + 1;
+        });
     });
 
     const modelosOrdenados = Object.entries(conteoModelos)
@@ -5925,7 +5936,7 @@ function mostrarVentasYTopModelo(pedidos) {
                         <div class="dashboard-top-modelo">
                             <div class="dashboard-top-modelo-nombre">${escaparHTML(topModelo[0])}</div>
                             <div class="dashboard-top-modelo-cantidad">
-                                ${topModelo[1]} pedido${topModelo[1] === 1 ? "" : "s"}
+                                ${topModelo[1]} pieza${topModelo[1] === 1 ? "" : "s"} vendida${topModelo[1] === 1 ? "" : "s"}
                             </div>
                         </div>
                     `
@@ -6578,208 +6589,18 @@ async function mostrarNuevoPedido(
                 <div class="pedido-seccion">
 
                     <div class="pedido-seccion-titulo">
-                        PRODUCTO
+                        PRODUCTOS
                     </div>
 
-                    <div class="pedido-grid">
+                    <div id="pedido-items-lista"></div>
 
-                        <div class="pedido-campo">
-
-                            <label>
-                                MODELO
-                            </label>
-
-                            <select
-                                name="modelo_id"
-                                id="pedido-modelo"
-                            >
-
-                                <option value="">
-                                    Cargando modelos...
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                CÓDIGO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="codigo"
-                                id="pedido-codigo"
-                                readonly
-                            >
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="pedido-seccion">
-
-                    <div class="pedido-seccion-titulo">
-                        PERSONALIZACIÓN
-                    </div>
-
-                    <div class="pedido-grid">
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                MATERIAL
-                            </label>
-
-                            <input
-                                type="text"
-                                name="material"
-                                id="pedido-material"
-                                placeholder="Material"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                COLOR CUERO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="color_cuero"
-                                id="pedido-color-cuero"
-                                placeholder="Color elegido"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                COLOR HILO
-                            </label>
-
-                            <input
-                                type="text"
-                                name="color_hilo"
-                                id="pedido-color-hilo"
-                                placeholder="Color elegido"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                TALLE
-                            </label>
-
-                            <input
-                                type="text"
-                                name="talle"
-                                id="pedido-talle"
-                                placeholder="Talle"
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="pedido-a-medida">
-
-                        <label>
-
-                            <input
-                                type="checkbox"
-                                name="a_medida"
-                                id="pedido-a-medida"
-                            >
-
-                            A medida
-
-                        </label>
-
-                    </div>
-
-
-                    <div
-                        class="pedido-medidas"
-                        id="pedido-medidas"
+                    <button
+                        type="button"
+                        id="btn-agregar-item-pedido"
+                        class="btn-agregar-item"
                     >
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                CUELLO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="cuello"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                BUSTO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="busto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                CINTURA
-                            </label>
-
-                            <input
-                                type="number"
-                                name="cintura"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
-                        </div>
-
-                        <div class="pedido-campo">
-
-                            <label>
-                                ALTO
-                            </label>
-
-                            <input
-                                type="number"
-                                name="alto"
-                                min="0"
-                                step="0.1"
-                                placeholder="cm"
-                            >
-
-                        </div>
-
-                    </div>
+                        + AGREGAR OTRO MODELO
+                    </button>
 
                 </div>
 
@@ -6795,15 +6616,13 @@ async function mostrarNuevoPedido(
                         <div class="pedido-campo">
 
                             <label>
-                                PRECIO
+                                PRECIO TOTAL
                             </label>
 
                             <input
                                 type="number"
-                                name="precio"
-                                id="pedido-precio"
-                                min="0"
-                                step="0.01"
+                                id="pedido-precio-total"
+                                readonly
                             >
 
                         </div>
@@ -7008,34 +6827,193 @@ async function mostrarNuevoPedido(
         );
 
 
-    const selectModelo =
-        modal.querySelector(
-            "#pedido-modelo"
-        );
-
-
     const botonNuevoCliente =
         modal.querySelector(
             "#btn-nuevo-cliente-pedido"
         );
 
 
-    const inputCodigo =
+    const listaItems =
         modal.querySelector(
-            "#pedido-codigo"
+            "#pedido-items-lista"
         );
 
 
-    const inputMaterial =
+    const inputPrecioTotal =
         modal.querySelector(
-            "#pedido-material"
+            "#pedido-precio-total"
         );
 
 
-    const inputPrecio =
-        modal.querySelector(
-            "#pedido-precio"
-        );
+    /* =====================================================
+       ÍTEMS DEL PEDIDO (uno o más modelos por pedido)
+       ===================================================== */
+
+    let contadorItems = 0;
+    let modelosEmpresa = [];
+
+    function opcionesModeloHTML() {
+        if (!modelosEmpresa.length) {
+            return `<option value="">No hay modelos registrados</option>`;
+        }
+        return `
+            <option value="">Seleccionar modelo...</option>
+            ${modelosEmpresa.map(modelo => `
+                <option value="${escaparHTML(modelo.modelo_id)}">
+                    ${escaparHTML(modelo.nombre || "")}
+                </option>
+            `).join("")}
+        `;
+    }
+
+    function crearBloqueItemHTML(index) {
+        return `
+            <div class="pedido-item-bloque" data-item-index="${index}">
+
+                <div class="pedido-item-bloque-header">
+                    <span>MODELO ${index + 1}</span>
+                    <button type="button" class="btn-quitar-item" ${index === 0 ? "hidden" : ""}>QUITAR</button>
+                </div>
+
+                <div class="pedido-grid">
+                    <div class="pedido-campo">
+                        <label>MODELO</label>
+                        <select class="item-modelo">${opcionesModeloHTML()}</select>
+                    </div>
+                    <div class="pedido-campo">
+                        <label>CÓDIGO</label>
+                        <input type="text" class="item-codigo" readonly>
+                    </div>
+                </div>
+
+                <div class="pedido-grid">
+                    <div class="pedido-campo">
+                        <label>MATERIAL</label>
+                        <input type="text" class="item-material" placeholder="Material">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>COLOR CUERO</label>
+                        <input type="text" class="item-color-cuero" placeholder="Color elegido">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>COLOR HILO</label>
+                        <input type="text" class="item-color-hilo" placeholder="Color elegido">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>TALLE</label>
+                        <input type="text" class="item-talle" placeholder="Talle">
+                    </div>
+                </div>
+
+                <div class="pedido-a-medida">
+                    <label>
+                        <input type="checkbox" class="item-a-medida">
+                        A medida
+                    </label>
+                </div>
+
+                <div class="pedido-medidas item-medidas">
+                    <div class="pedido-campo">
+                        <label>CUELLO</label>
+                        <input type="number" class="item-cuello" min="0" step="0.1" placeholder="cm">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>BUSTO</label>
+                        <input type="number" class="item-busto" min="0" step="0.1" placeholder="cm">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>CINTURA</label>
+                        <input type="number" class="item-cintura" min="0" step="0.1" placeholder="cm">
+                    </div>
+                    <div class="pedido-campo">
+                        <label>ALTO</label>
+                        <input type="number" class="item-alto" min="0" step="0.1" placeholder="cm">
+                    </div>
+                </div>
+
+                <div class="pedido-grid">
+                    <div class="pedido-campo">
+                        <label>PRECIO</label>
+                        <input type="number" class="item-precio" min="0" step="0.01">
+                    </div>
+                </div>
+
+            </div>
+        `;
+    }
+
+    function recalcularTotalPedido() {
+        let total = 0;
+        listaItems.querySelectorAll(".item-precio").forEach(input => {
+            total += Number(input.value || 0);
+        });
+        inputPrecioTotal.value = total;
+        actualizarSaldo();
+    }
+
+    function cablearBloqueItem(bloque) {
+        const selectItemModelo = bloque.querySelector(".item-modelo");
+        const inputItemCodigo = bloque.querySelector(".item-codigo");
+        const inputItemMaterial = bloque.querySelector(".item-material");
+        const inputItemPrecio = bloque.querySelector(".item-precio");
+        const checkAMedida = bloque.querySelector(".item-a-medida");
+        const divMedidas = bloque.querySelector(".item-medidas");
+
+        selectItemModelo.addEventListener("change", function() {
+            const modeloId = this.value;
+
+            if (!modeloId) {
+                inputItemCodigo.value = "";
+                return;
+            }
+
+            const modelo = modelosEmpresa.find(
+                item => String(item.modelo_id) === String(modeloId)
+            );
+
+            if (!modelo) {
+                return;
+            }
+
+            inputItemCodigo.value = modelo.codigo || "";
+
+            if (!inputItemMaterial.value.trim()) {
+                inputItemMaterial.value = modelo.material_base || "";
+            }
+
+            if (!inputItemPrecio.value) {
+                inputItemPrecio.value = modelo.precio_venta || "";
+            }
+
+            recalcularTotalPedido();
+        });
+
+        inputItemPrecio.addEventListener("input", recalcularTotalPedido);
+
+        checkAMedida.addEventListener("change", function() {
+            divMedidas.style.display = this.checked ? "grid" : "none";
+        });
+
+        bloque.querySelector(".btn-quitar-item").addEventListener("click", function() {
+            bloque.remove();
+            recalcularTotalPedido();
+        });
+    }
+
+    function agregarBloqueItem() {
+        const index = contadorItems++;
+        const div = document.createElement("div");
+        div.innerHTML = crearBloqueItemHTML(index);
+        const bloque = div.firstElementChild;
+        listaItems.appendChild(bloque);
+        cablearBloqueItem(bloque);
+        return bloque;
+    }
+
+    modal.querySelector("#btn-agregar-item-pedido").addEventListener(
+        "click",
+        () => agregarBloqueItem()
+    );
 
 
     const inputBusquedaCliente =
@@ -7511,24 +7489,17 @@ async function mostrarNuevoPedido(
             "";
 
 
-        formulario.elements[
-            "cuello"
-        ].value = "";
+        const primerBloque =
+            listaItems.querySelector(
+                '[data-item-index="0"]'
+            );
 
-
-        formulario.elements[
-            "busto"
-        ].value = "";
-
-
-        formulario.elements[
-            "cintura"
-        ].value = "";
-
-
-        formulario.elements[
-            "alto"
-        ].value = "";
+        if (primerBloque) {
+            primerBloque.querySelector(".item-cuello").value = "";
+            primerBloque.querySelector(".item-busto").value = "";
+            primerBloque.querySelector(".item-cintura").value = "";
+            primerBloque.querySelector(".item-alto").value = "";
+        }
 
     }
 
@@ -7570,28 +7541,21 @@ async function mostrarNuevoPedido(
 
         if (!esEdicion) {
 
-            formulario.elements[
-                "cuello"
-            ].value =
-                cliente.medidas_cuello || "";
+            const primerBloque =
+                listaItems.querySelector(
+                    '[data-item-index="0"]'
+                );
 
-
-            formulario.elements[
-                "busto"
-            ].value =
-                cliente.medidas_busto || "";
-
-
-            formulario.elements[
-                "cintura"
-            ].value =
-                cliente.medidas_cintura || "";
-
-
-            formulario.elements[
-                "alto"
-            ].value =
-                cliente.medidas_alto || "";
+            if (primerBloque) {
+                primerBloque.querySelector(".item-cuello").value =
+                    cliente.medidas_cuello || "";
+                primerBloque.querySelector(".item-busto").value =
+                    cliente.medidas_busto || "";
+                primerBloque.querySelector(".item-cintura").value =
+                    cliente.medidas_cintura || "";
+                primerBloque.querySelector(".item-alto").value =
+                    cliente.medidas_alto || "";
+            }
 
         }
 
@@ -7654,12 +7618,6 @@ async function mostrarNuevoPedido(
        SALDO AUTOMÁTICO
        ===================================================== */
 
-    const precio =
-        formulario.querySelector(
-            "#pedido-precio"
-        );
-
-
     const sena =
         formulario.querySelector(
             "#pedido-sena"
@@ -7676,7 +7634,7 @@ async function mostrarNuevoPedido(
 
         const precioValor =
             Number(
-                precio.value || 0
+                inputPrecioTotal.value || 0
             );
 
 
@@ -7693,12 +7651,6 @@ async function mostrarNuevoPedido(
     }
 
 
-    precio.addEventListener(
-        "input",
-        actualizarSaldo
-    );
-
-
     sena.addEventListener(
         "input",
         actualizarSaldo
@@ -7708,9 +7660,6 @@ async function mostrarNuevoPedido(
     /* =====================================================
        CARGAR MODELOS
        ===================================================== */
-
-    let modelosEmpresa = [];
-
 
     try {
 
@@ -7728,140 +7677,62 @@ async function mostrarNuevoPedido(
 
 
         if (!modelosEmpresa.length) {
-
-            selectModelo.innerHTML = `
-                <option value="">
-                    No hay modelos registrados
-                </option>
-            `;
-
-        } else {
-
-            selectModelo.innerHTML = `
-                <option value="">
-                    Seleccionar modelo...
-                </option>
-
-                ${modelosEmpresa
-                    .map(
-                        modelo => `
-                            <option
-                                value="${escaparHTML(
-                                    modelo.modelo_id
-                                )}"
-                            >
-                                ${escaparHTML(
-                                    modelo.nombre || ""
-                                )}
-                            </option>
-                        `
-                    )
-                    .join("")}
-
-            `;
-
+            console.warn("No hay modelos registrados para esta empresa.");
         }
 
+        // Ya tenemos modelosEmpresa cargado: creamos el/los bloque(s)
+        // de ítem. En edición, uno por cada ítem que ya tenía el
+        // pedido; si es nuevo, arrancamos con uno solo vacío.
+        if (esEdicion && Array.isArray(pedidoEdicion.items) && pedidoEdicion.items.length) {
 
-        selectModelo.addEventListener(
-            "change",
-            function() {
+            pedidoEdicion.items.forEach(itemEdicion => {
+                const bloque = agregarBloqueItem();
 
-                const modeloId =
-                    this.value;
+                bloque.querySelector(".item-modelo").value =
+                    String(itemEdicion.modelo_id || "");
 
+                bloque.querySelector(".item-codigo").value =
+                    itemEdicion.codigo || "";
 
-                if (!modeloId) {
+                bloque.querySelector(".item-material").value =
+                    itemEdicion.material || "";
 
-                    inputCodigo.value =
-                        "";
+                bloque.querySelector(".item-color-cuero").value =
+                    itemEdicion.color_cuero || "";
 
+                bloque.querySelector(".item-color-hilo").value =
+                    itemEdicion.color_hilo || "";
 
-                    inputMaterial.value =
-                        "";
+                bloque.querySelector(".item-talle").value =
+                    itemEdicion.talle || "";
 
+                const checkAMedida = bloque.querySelector(".item-a-medida");
+                checkAMedida.checked =
+                    itemEdicion.a_medida === true ||
+                    String(itemEdicion.a_medida).toLowerCase() === "true" ||
+                    String(itemEdicion.a_medida) === "1";
+                bloque.querySelector(".item-medidas").style.display =
+                    checkAMedida.checked ? "grid" : "none";
 
-                    /*
-                     * En edición no queremos
-                     * borrar el precio si
-                     * accidentalmente se
-                     * selecciona vacío.
-                     */
+                bloque.querySelector(".item-cuello").value = itemEdicion.cuello ?? "";
+                bloque.querySelector(".item-busto").value = itemEdicion.busto ?? "";
+                bloque.querySelector(".item-cintura").value = itemEdicion.cintura ?? "";
+                bloque.querySelector(".item-alto").value = itemEdicion.alto ?? "";
 
-                    if (!esEdicion) {
+                bloque.querySelector(".item-precio").value = itemEdicion.precio ?? "";
+            });
 
-                        inputPrecio.value =
-                            "";
+            // El primer bloque nunca se puede quitar — si hay más de
+            // uno en edición, mostramos "QUITAR" en todos menos el 1º.
+            listaItems.querySelectorAll(".pedido-item-bloque").forEach((bloque, i) => {
+                bloque.querySelector(".btn-quitar-item").hidden = i === 0;
+            });
 
-                        actualizarSaldo();
+            recalcularTotalPedido();
 
-                    }
-
-                    return;
-
-                }
-
-
-                const modelo =
-                    modelosEmpresa.find(
-                        item =>
-                            String(
-                                item.modelo_id
-                            ) ===
-                            String(
-                                modeloId
-                            )
-                    );
-
-
-                if (!modelo) {
-                    return;
-                }
-
-
-                inputCodigo.value =
-                    modelo.codigo || "";
-
-
-                /*
-                 * Solo usamos material del modelo
-                 * automáticamente si el campo
-                 * está vacío.
-                 */
-
-                if (
-                    !inputMaterial.value.trim()
-                ) {
-
-                    inputMaterial.value =
-                        modelo.material_base || "";
-
-                }
-
-
-                /*
-                 * Al crear un pedido,
-                 * el precio viene del modelo.
-                 *
-                 * Al editar, conservamos
-                 * el precio actual del pedido.
-                 */
-
-                if (
-                    !esEdicion &&
-                    !inputPrecio.value
-                ) {
-
-                    inputPrecio.value =
-                        modelo.precio_venta || "";
-
-                }
-
-
-                actualizarSaldo();
-
-            }
-        );
+        } else {
+            agregarBloqueItem();
+        }
 
 
     } catch (error) {
@@ -7871,18 +7742,13 @@ async function mostrarNuevoPedido(
             error
         );
 
-
-        selectModelo.innerHTML = `
-            <option value="">
-                No se pudieron cargar los modelos
-            </option>
-        `;
-
     }
 
 
     /* =====================================================
        PRE-CARGAR DATOS DEL PEDIDO EN EDICIÓN
+       (cliente, canal de venta y configuración general —
+       los ítems ya se precargaron más arriba)
        ===================================================== */
 
     if (esEdicion) {
@@ -7907,145 +7773,13 @@ async function mostrarNuevoPedido(
 
 
         /*
-         * MODELO
+         * VENTA (a nivel pedido)
          */
-
-        selectModelo.value =
-            String(
-                pedidoEdicion.modelo_id || ""
-            );
-
-
-        /*
-         * Si el modelo existe,
-         * completamos código.
-         */
-
-        const modeloEdicion =
-            modelosEmpresa.find(
-                item =>
-                    String(
-                        item.modelo_id
-                    ) ===
-                    String(
-                        pedidoEdicion.modelo_id
-                    )
-            );
-
-
-        if (modeloEdicion) {
-
-            inputCodigo.value =
-                pedidoEdicion.codigo ||
-                modeloEdicion.codigo ||
-                "";
-
-        } else {
-
-            inputCodigo.value =
-                pedidoEdicion.codigo || "";
-
-        }
-
-
-        /*
-         * PERSONALIZACIÓN
-         */
-
-        inputMaterial.value =
-            pedidoEdicion.material || "";
-
-
-        formulario.elements[
-            "color_cuero"
-        ].value =
-            pedidoEdicion.color_cuero || "";
-
-
-        formulario.elements[
-            "color_hilo"
-        ].value =
-            pedidoEdicion.color_hilo || "";
-
-
-        formulario.elements[
-            "talle"
-        ].value =
-            pedidoEdicion.talle || "";
-
-
-        /*
-         * A MEDIDA
-         */
-
-        formulario.querySelector(
-            "#pedido-a-medida"
-        ).checked =
-            pedidoEdicion.a_medida === true ||
-            String(
-                pedidoEdicion.a_medida
-            ).toLowerCase() === "true" ||
-            String(
-                pedidoEdicion.a_medida
-            ) === "1";
-
-
-        /*
-         * MEDIDAS
-         */
-
-        formulario.elements[
-            "cuello"
-        ].value =
-            pedidoEdicion.cuello ?? "";
-
-
-        formulario.elements[
-            "busto"
-        ].value =
-            pedidoEdicion.busto ?? "";
-
-
-        formulario.elements[
-            "cintura"
-        ].value =
-            pedidoEdicion.cintura ?? "";
-
-
-        formulario.elements[
-            "alto"
-        ].value =
-            pedidoEdicion.alto ?? "";
-
-
-        /*
-         * VENTA
-         */
-
-        formulario.elements[
-            "precio"
-        ].value =
-            pedidoEdicion.precio ?? "";
-
 
         formulario.elements[
             "sena"
         ].value =
             pedidoEdicion.sena ?? "";
-
-
-        formulario.elements[
-            "saldo"
-        ].value =
-            pedidoEdicion.saldo ??
-            (
-                Number(
-                    pedidoEdicion.precio || 0
-                ) -
-                Number(
-                    pedidoEdicion.sena || 0
-                )
-            );
 
 
         /*
@@ -8116,546 +7850,213 @@ async function mostrarNuevoPedido(
 
             event.preventDefault();
 
+            const boton = formulario.querySelector(".btn-guardar-pedido");
+            const mensaje = formulario.querySelector("#nuevo-pedido-mensaje");
+            const formData = new FormData(formulario);
 
-            const boton =
-                formulario.querySelector(
-                    ".btn-guardar-pedido"
-                );
-
-
-            const mensaje =
-                formulario.querySelector(
-                    "#nuevo-pedido-mensaje"
-                );
-
-
-            const formData =
-                new FormData(
-                    formulario
-                );
-
-
-            const clienteId =
-                formData.get(
-                    "cliente_id"
-                );
-
-
-            const modeloId =
-                formData.get(
-                    "modelo_id"
-                );
-
+            const clienteId = formData.get("cliente_id");
 
             if (!clienteId) {
-
-                alert(
-                    "Seleccioná un cliente."
-                );
-
+                alert("Seleccioná un cliente.");
                 return;
-
             }
 
+            // ---- Recolectar los ítems (uno o más modelos) ----
+            const bloquesItem = Array.from(
+                listaItems.querySelectorAll(".pedido-item-bloque")
+            );
 
-            if (!modeloId) {
+            const items = bloquesItem
+                .map(bloque => {
+                    const modeloId = bloque.querySelector(".item-modelo").value;
+                    if (!modeloId) {
+                        return null;
+                    }
 
-                alert(
-                    "Seleccioná un modelo."
-                );
+                    const modelo = modelosEmpresa.find(
+                        m => String(m.modelo_id) === String(modeloId)
+                    );
 
+                    return {
+                        modelo_id: Number(modeloId),
+                        codigo: bloque.querySelector(".item-codigo").value.trim() ||
+                            (modelo ? modelo.codigo || "" : ""),
+                        modelo: modelo ? String(modelo.nombre || "").trim() : "",
+                        material: bloque.querySelector(".item-material").value.trim(),
+                        color_cuero: bloque.querySelector(".item-color-cuero").value.trim(),
+                        color_hilo: bloque.querySelector(".item-color-hilo").value.trim(),
+                        talle: bloque.querySelector(".item-talle").value.trim(),
+                        a_medida: bloque.querySelector(".item-a-medida").checked,
+                        cuello: bloque.querySelector(".item-cuello").value || "",
+                        busto: bloque.querySelector(".item-busto").value || "",
+                        cintura: bloque.querySelector(".item-cintura").value || "",
+                        alto: bloque.querySelector(".item-alto").value || "",
+                        precio: Number(bloque.querySelector(".item-precio").value || 0)
+                    };
+                })
+                .filter(Boolean);
+
+            if (!items.length) {
+                alert("Seleccioná al menos un modelo.");
                 return;
-
             }
 
+            const precioTotal = items.reduce((total, item) => total + item.precio, 0);
+            const senaValor = Number(formData.get("sena") || 0);
 
-            const precioValor =
-                Number(
-                    formData.get(
-                        "precio"
-                    ) || 0
-                );
-
-
-            const senaValor =
-                Number(
-                    formData.get(
-                        "sena"
-                    ) || 0
-                );
-
-
-            if (
-                precioValor < 0 ||
-                senaValor < 0
-            ) {
-
-                alert(
-                    "El precio y la seña no pueden ser negativos."
-                );
-
+            if (precioTotal < 0 || senaValor < 0) {
+                alert("El precio y la seña no pueden ser negativos.");
                 return;
-
             }
 
-
-            if (
-                senaValor >
-                precioValor
-            ) {
-
-                alert(
-                    "La seña no puede ser mayor que el precio."
-                );
-
+            if (senaValor > precioTotal) {
+                alert("La seña no puede ser mayor que el precio total.");
                 return;
-
             }
 
-
-            const cliente =
-                clientesEmpresa.find(
-                    item =>
-                        String(
-                            item.cliente_id
-                        ) ===
-                        String(
-                            clienteId
-                        )
-                );
-
-
-            const modelo =
-                modelosEmpresa.find(
-                    item =>
-                        String(
-                            item.modelo_id
-                        ) ===
-                        String(
-                            modeloId
-                        )
-                );
-
-
-            if (!modelo) {
-
-                alert(
-                    "No se encontró el modelo seleccionado."
-                );
-
-                return;
-
-            }
-
-
-            const data = {
-
-                empresa_id:
-                    Number(
-                        empresaActual.empresa_id
-                    ),
-
-
-                /*
-                 * En edición conservamos
-                 * la fecha original.
-                 *
-                 * En nuevo usamos la fecha actual.
-                 */
-
-                fecha:
-                    esEdicion
-                        ? (
-                            pedidoEdicion.fecha ||
-                            new Date()
-                                .toISOString()
-                                .split("T")[0]
-                        )
-                        : new Date()
-                            .toISOString()
-                            .split("T")[0],
-
-
-                cliente_id:
-                    Number(
-                        clienteId
-                    ),
-
-
-                cliente_nombre:
-                    cliente
-                        ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
-                        : "",
-
-
-                telefono:
-                    cliente
-                        ? String(
-                            cliente.telefono || ""
-                        ).trim()
-                        : "",
-
-
-                instagram:
-                    cliente
-                        ? String(
-                            cliente.instagram || ""
-                        ).trim()
-                        : "",
-
-
-                canal_venta:
-                    String(
-                        formData.get(
-                            "canal_venta"
-                        ) || ""
-                    ).trim(),
-
-
-                modelo_id:
-                    Number(
-                        modeloId
-                    ),
-
-
-                codigo:
-                    modelo
-                        ? String(
-                            modelo.codigo || ""
-                        ).trim()
-                        : "",
-
-
-                modelo:
-                    modelo
-                        ? String(
-                            modelo.nombre || ""
-                        ).trim()
-                        : "",
-
-
-                material:
-                    String(
-                        formData.get(
-                            "material"
-                        ) || ""
-                    ).trim(),
-
-
-                color_cuero:
-                    String(
-                        formData.get(
-                            "color_cuero"
-                        ) || ""
-                    ).trim(),
-
-
-                color_hilo:
-                    String(
-                        formData.get(
-                            "color_hilo"
-                        ) || ""
-                    ).trim(),
-
-
-                talle:
-                    String(
-                        formData.get(
-                            "talle"
-                        ) || ""
-                    ).trim(),
-
-
-                a_medida:
-                    formulario.querySelector(
-                        "#pedido-a-medida"
-                    ).checked,
-
-
-                cuello:
-                    formData.get(
-                        "cuello"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "cuello"
-                            )
-                        ),
-
-
-                busto:
-                    formData.get(
-                        "busto"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "busto"
-                            )
-                        ),
-
-
-                cintura:
-                    formData.get(
-                        "cintura"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "cintura"
-                            )
-                        ),
-
-
-                alto:
-                    formData.get(
-                        "alto"
-                    ) === ""
-                        ? ""
-                        : Number(
-                            formData.get(
-                                "alto"
-                            )
-                        ),
-
-
-                precio:
-                    precioValor,
-
-
-                sena:
-                    senaValor,
-
-
-                saldo:
-                    precioValor -
-                    senaValor,
-
-
-                metodo_pago:
-                    String(
-                        formData.get(
-                            "metodo_pago"
-                        ) || ""
-                    ).trim(),
-
-
-                tipo_entrega:
-                    String(
-                        formData.get(
-                            "tipo_entrega"
-                        ) || ""
-                    ).trim(),
-
-
-                estado:
-                    String(
-                        formData.get(
-                            "estado"
-                        ) || ""
-                    ).trim(),
-
-
-                fecha_entrega:
-                    String(
-                        formData.get(
-                            "fecha_entrega"
-                        ) || ""
-                    ).trim(),
-
-
-                observaciones:
-                    String(
-                        formData.get(
-                            "observaciones"
-                        ) || ""
-                    ).trim()
-
+            const cliente = clientesEmpresa.find(
+                item => String(item.cliente_id) === String(clienteId)
+            );
+
+            // ---- Datos de la cabecera del pedido ----
+            const pedidoData = {
+                empresa_id: Number(empresaActual.empresa_id),
+
+                fecha: esEdicion
+                    ? (pedidoEdicion.fecha || new Date().toISOString().split("T")[0])
+                    : new Date().toISOString().split("T")[0],
+
+                cliente_id: Number(clienteId),
+                cliente_nombre: cliente
+                    ? `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim()
+                    : "",
+                telefono: cliente ? String(cliente.telefono || "").trim() : "",
+                instagram: cliente ? String(cliente.instagram || "").trim() : "",
+
+                canal_venta: String(formData.get("canal_venta") || "").trim(),
+                metodo_pago: String(formData.get("metodo_pago") || "").trim(),
+                tipo_entrega: String(formData.get("tipo_entrega") || "").trim(),
+                estado: String(formData.get("estado") || "").trim(),
+                fecha_entrega: String(formData.get("fecha_entrega") || "").trim(),
+                observaciones: String(formData.get("observaciones") || "").trim(),
+
+                precio_total: precioTotal,
+                costo_total: esEdicion ? (pedidoEdicion.costo_total || 0) : 0,
+                sena: senaValor,
+                saldo: precioTotal - senaValor
             };
 
+            boton.disabled = true;
+            boton.textContent = esEdicion ? "GUARDANDO..." : "CREANDO...";
+            mensaje.textContent = esEdicion ? "Guardando cambios..." : "Guardando pedido...";
+            mensaje.className = "pedido-nuevo-mensaje";
 
-            boton.disabled =
-                true;
-
-
-            boton.textContent =
-                esEdicion
-                    ? "GUARDANDO..."
-                    : "CREANDO...";
-
-
-            mensaje.textContent =
-                esEdicion
-                    ? "Guardando cambios..."
-                    : "Guardando pedido...";
-
-
-            mensaje.className =
-                "pedido-nuevo-mensaje";
-
+            async function llamarBackend(payload) {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
+                return response.json();
+            }
 
             try {
-
-                const payload = {
-
-                    action:
-                        esEdicion
-                            ? "update"
-                            : "insert",
-
-
-                    resource:
-                        "pedidos",
-
-
-                    data:
-                        data
-
+                // ---- 1. Guardar la cabecera ----
+                const payloadPedido = {
+                    action: esEdicion ? "update" : "insert",
+                    resource: "pedidos",
+                    data: pedidoData
                 };
 
-
-                /*
-                 * En actualización necesitamos
-                 * enviar el ID del pedido.
-                 */
-
                 if (esEdicion) {
-
-                    payload.id =
-                        pedidoEdicion.id_pedido;
-
+                    payloadPedido.id = pedidoEdicion.id_pedido;
                 }
 
+                const resultadoPedido = await llamarBackend(payloadPedido);
 
-                const response =
-                    await fetch(
-                        API_URL,
-                        {
-                            method:
-                                "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    payload
-                                )
-
-                        }
-                    );
-
-
-                const resultado =
-                    await response.json();
-
-
-                if (!resultado.success) {
-
+                if (!resultadoPedido.success) {
                     throw new Error(
-                        resultado.error ||
-                        (
-                            esEdicion
-                                ? "No se pudieron guardar los cambios."
-                                : "No se pudo crear el pedido."
-                        )
+                        resultadoPedido.error ||
+                        (esEdicion ? "No se pudieron guardar los cambios." : "No se pudo crear el pedido.")
                     );
-
                 }
 
+                const idPedido = esEdicion
+                    ? pedidoEdicion.id_pedido
+                    : resultadoPedido.data.id_pedido;
 
-                mensaje.textContent =
-                    esEdicion
-                        ? "Pedido actualizado correctamente."
-                        : "Pedido creado correctamente.";
+                // ---- 2. En edición, sacamos los ítems viejos antes de ----
+                //         volver a crearlos con los datos actuales.
+                if (esEdicion && Array.isArray(pedidoEdicion.items)) {
+                    for (const itemViejo of pedidoEdicion.items) {
+                        await llamarBackend({
+                            action: "delete",
+                            resource: "pedido_items",
+                            id: itemViejo.pedido_item_id
+                        });
+                    }
+                }
 
-
-                mensaje.className =
-                    "pedido-nuevo-mensaje exito";
-
-
-                setTimeout(
-                    async function() {
-
-                        modal.remove();
-
-
-                        try {
-
-                            await iniciarPedidos();
-
-                        } catch (error) {
-
-                            console.error(
-                                "Error actualizando pedidos:",
-                                error
-                            );
-
+                // ---- 3. Crear los ítems actuales ----
+                for (const item of items) {
+                    const resultadoItem = await llamarBackend({
+                        action: "insert",
+                        resource: "pedido_items",
+                        data: {
+                            id_pedido: idPedido,
+                            empresa_id: Number(empresaActual.empresa_id),
+                            ...item
                         }
+                    });
 
+                    if (!resultadoItem.success) {
+                        throw new Error(
+                            resultadoItem.error || "No se pudo guardar uno de los productos del pedido."
+                        );
+                    }
+                }
 
-                        try {
+                mensaje.textContent = esEdicion
+                    ? "Pedido actualizado correctamente."
+                    : "Pedido creado correctamente.";
+                mensaje.className = "pedido-nuevo-mensaje exito";
 
-                            await iniciarDashboard();
+                setTimeout(async function() {
+                    modal.remove();
 
-                        } catch (error) {
+                    try {
+                        await iniciarPedidos();
+                    } catch (error) {
+                        console.error("Error actualizando pedidos:", error);
+                    }
 
-                            console.error(
-                                "Error actualizando Dashboard:",
-                                error
-                            );
-
-                        }
-
-                    },
-                    700
-                );
-
+                    try {
+                        await iniciarDashboard();
+                    } catch (error) {
+                        console.error("Error actualizando Dashboard:", error);
+                    }
+                }, 700);
 
             } catch (error) {
-
                 console.error(
-                    esEdicion
-                        ? "Error actualizando pedido:"
-                        : "Error creando pedido:",
+                    esEdicion ? "Error actualizando pedido:" : "Error creando pedido:",
                     error
                 );
 
+                mensaje.textContent = esEdicion
+                    ? "No se pudieron guardar los cambios."
+                    : "No se pudo crear el pedido.";
+                mensaje.className = "pedido-nuevo-mensaje error";
 
-                mensaje.textContent =
-                    esEdicion
-                        ? "No se pudieron guardar los cambios."
-                        : "No se pudo crear el pedido.";
-
-
-                mensaje.className =
-                    "pedido-nuevo-mensaje error";
-
-
-                boton.disabled =
-                    false;
-
-
-                boton.textContent =
-                    esEdicion
-                        ? "GUARDAR CAMBIOS"
-                        : "CREAR PEDIDO";
-
+                boton.disabled = false;
+                boton.textContent = esEdicion ? "GUARDAR CAMBIOS" : "CREAR PEDIDO";
 
                 alert(
-                    (
-                        esEdicion
-                            ? "No se pudieron guardar los cambios.\n\n"
-                            : "No se pudo crear el pedido.\n\n"
-                    ) +
-                    error.message
+                    (esEdicion
+                        ? "No se pudieron guardar los cambios.\n\n"
+                        : "No se pudo crear el pedido.\n\n") + error.message
                 );
-
             }
-
         }
     );
 
@@ -9133,6 +8534,61 @@ function agregarEstilosNuevoPedido() {
 
 
     style.textContent = `
+
+        /* =================================================
+           ÍTEMS DEL PEDIDO (varios modelos por pedido)
+           ================================================= */
+
+        .pedido-item-bloque {
+            border: 1px solid #e5e0dc;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 14px;
+            background: #fafaf8;
+        }
+
+        .pedido-item-bloque-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.6px;
+            color: #5d6657;
+        }
+
+        .btn-quitar-item {
+            background: none;
+            border: none;
+            color: #a33d2a;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+
+        .btn-quitar-item:hover {
+            text-decoration: underline;
+        }
+
+        .btn-agregar-item {
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            border: 1px dashed #5d6657;
+            border-radius: 8px;
+            background: transparent;
+            color: #5d6657;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+        }
+
+        .btn-agregar-item:hover {
+            background: #f0f2ee;
+        }
 
         /* =================================================
            VENTANA PRINCIPAL
@@ -9819,12 +9275,64 @@ function mostrarFichaPedido(id, pedidos) {
     const nombreCliente =
         pedido.cliente_nombre || "Cliente sin nombre";
 
-    const medidas = [
-        pedido.cuello ? `Cuello: ${pedido.cuello} cm` : "",
-        pedido.busto ? `Busto: ${pedido.busto} cm` : "",
-        pedido.cintura ? `Cintura: ${pedido.cintura} cm` : "",
-        pedido.alto ? `Alto: ${pedido.alto} cm` : ""
-    ].filter(Boolean).join(" · ");
+    const itemsPedido = pedido.items || [];
+
+    const productosHTML = itemsPedido.length
+        ? itemsPedido.map((item, i) => {
+            const medidasItem = [
+                item.cuello ? `Cuello: ${item.cuello} cm` : "",
+                item.busto ? `Busto: ${item.busto} cm` : "",
+                item.cintura ? `Cintura: ${item.cintura} cm` : "",
+                item.alto ? `Alto: ${item.alto} cm` : ""
+            ].filter(Boolean).join(" · ");
+
+            return `
+                <div class="pedido-ficha-producto">
+                    ${itemsPedido.length > 1 ? `<div class="pedido-ficha-producto-numero">PRODUCTO ${i + 1}</div>` : ""}
+
+                    <div class="pedido-ficha-grid">
+                        <div class="pedido-ficha-dato">
+                            <span>MODELO</span>
+                            <strong>${escaparHTML(item.modelo || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>CÓDIGO</span>
+                            <strong>${escaparHTML(item.codigo || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>MATERIAL</span>
+                            <strong>${escaparHTML(item.material || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>COLOR CUERO</span>
+                            <strong>${escaparHTML(item.color_cuero || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>COLOR HILO</span>
+                            <strong>${escaparHTML(item.color_hilo || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>TALLE</span>
+                            <strong>${escaparHTML(item.talle || "-")}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>A MEDIDA</span>
+                            <strong>${item.a_medida ? "Sí" : "No"}</strong>
+                        </div>
+                        <div class="pedido-ficha-dato">
+                            <span>PRECIO</span>
+                            <strong>$${escaparHTML(item.precio || "0")}</strong>
+                        </div>
+                    </div>
+
+                    <div class="pedido-ficha-subseccion">
+                        <span>MEDIDAS</span>
+                        <strong>${escaparHTML(medidasItem || "Sin medidas cargadas.")}</strong>
+                    </div>
+                </div>
+            `;
+        }).join("<hr class=\"pedido-ficha-separador\">")
+        : `<p>Este pedido no tiene productos cargados.</p>`;
 
     const modal = document.createElement("div");
     modal.className = "pedido-ficha-modal";
@@ -9920,71 +9428,10 @@ function mostrarFichaPedido(id, pedidos) {
             <div class="pedido-ficha-seccion">
 
                 <div class="pedido-ficha-seccion-titulo">
-                    PRODUCTO
+                    PRODUCTOS
                 </div>
 
-                <div class="pedido-ficha-grid">
-
-                    <div class="pedido-ficha-dato">
-                        <span>MODELO</span>
-                        <strong>
-                            ${escaparHTML(pedido.modelo || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>CÓDIGO</span>
-                        <strong>
-                            ${escaparHTML(pedido.codigo || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>MATERIAL</span>
-                        <strong>
-                            ${escaparHTML(pedido.material || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>COLOR CUERO</span>
-                        <strong>
-                            ${escaparHTML(pedido.color_cuero || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>COLOR HILO</span>
-                        <strong>
-                            ${escaparHTML(pedido.color_hilo || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>TALLE</span>
-                        <strong>
-                            ${escaparHTML(pedido.talle || "-")}
-                        </strong>
-                    </div>
-
-                    <div class="pedido-ficha-dato">
-                        <span>A MEDIDA</span>
-                        <strong>
-                            ${pedido.a_medida ? "Sí" : "No"}
-                        </strong>
-                    </div>
-
-                </div>
-
-                <div class="pedido-ficha-subseccion">
-
-                    <span>MEDIDAS</span>
-
-                    <strong>
-                        ${escaparHTML(medidas || "Sin medidas cargadas.")}
-                    </strong>
-
-                </div>
+                ${productosHTML}
 
             </div>
 
@@ -9997,9 +9444,9 @@ function mostrarFichaPedido(id, pedidos) {
                 <div class="pedido-ficha-grid">
 
                     <div class="pedido-ficha-dato">
-                        <span>PRECIO</span>
+                        <span>PRECIO TOTAL</span>
                         <strong>
-                            $${escaparHTML(pedido.precio || "0")}
+                            $${escaparHTML(pedido.precio_total || "0")}
                         </strong>
                     </div>
 
@@ -10127,7 +9574,7 @@ function mostrarFichaPedido(id, pedidos) {
    ========================================================= */
 
 const PASOS_ESTADO_PEDIDO = [
-    "Consulta",
+    "Pendiente",
     "Confirmado",
     "En producción",
     "Terminado",
@@ -10266,6 +9713,28 @@ function agregarEstilosFichaPedido() {
 
 
     style.textContent = `
+
+        /* =================================================
+           PRODUCTOS (varios por pedido)
+           ================================================= */
+
+        .pedido-ficha-producto {
+            margin-bottom: 4px;
+        }
+
+        .pedido-ficha-producto-numero {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.6px;
+            color: #C47456;
+            margin-bottom: 10px;
+        }
+
+        .pedido-ficha-separador {
+            border: none;
+            border-top: 1px dashed #e5e0dc;
+            margin: 18px 0;
+        }
 
         /* =================================================
            VENTANA
@@ -11025,7 +10494,7 @@ async function iniciarPedidos() {
 
         <div class="pedidos-filtros">
             <button type="button" class="pedido-filtro activo" data-estado="">TODOS</button>
-            <button type="button" class="pedido-filtro" data-estado="Consulta">CONSULTA</button>
+            <button type="button" class="pedido-filtro" data-estado="Pendiente">PENDIENTE</button>
             <button type="button" class="pedido-filtro" data-estado="Confirmado">CONFIRMADO</button>
             <button type="button" class="pedido-filtro" data-estado="En producción">EN PRODUCCIÓN</button>
             <button type="button" class="pedido-filtro" data-estado="Terminado">TERMINADO</button>
@@ -11039,12 +10508,19 @@ async function iniciarPedidos() {
     `;
 
     try {
-        const pedidos = await llamarAPI(
-            "pedidos",
-            empresaActual.empresa_id
-        );
+        const [pedidos, pedidoItems] = await Promise.all([
+            llamarAPI("pedidos", empresaActual.empresa_id),
+            llamarAPI("pedido_items", empresaActual.empresa_id)
+        ]);
 
-        const pedidosEmpresa = filtrarPorEmpresa(pedidos);
+        const itemsEmpresa = filtrarPorEmpresa(pedidoItems);
+
+        const pedidosEmpresa = filtrarPorEmpresa(pedidos).map(pedido => ({
+            ...pedido,
+            items: itemsEmpresa.filter(
+                item => String(item.id_pedido) === String(pedido.id_pedido)
+            )
+        }));
 
         const lista = document.getElementById("pedidos-lista");
         const buscador = document.getElementById("buscar-pedidos");
@@ -11093,16 +10569,18 @@ async function iniciarPedidos() {
                             </div>
 
                             <div class="pedido-dato">
-                                <span>MODELO</span>
+                                <span>MODELO(S)</span>
                                 <p>
-                                    ${escaparHTML(pedido.modelo || "-")}
+                                    ${escaparHTML(
+                                        (pedido.items || []).map(i => i.modelo).filter(Boolean).join(", ") || "-"
+                                    )}
                                 </p>
                             </div>
 
                             <div class="pedido-dato">
-                                <span>CÓDIGO</span>
+                                <span>ÍTEMS</span>
                                 <p>
-                                    ${escaparHTML(pedido.codigo || "-")}
+                                    ${(pedido.items || []).length}
                                 </p>
                             </div>
 
@@ -11116,7 +10594,7 @@ async function iniciarPedidos() {
                             <div class="pedido-dato pedido-dinero">
                                 <span>TOTAL</span>
                                 <p>
-                                    $${escaparHTML(pedido.precio || "0")}
+                                    $${escaparHTML(pedido.precio_total || "0")}
                                 </p>
                             </div>
 
@@ -11188,17 +10666,19 @@ async function iniciarPedidos() {
                 const cliente = String(pedido.cliente_nombre || "").toLowerCase();
                 const telefono = String(pedido.telefono || "").toLowerCase();
                 const instagram = String(pedido.instagram || "").toLowerCase();
-                const modelo = String(pedido.modelo || "").toLowerCase();
-                const codigo = String(pedido.codigo || "").toLowerCase();
                 const estado = String(pedido.estado || "").toLowerCase();
+
+                const modelosYCodigos = (pedido.items || [])
+                    .map(i => `${i.modelo || ""} ${i.codigo || ""}`)
+                    .join(" ")
+                    .toLowerCase();
 
                 const coincideTexto =
                     !texto ||
                     cliente.includes(texto) ||
                     telefono.includes(texto) ||
                     instagram.includes(texto) ||
-                    modelo.includes(texto) ||
-                    codigo.includes(texto);
+                    modelosYCodigos.includes(texto);
 
                 const coincideEstado =
                     !estadoActual ||
