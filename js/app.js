@@ -5267,6 +5267,30 @@ function convertirImagenDrive(url) {
 
 
 /* =========================
+   IMAGEN GRANDE (lightbox)
+   Para cualquier miniatura clickeable
+   (materiales, modelos, etc.)
+========================= */
+
+function mostrarImagenGrande(url) {
+
+    if (!url) {
+        return;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "imagen-grande-overlay";
+    overlay.innerHTML = `<img src="${url}" alt="">`;
+
+    overlay.addEventListener("click", function() {
+        overlay.remove();
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+/* =========================
    PRECIO
 ========================= */
 
@@ -10952,7 +10976,7 @@ async function iniciarMateriales() {
                                             <h3 class="material-nombre-con-imagen">
                                                 ${
                                                     material.imagen_muestra
-                                                        ? `<img class="material-miniatura" src="${convertirImagenDrive(material.imagen_muestra)}" alt="">`
+                                                        ? `<img class="material-miniatura" src="${convertirImagenDrive(material.imagen_muestra)}" alt="" onclick="mostrarImagenGrande('${convertirImagenDrive(material.imagen_muestra)}')">`
                                                         : ""
                                                 }
                                                 ${escaparHTML(
