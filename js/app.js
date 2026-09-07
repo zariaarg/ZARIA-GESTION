@@ -8769,6 +8769,12 @@ function agregarEstilosNuevoPedido() {
             column-gap: 28px;
 
             row-gap: 24px;
+
+            margin-bottom: 20px;
+        }
+
+        .pedido-grid:last-child {
+            margin-bottom: 0;
         }
 
 
@@ -8964,6 +8970,7 @@ function agregarEstilosNuevoPedido() {
         .pedido-a-medida {
 
             margin-top: 22px;
+            margin-bottom: 20px;
         }
 
 
@@ -9005,6 +9012,8 @@ function agregarEstilosNuevoPedido() {
             gap: 18px;
 
             margin-top: 20px;
+
+            margin-bottom: 20px;
 
             padding: 20px;
 
@@ -10940,7 +10949,12 @@ async function iniciarMateriales() {
                                                 MATERIAL
                                             </span>
 
-                                            <h3>
+                                            <h3 class="material-nombre-con-imagen">
+                                                ${
+                                                    material.imagen_muestra
+                                                        ? `<img class="material-miniatura" src="${convertirImagenDrive(material.imagen_muestra)}" alt="">`
+                                                        : ""
+                                                }
                                                 ${escaparHTML(
                                                     material.nombre || "-"
                                                 )}

@@ -41,34 +41,38 @@ const SHEETS = {
    ========================================================= */
 
 function doGet(e) {
-  try {
-    const resource = e.parameter.resource;
-    const callback = e.parameter.callback;
-    const empresaId = e.parameter.empresa_id;
+  const callback = e.parameter.callback;
 
-    if (!resource) {
-      return jsonResponse({ success: false, error: 'Falta el parámetro resource' });
-    }
-
-    const sheetName = getSheetName(resource);
-    if (!sheetName) {
-      return jsonResponse({ success: false, error: 'Recurso no válido: ' + resource });
-    }
-
-    const data = getAllRows(sheetName, empresaId);
-    const resultado = { success: true, resource: resource, data: data };
-
-    // Soporte JSONP: si viene "callback", envolvemos la respuesta.
+  // Envuelve cualquier respuesta (éxito o error) en el callback si
+  // vino JSONP — así un error del servidor nunca rompe el <script>
+  // del navegador, solo le llega como {success:false, error:...}.
+  function responder(resultado) {
     if (callback) {
       return ContentService
         .createTextOutput(callback + '(' + JSON.stringify(resultado) + ');')
         .setMimeType(ContentService.MimeType.JAVASCRIPT);
     }
-
     return jsonResponse(resultado);
+  }
+
+  try {
+    const resource = e.parameter.resource;
+    const empresaId = e.parameter.empresa_id;
+
+    if (!resource) {
+      return responder({ success: false, error: 'Falta el parámetro resource' });
+    }
+
+    const sheetName = getSheetName(resource);
+    if (!sheetName) {
+      return responder({ success: false, error: 'Recurso no válido: ' + resource });
+    }
+
+    const data = getAllRows(sheetName, empresaId);
+    return responder({ success: true, resource: resource, data: data });
 
   } catch (error) {
-    return jsonResponse({ success: false, error: error.message });
+    return responder({ success: false, error: error.message });
   }
 }
 
