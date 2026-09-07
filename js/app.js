@@ -5444,12 +5444,330 @@ async function iniciarDashboard() {
             pedidosEmpresa
         );
 
+        const botonEvolucion = document.getElementById("btn-ver-evolucion-ventas");
+        if (botonEvolucion) {
+            botonEvolucion.onclick = () => abrirAnalisisVentas(pedidosEmpresa);
+        }
+
     } catch (error) {
         console.error(
             "Error cargando dashboard:",
             error
         );
     }
+}
+
+
+/* =========================================================
+   ANÁLISIS DE VENTAS (por período)
+   ========================================================= */
+
+function abrirAnalisisVentas(pedidosEmpresa) {
+    cerrarModalesAbiertos();
+
+    const modal = document.createElement("div");
+    modal.className = "analisis-ventas-modal";
+
+    modal.innerHTML = `
+        <div class="analisis-ventas-overlay"></div>
+
+        <div class="analisis-ventas-contenido">
+
+            <button type="button" class="analisis-ventas-cerrar">×</button>
+
+            <div class="analisis-ventas-header">
+                <span>DASHBOARD</span>
+                <h2>Evolución de ventas</h2>
+            </div>
+
+            <div class="analisis-ventas-periodos">
+                <button type="button" class="periodo-btn activo" data-periodo="mes">Este mes</button>
+                <button type="button" class="periodo-btn" data-periodo="anio">Este año</button>
+                <button type="button" class="periodo-btn" data-periodo="todo">Todo</button>
+                <button type="button" class="periodo-btn" data-periodo="personalizado">Personalizado</button>
+            </div>
+
+            <div class="analisis-ventas-rango" id="analisis-rango" hidden>
+                <div class="pedido-campo">
+                    <label>DESDE</label>
+                    <input type="date" id="analisis-desde">
+                </div>
+                <div class="pedido-campo">
+                    <label>HASTA</label>
+                    <input type="date" id="analisis-hasta">
+                </div>
+            </div>
+
+            <div class="analisis-ventas-resumen">
+                <div class="analisis-ventas-metrica">
+                    <span>TOTAL VENDIDO</span>
+                    <strong id="analisis-total">$0</strong>
+                </div>
+                <div class="analisis-ventas-metrica">
+                    <span>PEDIDOS</span>
+                    <strong id="analisis-cantidad">0</strong>
+                </div>
+                <div class="analisis-ventas-metrica">
+                    <span>TICKET PROMEDIO</span>
+                    <strong id="analisis-promedio">$0</strong>
+                </div>
+            </div>
+
+            <div id="analisis-chart" class="dashboard-ventas-chart"></div>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    agregarEstilosAnalisisVentas();
+
+    const cerrar = () => modal.remove();
+    modal.querySelector(".analisis-ventas-cerrar").addEventListener("click", cerrar);
+    modal.querySelector(".analisis-ventas-overlay").addEventListener("click", cerrar);
+
+    const divRango = modal.querySelector("#analisis-rango");
+    const inputDesde = modal.querySelector("#analisis-desde");
+    const inputHasta = modal.querySelector("#analisis-hasta");
+
+    function calcularRango(periodo) {
+        const hoy = new Date();
+
+        if (periodo === "mes") {
+            const desde = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            return { desde, hasta: hoy };
+        }
+
+        if (periodo === "anio") {
+            const desde = new Date(hoy.getFullYear(), 0, 1);
+            return { desde, hasta: hoy };
+        }
+
+        if (periodo === "todo") {
+            return { desde: null, hasta: null };
+        }
+
+        // personalizado
+        const desde = inputDesde.value ? new Date(inputDesde.value + "T00:00:00") : null;
+        const hasta = inputHasta.value ? new Date(inputHasta.value + "T23:59:59") : null;
+        return { desde, hasta };
+    }
+
+    function actualizarAnalisis(periodo) {
+        const { desde, hasta } = calcularRango(periodo);
+
+        const pedidosFiltrados = pedidosEmpresa.filter(pedido => {
+            if (String(pedido.estado || "").toLowerCase() === "cancelado") {
+                return false;
+            }
+            if (!pedido.fecha) {
+                return false;
+            }
+            const fecha = new Date(pedido.fecha);
+            if (isNaN(fecha.getTime())) {
+                return false;
+            }
+            if (desde && fecha < desde) {
+                return false;
+            }
+            if (hasta && fecha > hasta) {
+                return false;
+            }
+            return true;
+        });
+
+        const total = pedidosFiltrados.reduce(
+            (acumulado, p) => acumulado + Number(p.precio_total || 0), 0
+        );
+        const cantidad = pedidosFiltrados.length;
+        const promedio = cantidad ? total / cantidad : 0;
+
+        modal.querySelector("#analisis-total").textContent = formatearPrecio(total);
+        modal.querySelector("#analisis-cantidad").textContent = cantidad;
+        modal.querySelector("#analisis-promedio").textContent = formatearPrecio(promedio);
+
+        // ---- Gráfico: agrupado por mes dentro del rango filtrado ----
+        const ventasPorMes = {};
+        pedidosFiltrados.forEach(pedido => {
+            const clave = String(pedido.fecha).slice(0, 7);
+            ventasPorMes[clave] = (ventasPorMes[clave] || 0) + Number(pedido.precio_total || 0);
+        });
+
+        const mesesOrdenados = Object.keys(ventasPorMes).sort();
+        const maxVenta = Math.max(1, ...mesesOrdenados.map(m => ventasPorMes[m]));
+        const nombresMes = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+        const chart = modal.querySelector("#analisis-chart");
+
+        if (!mesesOrdenados.length) {
+            chart.innerHTML = `<div class="dashboard-cargando">No hay ventas en este período.</div>`;
+            return;
+        }
+
+        chart.innerHTML = mesesOrdenados.map(mes => {
+            const [anio, numeroMes] = mes.split("-");
+            const etiqueta = mesesOrdenados.length > 12
+                ? `${nombresMes[Number(numeroMes) - 1]} ${anio.slice(2)}`
+                : nombresMes[Number(numeroMes) - 1];
+            const monto = ventasPorMes[mes];
+            const alturaPorc = Math.round((monto / maxVenta) * 100);
+
+            return `
+                <div class="dashboard-venta-barra-col">
+                    <div class="dashboard-venta-barra-valor">${formatearPrecio(monto)}</div>
+                    <div class="dashboard-venta-barra-pista">
+                        <div class="dashboard-venta-barra" style="height:${alturaPorc}%"></div>
+                    </div>
+                    <div class="dashboard-venta-barra-label">${escaparHTML(etiqueta)}</div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    modal.querySelectorAll(".periodo-btn").forEach(boton => {
+        boton.addEventListener("click", function() {
+            modal.querySelectorAll(".periodo-btn").forEach(b => b.classList.remove("activo"));
+            this.classList.add("activo");
+
+            const periodo = this.dataset.periodo;
+            divRango.hidden = periodo !== "personalizado";
+
+            if (periodo !== "personalizado") {
+                actualizarAnalisis(periodo);
+            }
+        });
+    });
+
+    inputDesde.addEventListener("change", () => actualizarAnalisis("personalizado"));
+    inputHasta.addEventListener("change", () => actualizarAnalisis("personalizado"));
+
+    actualizarAnalisis("mes");
+}
+
+function agregarEstilosAnalisisVentas() {
+    if (document.getElementById("zaria-analisis-ventas-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-analisis-ventas-styles";
+    style.textContent = `
+        .analisis-ventas-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+        }
+
+        .analisis-ventas-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(29, 26, 26, 0.5);
+        }
+
+        .analisis-ventas-contenido {
+            position: relative;
+            max-width: 640px;
+            margin: 60px auto;
+            background: #f7f5f3;
+            border-radius: 14px;
+            padding: 34px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .analisis-ventas-cerrar {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #ddd8d4;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .analisis-ventas-header span {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+            color: #C47456;
+        }
+
+        .analisis-ventas-header h2 {
+            margin: 4px 0 22px;
+            font-size: 20px;
+        }
+
+        .analisis-ventas-periodos {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .periodo-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd8d4;
+            background: white;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .periodo-btn.activo {
+            background: #5d6657;
+            border-color: #5d6657;
+            color: white;
+        }
+
+        .analisis-ventas-rango {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+            padding: 16px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e5e0dc;
+        }
+
+        .analisis-ventas-resumen {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .analisis-ventas-metrica {
+            padding: 16px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e5e0dc;
+            text-align: center;
+        }
+
+        .analisis-ventas-metrica span {
+            display: block;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .analisis-ventas-metrica strong {
+            font-size: 18px;
+            color: #1d1a1a;
+        }
+
+        #analisis-chart {
+            min-height: 160px;
+            overflow-x: auto;
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 
