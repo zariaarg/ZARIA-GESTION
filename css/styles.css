@@ -1561,6 +1561,11 @@ h2 {
         minmax(0, 1fr)
     );
     gap: 15px;
+    margin-bottom: 15px;
+}
+
+.material-grid:last-child {
+    margin-bottom: 0;
 }
 
 .material-campo small {
@@ -2088,12 +2093,26 @@ h2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 15px;
+    margin-bottom: 18px;
+}
+
+.material-editar-grid:last-child {
+    margin-bottom: 0;
 }
 
 .material-editar-campo {
     display: flex;
     flex-direction: column;
     gap: 7px;
+    margin-bottom: 18px;
+}
+
+.material-editar-campo:last-child {
+    margin-bottom: 0;
+}
+
+.material-editar-grid .material-editar-campo {
+    margin-bottom: 0;
 }
 
 .material-editar-campo label {

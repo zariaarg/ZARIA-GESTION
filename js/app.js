@@ -12867,6 +12867,21 @@ async function mostrarNuevoMaterial() {
                     </div>
 
 
+                    <div class="material-campo">
+
+                        <label>
+                            IMAGEN DE MUESTRA
+                        </label>
+
+                        <input
+                            type="url"
+                            name="imagen_muestra"
+                            placeholder="URL de Google Drive"
+                        >
+
+                    </div>
+
+
                     <div class="material-grid">
 
                         <div class="material-campo">
@@ -13192,6 +13207,14 @@ async function mostrarNuevoMaterial() {
                 ).trim();
 
 
+            const imagenMuestra =
+                String(
+                    formData.get(
+                        "imagen_muestra"
+                    ) || ""
+                ).trim();
+
+
             const costo =
                 Number(
                     formData.get(
@@ -13285,6 +13308,9 @@ async function mostrarNuevoMaterial() {
 
                 proveedor:
                     proveedor,
+
+                imagen_muestra:
+                    imagenMuestra,
 
                 stock_actual:
                     stockActual,
@@ -13903,6 +13929,24 @@ function editarMaterial(
                     </div>
 
 
+                    <div class="material-editar-campo">
+
+                        <label>
+                            IMAGEN DE MUESTRA
+                        </label>
+
+                        <input
+                            type="url"
+                            name="imagen_muestra"
+                            value="${escaparHTML(
+                                material.imagen_muestra || ""
+                            )}"
+                            placeholder="URL de Google Drive"
+                        >
+
+                    </div>
+
+
                     <div class="material-editar-grid">
 
                         <div class="material-editar-campo">
@@ -14248,6 +14292,14 @@ function editarMaterial(
                 ).trim();
 
 
+            const imagenMuestra =
+                String(
+                    formData.get(
+                        "imagen_muestra"
+                    ) || ""
+                ).trim();
+
+
             const costo =
                 Number(
                     formData.get(
@@ -14325,6 +14377,9 @@ function editarMaterial(
 
                 proveedor:
                     proveedor,
+
+                imagen_muestra:
+                    imagenMuestra,
 
                 costo_unitario:
                     costo,
