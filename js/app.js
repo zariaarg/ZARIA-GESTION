@@ -5332,6 +5332,16 @@ function formatearPrecio(valor) {
 
 }
 
+// Redondea al múltiplo de 1000 más cercano (ej: 65800 -> 66000).
+// Se usa sobre el precio de venta que se le recalcula al vendedor
+// al elegir reemplazos/extras — nunca sobre el costo estimado, que
+// necesita el valor real para no distorsionar el margen.
+function redondearAMil(valor) {
+
+    return Math.round((Number(valor) || 0) / 1000) * 1000;
+
+}
+
 
 /* =========================
    HTML SEGURO
@@ -7569,7 +7579,7 @@ async function mostrarNuevoPedido(
         if (bloque._precioBaseModelo !== undefined) {
             const inputPrecio = bloque.querySelector(".item-precio");
             const recargo = calcularRecargoItem(bloque);
-            inputPrecio.value = Math.round((bloque._precioBaseModelo + recargo) * 100) / 100;
+            inputPrecio.value = redondearAMil(bloque._precioBaseModelo + recargo);
             recalcularTotalPedido();
         }
     }
