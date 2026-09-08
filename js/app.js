@@ -2755,7 +2755,10 @@ async function eliminarMaterialModelo(
                                 "modelo_materiales",
 
                             id:
-                                modeloMaterialId
+                                modeloMaterialId,
+
+                            empresa_id:
+                                empresaActual.empresa_id
 
                         })
                 }
@@ -5397,12 +5400,14 @@ async function iniciarDashboard() {
             pedidos,
             pedidoItems,
             clientes,
-            modelosDashboard
+            modelosDashboard,
+            materialesDashboard
         ] = await Promise.all([
             llamarAPI("pedidos", empresaId),
             llamarAPI("pedido_items", empresaId),
             llamarAPI("clientes", empresaId),
-            llamarAPI("modelos", empresaId)
+            llamarAPI("modelos", empresaId),
+            llamarAPI("materiales", empresaId)
         ]);
 
         const itemsEmpresa = filtrarPorEmpresa(pedidoItems);
@@ -5420,6 +5425,9 @@ async function iniciarDashboard() {
 
         const modelosEmpresa =
             filtrarPorEmpresa(modelosDashboard);
+
+        const materialesEmpresa =
+            filtrarPorEmpresa(materialesDashboard);
 
         console.log("========== ACTUALIZACIÓN DASHBOARD ==========");
         console.log("Empresa:", empresaActual);
@@ -5442,6 +5450,10 @@ async function iniciarDashboard() {
 
         mostrarVentasYTopModelo(
             pedidosEmpresa
+        );
+
+        mostrarStockBajo(
+            materialesEmpresa
         );
 
         const botonEvolucion = document.getElementById("btn-ver-evolucion-ventas");
@@ -6284,6 +6296,60 @@ function mostrarVentasYTopModelo(pedidos) {
                     `
                     : `<div class="dashboard-cargando">Todavía no hay datos suficientes.</div>`
             }
+        </section>
+    `;
+}
+
+/* =========================================================
+   STOCK BAJO
+   ========================================================= */
+
+function mostrarStockBajo(materiales) {
+    const materialesActivos = materiales.filter(
+        m => String(m.activo).toUpperCase() !== "FALSE"
+    );
+
+    const conStockBajo = materialesActivos.filter(m => {
+        const actual = Number(m.stock_actual || 0);
+        const minimo = Number(m.stock_minimo || 0);
+        return minimo > 0 && actual <= minimo;
+    });
+
+    let fila = document.getElementById("dashboard-stock-row");
+    if (!fila) {
+        fila = document.createElement("div");
+        fila.id = "dashboard-stock-row";
+        fila.className = "dashboard-grid dashboard-grid-simple";
+        const filaVentas = document.getElementById("dashboard-ventas-row");
+        (filaVentas || document.querySelector(".dashboard-grid"))
+            .insertAdjacentElement("afterend", fila);
+    }
+
+    if (!conStockBajo.length) {
+        fila.innerHTML = "";
+        return;
+    }
+
+    fila.innerHTML = `
+        <section class="dashboard-panel dashboard-panel-alerta">
+            <div class="dashboard-panel-header">
+                <div>
+                    <span class="dashboard-panel-label">MATERIALES</span>
+                    <h3>Stock bajo</h3>
+                </div>
+                <span class="dashboard-panel-icon dashboard-panel-icon-alerta">!</span>
+            </div>
+
+            <div class="dashboard-stock-lista">
+                ${conStockBajo.map(m => `
+                    <div class="dashboard-stock-item">
+                        <span class="dashboard-stock-nombre">${escaparHTML(m.nombre || "-")}</span>
+                        <span class="dashboard-stock-cantidad">
+                            ${escaparHTML(m.stock_actual || "0")} / ${escaparHTML(m.stock_minimo || "0")} ${escaparHTML(m.unidad_compra || "")}
+                        </span>
+                    </div>
+                `).join("")}
+            </div>
         </section>
     `;
 }
@@ -7193,6 +7259,9 @@ async function mostrarNuevoPedido(
 
     let contadorItems = 0;
     let modelosEmpresa = [];
+    let materialesEmpresa = [];
+    let modeloMaterialesEmpresa = [];
+    let pedidosMaterialesEmpresa = [];
 
     function opcionesModeloHTML() {
         if (!modelosEmpresa.length) {
@@ -7227,6 +7296,8 @@ async function mostrarNuevoPedido(
                         <input type="text" class="item-codigo" readonly>
                     </div>
                 </div>
+
+                <div class="item-materiales-costo" hidden></div>
 
                 <div class="pedido-grid">
                     <div class="pedido-campo">
@@ -7278,6 +7349,10 @@ async function mostrarNuevoPedido(
                         <label>PRECIO</label>
                         <input type="number" class="item-precio" min="0" step="0.01">
                     </div>
+                    <div class="pedido-campo">
+                        <label>COSTO ESTIMADO</label>
+                        <input type="text" class="item-costo-estimado" readonly value="$0">
+                    </div>
                 </div>
 
             </div>
@@ -7293,6 +7368,181 @@ async function mostrarNuevoPedido(
         actualizarSaldo();
     }
 
+    function buscarMaterialInterno(materialId) {
+        return materialesEmpresa.find(m => Number(m.material_id) === Number(materialId));
+    }
+
+    function alternativasParaInterno(materialDefault) {
+        return materialesEmpresa.filter(m =>
+            m.categoria === materialDefault.categoria &&
+            m.unidad_compra === materialDefault.unidad_compra &&
+            Number(m.material_id) !== Number(materialDefault.material_id)
+        );
+    }
+
+    // Arma la lista final de materiales usados (default + reemplazos +
+    // extras) leyendo el estado guardado en el propio bloque — mismo
+    // criterio que usa Zaria Store para el cliente final.
+    function resolverMaterialesItem(bloque) {
+        const materialesFinales = [];
+
+        (bloque._materialesDefault || []).forEach(itemDefault => {
+            const elegidoId = (bloque._reemplazoPorCategoria || {})[itemDefault.material.categoria];
+            let materialUsado = itemDefault.material;
+
+            if (elegidoId && String(elegidoId) !== String(itemDefault.material.material_id)) {
+                const elegido = buscarMaterialInterno(elegidoId);
+                if (elegido) {
+                    materialUsado = elegido;
+                }
+            }
+
+            materialesFinales.push({
+                material_id: materialUsado.material_id,
+                cantidad: Number(itemDefault.cantidad || 0),
+                unidad: itemDefault.unidad || materialUsado.unidad_compra || "",
+                costo: Number(materialUsado.costo_unitario || 0)
+            });
+        });
+
+        (bloque._extrasSeleccionados || new Set()).forEach(materialId => {
+            const extra = buscarMaterialInterno(materialId);
+            if (!extra) {
+                return;
+            }
+            const cantidadExtra = Number(extra.cantidad_extra || 1);
+            materialesFinales.push({
+                material_id: extra.material_id,
+                cantidad: cantidadExtra,
+                unidad: extra.unidad_compra || "",
+                costo: Number(extra.costo_unitario || 0)
+            });
+        });
+
+        return materialesFinales;
+    }
+
+    function actualizarCostoItem(bloque) {
+        const materiales = resolverMaterialesItem(bloque);
+        const costo = materiales.reduce(
+            (acumulado, m) => acumulado + (m.cantidad * m.costo), 0
+        );
+        const inputCosto = bloque.querySelector(".item-costo-estimado");
+        if (inputCosto) {
+            inputCosto.value = formatearPrecio(costo);
+        }
+        bloque._costoCalculado = costo;
+    }
+
+    // Dibuja los selectores de reemplazo (agrupados por categoría) y
+    // los extras disponibles para el modelo elegido en este bloque.
+    function renderPersonalizacionItem(bloque, modeloId) {
+        const contenedor = bloque.querySelector(".item-materiales-costo");
+
+        bloque._materialesDefault = modeloMaterialesEmpresa
+            .filter(item => String(item.modelo_id) === String(modeloId))
+            .map(item => ({ ...item, material: buscarMaterialInterno(item.material_id) }))
+            .filter(item => item.material);
+
+        bloque._reemplazoPorCategoria = {};
+        bloque._extrasSeleccionados = new Set();
+
+        if (!bloque._materialesDefault.length) {
+            contenedor.hidden = true;
+            contenedor.innerHTML = "";
+            actualizarCostoItem(bloque);
+            return;
+        }
+
+        const categoriasConReemplazo = {};
+        bloque._materialesDefault.forEach(item => {
+            const cat = item.material.categoria;
+            if (cat !== "CUERO_TELA" && cat !== "HEBILLA") {
+                return;
+            }
+            if (!categoriasConReemplazo[cat]) {
+                categoriasConReemplazo[cat] = { categoria: cat, defaults: [] };
+            }
+            categoriasConReemplazo[cat].defaults.push(item.material);
+        });
+
+        const extrasDisponibles = materialesEmpresa.filter(m => m.categoria === "EXTRA");
+
+        const bloquesReemplazo = Object.values(categoriasConReemplazo).map(grupo => {
+            const alternativas = alternativasParaInterno(grupo.defaults[0]);
+            if (!alternativas.length) {
+                return "";
+            }
+            const opciones = [grupo.defaults[0], ...alternativas];
+            const etiqueta = grupo.categoria === "HEBILLA" ? "Hebilla" : "Material principal";
+
+            return `
+                <div class="item-swatch-grupo" data-categoria="${grupo.categoria}">
+                    <span class="item-swatch-titulo">
+                        ${escaparHTML(etiqueta)} — default: ${escaparHTML(grupo.defaults.map(d => d.nombre).join(" / "))}
+                    </span>
+                    <div class="item-swatches">
+                        ${opciones.map((op, i) => `
+                            <button type="button" class="item-swatch ${i === 0 ? "activo" : ""}" data-material-id="${op.material_id}" data-categoria="${grupo.categoria}" title="${escaparHTML(op.nombre)}">
+                                ${op.imagen_muestra ? `<img src="${convertirImagenDrive(op.imagen_muestra)}" alt="">` : `<span class="item-swatch-sin-foto"></span>`}
+                            </button>
+                        `).join("")}
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        const bloqueExtras = extrasDisponibles.length ? `
+            <div class="item-extras-grupo">
+                <span class="item-swatch-titulo">Extras</span>
+                <div class="item-extras-lista">
+                    ${extrasDisponibles.map(extra => `
+                        <label class="item-extra">
+                            <input type="checkbox" class="item-check-extra" value="${extra.material_id}">
+                            ${extra.imagen_muestra ? `<img class="item-extra-imagen" src="${convertirImagenDrive(extra.imagen_muestra)}" alt="">` : ""}
+                            ${escaparHTML(extra.nombre)}
+                        </label>
+                    `).join("")}
+                </div>
+            </div>
+        ` : "";
+
+        contenedor.hidden = false;
+        contenedor.innerHTML = `
+            <div class="item-materiales-titulo">MATERIALES (para calcular el costo)</div>
+            ${bloquesReemplazo}
+            ${bloqueExtras}
+        `;
+
+        contenedor.querySelectorAll(".item-swatch").forEach(swatch => {
+            swatch.addEventListener("click", function() {
+                const categoria = this.dataset.categoria;
+                const materialId = this.dataset.materialId;
+
+                contenedor.querySelectorAll(`.item-swatch[data-categoria="${categoria}"]`).forEach(s => {
+                    s.classList.remove("activo");
+                });
+                this.classList.add("activo");
+
+                bloque._reemplazoPorCategoria[categoria] = materialId;
+                actualizarCostoItem(bloque);
+            });
+        });
+
+        contenedor.querySelectorAll(".item-check-extra").forEach(check => {
+            check.addEventListener("change", function() {
+                if (this.checked) {
+                    bloque._extrasSeleccionados.add(this.value);
+                } else {
+                    bloque._extrasSeleccionados.delete(this.value);
+                }
+                actualizarCostoItem(bloque);
+            });
+        });
+
+        actualizarCostoItem(bloque);
+    }
+
     function cablearBloqueItem(bloque) {
         const selectItemModelo = bloque.querySelector(".item-modelo");
         const inputItemCodigo = bloque.querySelector(".item-codigo");
@@ -7306,6 +7556,8 @@ async function mostrarNuevoPedido(
 
             if (!modeloId) {
                 inputItemCodigo.value = "";
+                renderPersonalizacionItem(bloque, null);
+                recalcularTotalPedido();
                 return;
             }
 
@@ -7327,6 +7579,7 @@ async function mostrarNuevoPedido(
                 inputItemPrecio.value = modelo.precio_venta || "";
             }
 
+            renderPersonalizacionItem(bloque, modeloId);
             recalcularTotalPedido();
         });
 
@@ -8000,22 +8253,34 @@ async function mostrarNuevoPedido(
 
 
     /* =====================================================
-       CARGAR MODELOS
+       CARGAR MODELOS, MATERIALES Y SUS RELACIONES
        ===================================================== */
 
     try {
 
-        const modelos =
-            await llamarAPI(
-                "modelos",
-                empresaActual.empresa_id
-            );
+        const [modelos, materialesRaw, modeloMaterialesRaw, pedidosMaterialesRaw] =
+            await Promise.all([
+                llamarAPI("modelos", empresaActual.empresa_id),
+                llamarAPI("materiales", empresaActual.empresa_id),
+                llamarAPI("modelo_materiales", empresaActual.empresa_id),
+                llamarAPI("pedidos_materiales", empresaActual.empresa_id)
+            ]);
 
 
         modelosEmpresa =
             filtrarPorEmpresa(
                 modelos
             );
+
+        materialesEmpresa =
+            filtrarPorEmpresa(materialesRaw)
+                .filter(m => String(m.activo).toUpperCase() !== "FALSE");
+
+        modeloMaterialesEmpresa =
+            filtrarPorEmpresa(modeloMaterialesRaw);
+
+        pedidosMaterialesEmpresa =
+            filtrarPorEmpresa(pedidosMaterialesRaw);
 
 
         if (!modelosEmpresa.length) {
@@ -8062,6 +8327,52 @@ async function mostrarNuevoPedido(
                 bloque.querySelector(".item-alto").value = itemEdicion.alto ?? "";
 
                 bloque.querySelector(".item-precio").value = itemEdicion.precio ?? "";
+
+                // ---- Reconstruir reemplazos/extras ya guardados ----
+                if (itemEdicion.modelo_id) {
+                    renderPersonalizacionItem(bloque, itemEdicion.modelo_id);
+
+                    const materialesGuardados = pedidosMaterialesEmpresa.filter(
+                        pm => String(pm.pedido_item_id) === String(itemEdicion.pedido_item_id)
+                    );
+
+                    materialesGuardados.forEach(guardado => {
+                        const materialGuardado = buscarMaterialInterno(guardado.material_id);
+                        if (!materialGuardado) {
+                            return;
+                        }
+
+                        if (materialGuardado.categoria === "EXTRA") {
+                            const check = bloque.querySelector(
+                                `.item-check-extra[value="${guardado.material_id}"]`
+                            );
+                            if (check) {
+                                check.checked = true;
+                                bloque._extrasSeleccionados.add(String(guardado.material_id));
+                            }
+                            return;
+                        }
+
+                        const esDefault = (bloque._materialesDefault || []).some(
+                            def => Number(def.material.material_id) === Number(guardado.material_id)
+                        );
+
+                        if (!esDefault) {
+                            const swatch = bloque.querySelector(
+                                `.item-swatch[data-material-id="${guardado.material_id}"]`
+                            );
+                            if (swatch) {
+                                const categoria = swatch.dataset.categoria;
+                                bloque.querySelectorAll(`.item-swatch[data-categoria="${categoria}"]`)
+                                    .forEach(s => s.classList.remove("activo"));
+                                swatch.classList.add("activo");
+                                bloque._reemplazoPorCategoria[categoria] = String(guardado.material_id);
+                            }
+                        }
+                    });
+
+                    actualizarCostoItem(bloque);
+                }
             });
 
             // El primer bloque nunca se puede quitar — si hay más de
@@ -8233,7 +8544,9 @@ async function mostrarNuevoPedido(
                         busto: bloque.querySelector(".item-busto").value || "",
                         cintura: bloque.querySelector(".item-cintura").value || "",
                         alto: bloque.querySelector(".item-alto").value || "",
-                        precio: Number(bloque.querySelector(".item-precio").value || 0)
+                        precio: Number(bloque.querySelector(".item-precio").value || 0),
+                        costo: Number(bloque._costoCalculado || 0),
+                        materialesUsados: resolverMaterialesItem(bloque)
                     };
                 })
                 .filter(Boolean);
@@ -8244,6 +8557,7 @@ async function mostrarNuevoPedido(
             }
 
             const precioTotal = items.reduce((total, item) => total + item.precio, 0);
+            const costoTotal = items.reduce((total, item) => total + item.costo, 0);
             const senaValor = Number(formData.get("sena") || 0);
 
             if (precioTotal < 0 || senaValor < 0) {
@@ -8283,7 +8597,7 @@ async function mostrarNuevoPedido(
                 observaciones: String(formData.get("observaciones") || "").trim(),
 
                 precio_total: precioTotal,
-                costo_total: esEdicion ? (pedidoEdicion.costo_total || 0) : 0,
+                costo_total: costoTotal,
                 sena: senaValor,
                 saldo: precioTotal - senaValor
             };
@@ -8327,19 +8641,34 @@ async function mostrarNuevoPedido(
                     ? pedidoEdicion.id_pedido
                     : resultadoPedido.data.id_pedido;
 
-                // ---- 2. En edición, sacamos los ítems viejos antes de ----
-                //         volver a crearlos con los datos actuales.
+                // ---- 2. En edición, sacamos los ítems viejos (y sus ----
+                //         materiales asociados) antes de volver a
+                //         crearlos con los datos actuales.
                 if (esEdicion && Array.isArray(pedidoEdicion.items)) {
                     for (const itemViejo of pedidoEdicion.items) {
+                        const materialesViejos = pedidosMaterialesEmpresa.filter(
+                            pm => String(pm.pedido_item_id) === String(itemViejo.pedido_item_id)
+                        );
+
+                        for (const materialViejo of materialesViejos) {
+                            await llamarBackend({
+                                action: "delete",
+                                resource: "pedidos_materiales",
+                                id: materialViejo.pedido_detalle_id,
+                                empresa_id: Number(empresaActual.empresa_id)
+                            });
+                        }
+
                         await llamarBackend({
                             action: "delete",
                             resource: "pedido_items",
-                            id: itemViejo.pedido_item_id
+                            id: itemViejo.pedido_item_id,
+                            empresa_id: Number(empresaActual.empresa_id)
                         });
                     }
                 }
 
-                // ---- 3. Crear los ítems actuales ----
+                // ---- 3. Crear los ítems actuales (y sus materiales) ----
                 for (const item of items) {
                     const resultadoItem = await llamarBackend({
                         action: "insert",
@@ -8355,6 +8684,23 @@ async function mostrarNuevoPedido(
                         throw new Error(
                             resultadoItem.error || "No se pudo guardar uno de los productos del pedido."
                         );
+                    }
+
+                    const pedidoItemId = resultadoItem.data.pedido_item_id;
+
+                    for (const material of item.materialesUsados) {
+                        await llamarBackend({
+                            action: "insert",
+                            resource: "pedidos_materiales",
+                            data: {
+                                pedido_item_id: pedidoItemId,
+                                empresa_id: Number(empresaActual.empresa_id),
+                                material_id: material.material_id,
+                                cantidad: material.cantidad,
+                                unidad: material.unidad,
+                                costo: material.costo
+                            }
+                        });
                     }
                 }
 
@@ -8432,241 +8778,6 @@ function editarPedido(
 
 }
 
-
-/* =========================================================
-   GUARDAR NUEVO PEDIDO
-   ========================================================= */
-
-async function guardarNuevoPedido(
-    formulario,
-    modal,
-    clientesEmpresa,
-    modelosEmpresa
-) {
-    const boton = formulario.querySelector(".btn-guardar-pedido");
-    const mensaje = formulario.querySelector("#nuevo-pedido-mensaje");
-    const formData = new FormData(formulario);
-
-    const clienteId = String(
-        formData.get("cliente_id") || ""
-    ).trim();
-
-    const modeloId = String(
-        formData.get("modelo_id") || ""
-    ).trim();
-
-    if (!clienteId) {
-        alert("Seleccioná un cliente.");
-        return;
-    }
-
-    if (!modeloId) {
-        alert("Seleccioná un modelo.");
-        return;
-    }
-
-    if (!empresaActual) {
-        alert("No hay una empresa seleccionada.");
-        return;
-    }
-
-    const cliente = clientesEmpresa.find(
-        item =>
-            String(item.cliente_id) ===
-            String(clienteId)
-    );
-
-    if (!cliente) {
-        alert("No se encontró el cliente seleccionado.");
-        return;
-    }
-
-    const modelo = modelosEmpresa.find(
-        item =>
-            String(item.modelo_id) ===
-            String(modeloId)
-    );
-
-    if (!modelo) {
-        alert("No se encontró el modelo seleccionado.");
-        return;
-    }
-
-    const precio = Number(
-        formData.get("precio") || 0
-    );
-
-    const sena = Number(
-        formData.get("sena") || 0
-    );
-
-    const saldo = precio - sena;
-
-    if (precio < 0) {
-        alert("El precio no puede ser negativo.");
-        return;
-    }
-
-    if (sena < 0) {
-        alert("La seña no puede ser negativa.");
-        return;
-    }
-
-    if (sena > precio) {
-        alert("La seña no puede ser mayor que el precio.");
-        return;
-    }
-
-    const convertirMedida = nombreCampo => {
-        const valor = formData.get(nombreCampo);
-        return valor === "" ? "" : Number(valor);
-    };
-
-    const data = {
-        empresa_id: Number(empresaActual.empresa_id),
-        fecha:
-            formData.get("fecha") ||
-            new Date().toISOString().split("T")[0],
-        cliente_id: Number(cliente.cliente_id),
-        cliente_nombre:
-            `${cliente.nombre || ""} ${cliente.apellido || ""}`.trim(),
-        telefono: String(
-            cliente.telefono || ""
-        ).trim(),
-        instagram: String(
-            cliente.instagram || ""
-        ).trim(),
-        canal_venta: String(
-            formData.get("canal_venta") || ""
-        ).trim(),
-        modelo_id: Number(modelo.modelo_id),
-        modelo: String(
-            modelo.nombre || ""
-        ).trim(),
-        codigo: String(
-            modelo.codigo || ""
-        ).trim(),
-        material: String(
-            formData.get("material") ||
-            modelo.material_base ||
-            ""
-        ).trim(),
-        color_cuero: String(
-            formData.get("color_cuero") || ""
-        ).trim(),
-        color_hilo: String(
-            formData.get("color_hilo") || ""
-        ).trim(),
-        talle: String(
-            formData.get("talle") || ""
-        ).trim(),
-        a_medida:
-            formulario.elements["a_medida"] &&
-            formulario.elements["a_medida"].checked
-                ? true
-                : false,
-        cuello: convertirMedida("cuello"),
-        busto: convertirMedida("busto"),
-        cintura: convertirMedida("cintura"),
-        alto: convertirMedida("alto"),
-        precio,
-        sena,
-        saldo,
-        metodo_pago: String(
-            formData.get("metodo_pago") || ""
-        ).trim(),
-        tipo_entrega: String(
-            formData.get("tipo_entrega") || ""
-        ).trim(),
-        estado: String(
-            formData.get("estado") || ""
-        ).trim(),
-        fecha_entrega:
-            formData.get("fecha_entrega") || "",
-        observaciones: String(
-            formData.get("observaciones") || ""
-        ).trim()
-    };
-
-    boton.disabled = true;
-    boton.textContent = "CREANDO...";
-    mensaje.textContent = "Guardando pedido...";
-    mensaje.className = "pedido-nuevo-mensaje";
-
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8"
-            },
-            body: JSON.stringify({
-                action: "insert",
-                resource: "pedidos",
-                data
-            })
-        });
-
-        const resultado = await response.json();
-
-        if (!resultado.success) {
-            throw new Error(
-                resultado.error ||
-                "No se pudo crear el pedido."
-            );
-        }
-
-        mensaje.textContent =
-            "Pedido creado correctamente.";
-
-        mensaje.className =
-            "pedido-nuevo-mensaje exito";
-
-        setTimeout(async function() {
-            modal.remove();
-
-            try {
-                await iniciarPedidos();
-                console.log("Pedidos actualizados correctamente.");
-            } catch (error) {
-                console.error(
-                    "Error actualizando pedidos:",
-                    error
-                );
-            }
-
-            try {
-                await iniciarDashboard();
-                console.log("Dashboard actualizado correctamente.");
-            } catch (error) {
-                console.error(
-                    "ERROR REAL ACTUALIZANDO DASHBOARD:",
-                    error
-                );
-            }
-        }, 700);
-
-    } catch (error) {
-        console.error(
-            "Error creando pedido:",
-            error
-        );
-
-        mensaje.textContent =
-            "No se pudo crear el pedido.";
-
-        mensaje.className =
-            "pedido-nuevo-mensaje error";
-
-        boton.disabled = false;
-        boton.textContent =
-            "CREAR PEDIDO";
-
-        alert(
-            "No se pudo crear el pedido.\n\n" +
-            error.message
-        );
-    }
-}
 
 /* =========================================================
    CARGAR CONFIGURACIÓN PEDIDO
@@ -8930,6 +9041,101 @@ function agregarEstilosNuevoPedido() {
 
         .btn-agregar-item:hover {
             background: #f0f2ee;
+        }
+
+        .item-materiales-costo {
+            margin: 4px 0 20px;
+            padding: 14px;
+            background: white;
+            border: 1px solid #e5e0dc;
+            border-radius: 8px;
+        }
+
+        .item-materiales-titulo {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.8px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .item-swatch-grupo,
+        .item-extras-grupo {
+            margin-bottom: 14px;
+        }
+
+        .item-swatch-grupo:last-child,
+        .item-extras-grupo:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-swatch-titulo {
+            display: block;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .item-swatches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .item-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            padding: 0;
+            cursor: pointer;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .item-swatch img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-swatch-sin-foto {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #ddd;
+        }
+
+        .item-swatch.activo {
+            border-color: #C47456;
+        }
+
+        .item-extras-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .item-extra {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .item-extra-imagen {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .item-costo-estimado {
+            background: #f7f7f7 !important;
+            color: #888 !important;
+            font-weight: bold;
         }
 
         /* =================================================
@@ -10005,6 +10211,7 @@ async function avanzarEstadoPedido(pedido, modal) {
                 action: "update",
                 resource: "pedidos",
                 id: pedido.id_pedido,
+                empresa_id: pedido.empresa_id,
                 data: { estado: siguiente }
             })
         });
@@ -14686,6 +14893,9 @@ function editarMaterial(
 
 
             const data = {
+
+                empresa_id:
+                    Number(empresaActual.empresa_id),
 
                 nombre:
                     nombre,
