@@ -16,6 +16,14 @@
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
 
+// Token de administrador — lo exige el backend para TODO lo que no
+// sea el catálogo público (pedidos, clientes, materiales con costo,
+// insert/update/delete, etc.). Tiene que ser EXACTAMENTE el mismo
+// valor que se cargó en el backend como TOKEN_ADMIN (Apps Script →
+// Configuración del proyecto → Propiedades del script). Si se
+// regenera ese valor en el backend, hay que actualizarlo acá también.
+const API_TOKEN = "7du9Wqcm8L5uz__PGs_6U1Si1TjTL-Y0N4X2W3BMWeA";
+
 /* =========================
    EMPRESA ACTUAL
 ========================= */
@@ -99,7 +107,7 @@ function llamarAPI(
 
 
             let url =
-                `${API_URL}?resource=${encodeURIComponent(resource)}&callback=${callbackName}`;
+                `${API_URL}?resource=${encodeURIComponent(resource)}&callback=${callbackName}&token=${encodeURIComponent(API_TOKEN)}`;
 
 
             if (empresaId) {
@@ -2048,6 +2056,9 @@ async function guardarMaterialModelo(
                     body:
                         JSON.stringify({
 
+                            token:
+                                API_TOKEN,
+
                             accion:
                                 "agregar_modelo_material",
 
@@ -2198,6 +2209,9 @@ async function calcularCostoModelo(
 
                     body:
                         JSON.stringify({
+
+                            token:
+                                API_TOKEN,
 
                             accion:
                                 "calcular_costo_modelo",
@@ -2747,6 +2761,9 @@ async function eliminarMaterialModelo(
 
                     body:
                         JSON.stringify({
+
+                            token:
+                                API_TOKEN,
 
                             action:
                                 "delete",
@@ -3320,6 +3337,7 @@ async function guardarNuevoModelo(formulario, modal) {
                 "Content-Type": "text/plain;charset=utf-8"
             },
             body: JSON.stringify({
+                token: API_TOKEN,
                 action: "insert",
                 resource: "modelos",
                 data
@@ -8784,7 +8802,7 @@ async function mostrarNuevoPedido(
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ ...payload, token: API_TOKEN })
                 });
                 return response.json();
             }
@@ -10381,6 +10399,7 @@ async function avanzarEstadoPedido(pedido, modal) {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
+                token: API_TOKEN,
                 action: "update",
                 resource: "pedidos",
                 id: pedido.id_pedido,
@@ -12631,6 +12650,7 @@ async function guardarCambiosCliente(cliente, formulario, modal) {
                 "Content-Type": "text/plain;charset=utf-8"
             },
             body: JSON.stringify({
+                token: API_TOKEN,
                 action: "update",
                 resource: "clientes",
                 id: cliente.cliente_id,
@@ -12833,6 +12853,9 @@ async function guardarNuevoCliente(
 
                     body:
                         JSON.stringify({
+
+                            token:
+                                API_TOKEN,
 
                             action:
                                 "insert",
@@ -14058,6 +14081,9 @@ async function mostrarNuevoMaterial() {
                             body:
                                 JSON.stringify({
 
+                                    token:
+                                        API_TOKEN,
+
                                     action:
                                         "insert",
 
@@ -15128,6 +15154,9 @@ function editarMaterial(
 
                             body:
                                 JSON.stringify({
+
+                                    token:
+                                        API_TOKEN,
 
                                     action:
                                         "update",
