@@ -132,6 +132,12 @@ function doPost(e) {
         return jsonResponse({ success: false, error: 'Falta data' });
       }
 
+      // Empresa dueña del registro: puede venir suelta en el body
+      // (ej. modelos, que la borra de data antes de actualizar) o
+      // adentro de data (la mayoría de los recursos).
+      const empresaIdUpdate =
+        body.empresa_id !== undefined ? body.empresa_id : data.empresa_id;
+
       // En modelos no se permite pisar estos campos desde una edición.
       if (resource.toLowerCase() === 'modelos') {
         delete data.modelo_id;
@@ -141,7 +147,7 @@ function doPost(e) {
         delete data.updated_at;
       }
 
-      const result = updateRow(sheetName, id, data);
+      const result = updateRow(sheetName, id, data, empresaIdUpdate);
       return jsonResponse({ success: true, action: 'update', data: result });
     }
 
@@ -149,7 +155,7 @@ function doPost(e) {
       if (!id) {
         return jsonResponse({ success: false, error: 'Falta id' });
       }
-      const result = deleteRow(sheetName, id);
+      const result = deleteRow(sheetName, id, body.empresa_id);
       return jsonResponse({ success: true, action: 'delete', data: result });
     }
 
@@ -329,6 +335,10 @@ function insertRow(sheetName, data) {
       return data.pedido_item_id ? data.pedido_item_id : generarNuevoId(sheet, 'pedido_item_id');
     }
 
+    if (header === 'pedido_detalle_id') {
+      return data.pedido_detalle_id ? data.pedido_detalle_id : generarNuevoId(sheet, 'pedido_detalle_id');
+    }
+
     if (
       header === 'producto_id' ||
       header === 'movimiento_id' ||
@@ -347,18 +357,31 @@ function insertRow(sheetName, data) {
   return objectFromRow(headers, row);
 }
 
-function updateRow(sheetName, id, data) {
+function updateRow(sheetName, id, data, empresaId) {
   const sheet = getSheet(sheetName);
   const values = sheet.getDataRange().getValues();
   const headers = values[0];
   const idColumn = getIdColumn(headers);
+  const empresaColumn = headers.indexOf('empresa_id');
 
   if (idColumn === -1) {
     throw new Error('La hoja no tiene una columna ID reconocible');
   }
 
+  // Si la hoja tiene empresa_id, exigimos que quien pide el update
+  // mande la empresa dueña del registro — evita que una empresa
+  // modifique datos de otra aunque adivine el ID.
+  if (empresaColumn !== -1 && (empresaId === undefined || empresaId === null || empresaId === '')) {
+    throw new Error('Falta empresa_id para validar el permiso sobre este registro.');
+  }
+
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][idColumn]) === String(id)) {
+
+      if (empresaColumn !== -1 && Number(values[i][empresaColumn]) !== Number(empresaId)) {
+        throw new Error('No se encontró el registro con ID: ' + id);
+      }
+
       headers.forEach((header, column) => {
         if (data[header] !== undefined) {
           sheet.getRange(i + 1, column + 1).setValue(data[header]);
@@ -377,7 +400,7 @@ function updateRow(sheetName, id, data) {
   throw new Error('No se encontró el registro con ID: ' + id);
 }
 
-function deleteRow(sheetName, id) {
+function deleteRow(sheetName, id, empresaId) {
   const sheet = getSheet(sheetName);
   const values = sheet.getDataRange().getValues();
 
@@ -386,6 +409,11 @@ function deleteRow(sheetName, id) {
   }
 
   const headers = values[0];
+  const empresaColumn = headers.indexOf('empresa_id');
+
+  if (empresaColumn !== -1 && (empresaId === undefined || empresaId === null || empresaId === '')) {
+    throw new Error('Falta empresa_id para validar el permiso sobre este registro.');
+  }
 
   // MODELO_MATERIALES siempre se elimina por modelo_material_id;
   // el resto de las hojas usa getIdColumn() para detectar la columna.
@@ -402,6 +430,11 @@ function deleteRow(sheetName, id) {
 
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][idColumn]).trim() === String(id).trim()) {
+
+      if (empresaColumn !== -1 && Number(values[i][empresaColumn]) !== Number(empresaId)) {
+        throw new Error('No se encontró el registro con ' + headers[idColumn] + ': ' + id);
+      }
+
       sheet.deleteRow(i + 1);
       return { deleted: true, id: id };
     }
