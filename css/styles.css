@@ -363,6 +363,48 @@ h2 {
     gap: 10px;
 }
 
+.dashboard-panel-stock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboard-stock-resumen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.dashboard-stock-resumen strong {
+    font-size: 26px;
+    color: #a33d2a;
+    margin-right: 8px;
+}
+
+.dashboard-stock-resumen span {
+    font-size: 12px;
+    color: #666;
+}
+
+.btn-ver-stock-bajo {
+    padding: 9px 18px;
+    border-radius: 20px;
+    border: 1px solid #C47456;
+    background: white;
+    color: #C47456;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-ver-stock-bajo:hover {
+    background: #C47456;
+    color: white;
+}
+
 .dashboard-stock-item {
     display: flex;
     align-items: center;

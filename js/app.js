@@ -6331,7 +6331,7 @@ function mostrarStockBajo(materiales) {
     }
 
     fila.innerHTML = `
-        <section class="dashboard-panel dashboard-panel-alerta">
+        <section class="dashboard-panel dashboard-panel-alerta dashboard-panel-stock">
             <div class="dashboard-panel-header">
                 <div>
                     <span class="dashboard-panel-label">MATERIALES</span>
@@ -6340,8 +6340,38 @@ function mostrarStockBajo(materiales) {
                 <span class="dashboard-panel-icon dashboard-panel-icon-alerta">!</span>
             </div>
 
+            <div class="dashboard-stock-resumen">
+                <div>
+                    <strong>${conStockBajo.length}</strong>
+                    <span>material${conStockBajo.length === 1 ? "" : "es"} por debajo del mínimo</span>
+                </div>
+                <button type="button" id="btn-ver-stock-bajo" class="btn-ver-stock-bajo">Ver detalle</button>
+            </div>
+        </section>
+    `;
+
+    document.getElementById("btn-ver-stock-bajo").addEventListener(
+        "click",
+        () => abrirDetalleStockBajo(conStockBajo)
+    );
+}
+
+function abrirDetalleStockBajo(materiales) {
+    cerrarModalesAbiertos();
+
+    const modal = document.createElement("div");
+    modal.className = "stock-bajo-modal";
+
+    modal.innerHTML = `
+        <div class="stock-bajo-overlay"></div>
+        <div class="stock-bajo-contenido">
+            <button type="button" class="stock-bajo-cerrar">×</button>
+            <div class="stock-bajo-header">
+                <span>MATERIALES</span>
+                <h2>Stock bajo</h2>
+            </div>
             <div class="dashboard-stock-lista">
-                ${conStockBajo.map(m => `
+                ${materiales.map(m => `
                     <div class="dashboard-stock-item">
                         <span class="dashboard-stock-nombre">${escaparHTML(m.nombre || "-")}</span>
                         <span class="dashboard-stock-cantidad">
@@ -6350,8 +6380,74 @@ function mostrarStockBajo(materiales) {
                     </div>
                 `).join("")}
             </div>
-        </section>
+        </div>
     `;
+
+    document.body.appendChild(modal);
+    agregarEstilosStockBajoModal();
+
+    const cerrar = () => modal.remove();
+    modal.querySelector(".stock-bajo-cerrar").addEventListener("click", cerrar);
+    modal.querySelector(".stock-bajo-overlay").addEventListener("click", cerrar);
+}
+
+function agregarEstilosStockBajoModal() {
+    if (document.getElementById("zaria-stock-bajo-styles")) {
+        return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "zaria-stock-bajo-styles";
+    style.textContent = `
+        .stock-bajo-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+        }
+
+        .stock-bajo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(29, 26, 26, 0.5);
+        }
+
+        .stock-bajo-contenido {
+            position: relative;
+            max-width: 480px;
+            margin: 60px auto;
+            background: #f7f5f3;
+            border-radius: 14px;
+            padding: 30px;
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .stock-bajo-cerrar {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #ddd8d4;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .stock-bajo-header span {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+            color: #C47456;
+        }
+
+        .stock-bajo-header h2 {
+            margin: 4px 0 20px;
+            font-size: 20px;
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 /* =========================================================
@@ -7262,6 +7358,7 @@ async function mostrarNuevoPedido(
     let materialesEmpresa = [];
     let modeloMaterialesEmpresa = [];
     let pedidosMaterialesEmpresa = [];
+    let margenPersonalizacion = 0;
 
     function opcionesModeloHTML() {
         if (!modelosEmpresa.length) {
@@ -7422,6 +7519,39 @@ async function mostrarNuevoPedido(
         return materialesFinales;
     }
 
+    // Recargo por reemplazo/extra, mismo criterio que Zaria Store:
+    // diferencia de costo × cantidad real del modelo × margen. Para
+    // extras, es directo costo × cantidad_extra × margen.
+    function calcularRecargoItem(bloque) {
+        const factorMargen = 1 + (margenPersonalizacion / 100);
+        let recargo = 0;
+
+        (bloque._materialesDefault || []).forEach(itemDefault => {
+            const elegidoId = (bloque._reemplazoPorCategoria || {})[itemDefault.material.categoria];
+            if (!elegidoId || String(elegidoId) === String(itemDefault.material.material_id)) {
+                return;
+            }
+            const elegido = buscarMaterialInterno(elegidoId);
+            if (!elegido) {
+                return;
+            }
+            const diferenciaCosto =
+                Number(elegido.costo_unitario || 0) - Number(itemDefault.material.costo_unitario || 0);
+            recargo += diferenciaCosto * Number(itemDefault.cantidad || 0) * factorMargen;
+        });
+
+        (bloque._extrasSeleccionados || new Set()).forEach(materialId => {
+            const extra = buscarMaterialInterno(materialId);
+            if (!extra) {
+                return;
+            }
+            const cantidadExtra = Number(extra.cantidad_extra || 1);
+            recargo += Number(extra.costo_unitario || 0) * cantidadExtra * factorMargen;
+        });
+
+        return recargo;
+    }
+
     function actualizarCostoItem(bloque) {
         const materiales = resolverMaterialesItem(bloque);
         const costo = materiales.reduce(
@@ -7432,6 +7562,16 @@ async function mostrarNuevoPedido(
             inputCosto.value = formatearPrecio(costo);
         }
         bloque._costoCalculado = costo;
+
+        // El precio se recalcula solo mientras se eligen materiales —
+        // si el vendedor lo toca a mano después, ese valor manual se
+        // mantiene hasta el próximo cambio de material.
+        if (bloque._precioBaseModelo !== undefined) {
+            const inputPrecio = bloque.querySelector(".item-precio");
+            const recargo = calcularRecargoItem(bloque);
+            inputPrecio.value = Math.round((bloque._precioBaseModelo + recargo) * 100) / 100;
+            recalcularTotalPedido();
+        }
     }
 
     // Dibuja los selectores de reemplazo (agrupados por categoría) y
@@ -7570,6 +7710,8 @@ async function mostrarNuevoPedido(
             }
 
             inputItemCodigo.value = modelo.codigo || "";
+
+            bloque._precioBaseModelo = Number(modelo.precio_venta || 0);
 
             if (!inputItemMaterial.value.trim()) {
                 inputItemMaterial.value = modelo.material_base || "";
@@ -8258,12 +8400,13 @@ async function mostrarNuevoPedido(
 
     try {
 
-        const [modelos, materialesRaw, modeloMaterialesRaw, pedidosMaterialesRaw] =
+        const [modelos, materialesRaw, modeloMaterialesRaw, pedidosMaterialesRaw, configSistemaRaw] =
             await Promise.all([
                 llamarAPI("modelos", empresaActual.empresa_id),
                 llamarAPI("materiales", empresaActual.empresa_id),
                 llamarAPI("modelo_materiales", empresaActual.empresa_id),
-                llamarAPI("pedidos_materiales", empresaActual.empresa_id)
+                llamarAPI("pedidos_materiales", empresaActual.empresa_id),
+                llamarAPI("config_sistema")
             ]);
 
 
@@ -8281,6 +8424,11 @@ async function mostrarNuevoPedido(
 
         pedidosMaterialesEmpresa =
             filtrarPorEmpresa(pedidosMaterialesRaw);
+
+        const filaMargen = (configSistemaRaw || []).find(
+            item => String(item.parametro || "").trim().toUpperCase() === "MARGEN_PERSONALIZACION"
+        );
+        margenPersonalizacion = filaMargen ? Number(filaMargen.valor || 0) : 0;
 
 
         if (!modelosEmpresa.length) {
@@ -8372,6 +8520,21 @@ async function mostrarNuevoPedido(
                     });
 
                     actualizarCostoItem(bloque);
+
+                    // actualizarCostoItem recién de arriba pudo haber
+                    // pisado el precio con el valor "de hoy" del
+                    // modelo — restauramos el precio realmente
+                    // guardado en su momento, y a partir de ahora sí
+                    // dejamos que cualquier cambio de material lo
+                    // recalcule (para eso habilitamos _precioBaseModelo
+                    // recién acá, no antes).
+                    bloque.querySelector(".item-precio").value = itemEdicion.precio ?? "";
+                    const modeloDelItem = modelosEmpresa.find(
+                        m => String(m.modelo_id) === String(itemEdicion.modelo_id)
+                    );
+                    bloque._precioBaseModelo = modeloDelItem
+                        ? Number(modeloDelItem.precio_venta || 0)
+                        : Number(itemEdicion.precio || 0);
                 }
             });
 
