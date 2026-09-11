@@ -14,7 +14,12 @@
      - CLIENTES: iniciarClientes, abrirNuevoCliente, editarCliente, guardarCambiosCliente, guardarNuevoCliente, agregarEstilosNuevoCliente, mostrarFichaCliente, agregarEstilosFichaCliente, agregarEstilosClientes
    ============================================================= */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
+// El "/a/~/" evita un bug conocido de Google: si el navegador tiene
+// más de una cuenta de Google logueada, Google puede redirigir la
+// petición a una URL con "/u/N/" según cuál cuenta esté "activa", y
+// esa redirección a veces se rompe y devuelve 404 — pasó en Zaria
+// Store, "/a/~/" lo evita forzando el modo genérico/público.
+const API_URL = "https://script.google.com/a/~/macros/s/AKfycbyZzZQhIyQAdZv2G4YqUqvb_wThnq_S_PPq81YET8W-vBVs7O9No7KOb1_stS2XbMvO/exec";
 
 // Token de administrador — lo exige el backend para TODO lo que no
 // sea el catálogo público (pedidos, clientes, materiales con costo,
